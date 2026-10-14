@@ -495,7 +495,7 @@ function topBar(){return '<div class="top"><span class="chip">'+I.flame+' '+S.st
 
 function renderWelcome(){
   setNav(false);
-  app.innerHTML='<div class="wrap"><div class="welcome">'+CUBE+'<h1>Trigo<br>Avcısı</h1><p class="muted" style="font-size:19px">Dik üçgenin şifresini çöz, XP topla, seviye atla, sonunda Trigo Kalesi’ni fethet.</p><form id="nameForm" style="display:flex;flex-direction:column;gap:10px"><label for="nameInput">Adın ne, avcı?</label><input id="nameInput" maxlength="16" autocomplete="off" placeholder="Adını yaz"><button class="btn primary" type="submit">Maceraya başla</button></form></div></div>';
+  app.innerHTML='<div class="wrap"><div class="welcome">'+CUBE+'<h1>Trigo<br>Avcısı</h1><p class="muted" style="font-size:19px">Dik üçgenin şifresini çöz, XP topla, seviye atla, sonunda Trigo Kalesi’ni fethet.</p><form id="nameForm" style="display:flex;flex-direction:column;gap:10px"><label for="nameInput">Adın ne, avcı?</label><input id="nameInput" maxlength="16" autocomplete="off" placeholder="Adını yaz"><button class="btn primary" type="submit">Maceraya başla</button></form>'+installTip(false)+'</div></div>';
   document.getElementById('nameForm').addEventListener('submit',e=>{e.preventDefault();S.name=(document.getElementById('nameInput').value||'').trim()||'Avcı';save();sfx.win();go('home');});
 }
 
@@ -505,7 +505,7 @@ function renderHome(){
   let nextFound=false;
   const nodes=CH.map(c=>{const open=unlocked(c);const st=S.stars[c.id]||0;let isNext=false;if(open&&!st&&!nextFound){isNext=true;nextFound=true;}
     return '<button type="button" class="node'+(open?'':' locked')+(c.boss?' boss':'')+(isNext?' next':'')+'" data-act="chapter" data-id="'+c.id+'" '+(open?'':'aria-disabled="true"')+'>'+(isNext?'<span class="badge-next">SIRADAKİ</span>':'')+'<span class="num" style="background-color:'+c.color+';--nd:'+c.color.replace(')','-d)')+'">'+(c.boss?I.crown:c.id)+'</span><span class="txt"><strong>'+c.name+'</strong><small>'+c.sub.replace(/-/g,'\u2011')+'</small></span>'+(open?'<span class="stars">'+[1,2,3].map(i=>I.star(i<=st)).join('')+'</span>':'<span class="muted">'+I.lock+'</span>')+'</button>';}).join('');
-  app.innerHTML='<div class="wrap">'+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div></div>';
+  app.innerHTML='<div class="wrap">'+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section>'+installTip(true)+'<h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
 }
 
 function startChapter(id){stopAll();const c=CH.find(x=>x.id===id);if(!unlocked(c)){sfx.bad();return;}const slides=c.lesson();if(!slides.length){startQuiz(c);return;}L={c,slides,i:0};view='lesson';renderLesson();}
@@ -585,9 +585,28 @@ function renderSheet(){
   '<section class="box"><h3>Değer tablosu</h3><div class="tbl"><table><thead><tr><th></th>'+ang.map(a=>'<th>'+a+'°</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div><div class="tip">Kök hilesi: sin = √0/2, √1/2, √2/2, √3/2, √4/2. cos = tersten.</div></section>'+
   '<section class="box"><h3>Süper güçler</h3><p class="big" style="font-size:21px">sin²α + cos²α = 1<br>tan α · cot α = 1<br>tan α = sin α / cos α<br>sin α = cos(90° − α)</p></section>'+
   '<section class="box"><h3>Telefona uygulama gibi ekle</h3><p><b>iPhone (Safari):</b> Paylaş düğmesi › Ana Ekrana Ekle.</p><p><b>Android (Chrome):</b> sağ üstteki üç nokta › Ana ekrana ekle.</p><p class="muted">İlerlemen bu telefonda saklanır.</p></section>'+
-  '<button type="button" class="danger" data-act="reset">'+(resetArmed?'Emin misin? Tüm XP ve yıldızlar silinecek. Silmek için tekrar dokun':'İlerlemeyi sıfırla')+'</button></div></div>';
+  contactCard()+'<button type="button" class="danger" data-act="reset">'+(resetArmed?'Emin misin? Tüm XP ve yıldızlar silinecek. Silmek için tekrar dokun':'İlerlemeyi sıfırla')+'</button></div></div>';
 }
 
+// ana ekrana ekleme bilgisi
+let installEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(view==='home'||!S.name){if(!S.name)renderWelcome();else renderHome();}});
+window.addEventListener('appinstalled',()=>{installEvt=null;S.tipHidden=true;save();});
+function isStandalone(){try{return window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;}catch(e){return false;}}
+const SHARE_ICO='<svg viewBox="0 0 24 24" width="18" height="18" aria-label="Paylaş" role="img" style="vertical-align:-3px" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 11v9h14v-9"/></svg>';
+function installTip(closable){
+  if(isStandalone())return '';
+  if(closable&&S.tipHidden)return '';
+  const ua=navigator.userAgent||'';const ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document);const android=/Android/.test(ua);
+  let steps;
+  if(ios)steps='<p><b>1.</b> Bu sayfayı <b>Safari</b>’de aç.</p><p><b>2.</b> Alttaki <b>Paylaş</b> düğmesine dokun '+SHARE_ICO+'</p><p><b>3.</b> Listeyi aşağı kaydır, <b>Ana Ekrana Ekle</b>’yi seç, sonra <b>Ekle</b>.</p>';
+  else if(android)steps=(installEvt?'<button class="btn primary" type="button" data-act="install">Uygulamayı yükle</button>':'')+'<p><b>1.</b> Bu sayfayı <b>Chrome</b>’da aç.</p><p><b>2.</b> Sağ üstteki <b>⋮</b> menüsüne dokun.</p><p><b>3.</b> <b>Ana ekrana ekle</b> ya da <b>Uygulamayı yükle</b>’yi seç.</p>';
+  else steps=(installEvt?'<button class="btn primary" type="button" data-act="install">Uygulamayı yükle</button>':'')+'<p><b>iPhone:</b> Safari › Paylaş '+SHARE_ICO+' › Ana Ekrana Ekle</p><p><b>Android:</b> Chrome › ⋮ › Ana ekrana ekle</p>';
+  return '<section class="box install"><h3>Telefonuna uygulama gibi ekle</h3><p class="muted">Ana ekrana eklersen tek dokunuşla tam ekran açılır ve ilerlemen kaybolmaz.</p>'+steps+(closable?'<button class="btn ghost" type="button" data-act="tipHide">Tamam, anladım</button>':'')+'</section>';
+}
+// iletişim: adres düz metin olarak sayfa kaynağında durmasın diye parçalardan kurulur
+const MAIL=['tuyas2005','gmail.com'].join('@');
+function contactCard(){return '<section class="box contact"><h3>Sana özel uygulama</h3><p>İstediğiniz dersle ilgili uygulama yapılır. Görüş, öneri ve talepleriniz için yazın:</p><div class="row" style="flex-wrap:wrap"><a class="btn ghost mail" href="mailto:'+MAIL+'?subject='+encodeURIComponent('Trigo Avcısı')+'" style="text-decoration:none;color:var(--fg);flex:1 1 220px;min-width:0;overflow-wrap:anywhere">'+MAIL+'</a><button class="btn ghost" type="button" data-act="copyMail" style="flex:1 1 110px">Kopyala</button></div><p class="muted" id="mailMsg" style="min-height:20px;font-size:14px"></p></section>';}
 function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 
 function go(v){if(v!=='ritim')stopAll();view=v;resetArmed=false;if(v==='home')renderHome();else if(v==='ritim')renderRitim();else if(v==='lab')renderLab();else if(v==='sheet')renderSheet();window.scrollTo({top:0});}
@@ -809,6 +828,9 @@ document.addEventListener('click',e=>{
   else if(act==='syncUndo'){if(SY.i>0){SY.i--;SY.t[SY.i]=null;renderSync();}}
   else if(act==='syncExit'){if(audioPlaying())audio.pause();go('ritim');}
   else if(act==='syncReset'){SYNC={t:null,off:0};saveSync();renderRitim();}
+  else if(act==='tipHide'){S.tipHidden=true;save();renderHome();}
+  else if(act==='install'){if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;if(view==='home')renderHome();});}}
+  else if(act==='copyMail'){const msg=document.getElementById('mailMsg');const ok=()=>{if(msg)msg.textContent='Adres kopyalandı.';};try{navigator.clipboard.writeText(MAIL).then(ok,()=>{if(msg)msg.textContent=MAIL+' (basılı tutup kopyalayın)';});}catch(e){if(msg)msg.textContent=MAIL+' (basılı tutup kopyalayın)';}}
   else if(act==='copySync'){const ta=document.getElementById('syncCode');const msg=document.getElementById('copyMsg');const done=()=>{msg.textContent='Kopyalandı. Şimdi Claude’a yapıştırıp gönder.';};try{navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();msg.textContent='Kod seçildi, uzun basıp kopyala.';});}catch(e){ta.select();msg.textContent='Kod seçildi, uzun basıp kopyala.';}}
   else if(act==='tempo'){if(!playing){bpm=+t.dataset.bpm;songMsg='';renderRitim();}}
   else if(act==='setA'){const inp=document.getElementById('labAngle');inp.value=t.dataset.a;labUpdate(+t.dataset.a);}
