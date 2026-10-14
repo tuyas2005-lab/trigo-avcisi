@@ -296,6 +296,14 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-inde
 .fticker{margin:6px 0 0;font-family:var(--display);font-weight:800;font-size:17px;line-height:1.3;color:var(--fg);min-height:44px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .fticker.in{animation:tickin .45s ease-out}
 @keyframes tickin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero .hi{font-size:30px;display:flex;flex-wrap:wrap;gap:0 8px;align-items:baseline}
+.hero .hi .muted{font-size:22px;font-weight:700}
+.fbox{margin-top:12px;align-self:flex-start;background:rgba(10,20,38,.55);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:6px 12px;box-shadow:inset 0 2px 6px rgba(0,0,0,.35)}
+.fbox{padding:6px 10px;max-width:100%}
+.fbox .fticker{margin:0;min-height:40px;flex-wrap:nowrap;white-space:nowrap;font-size:16px;gap:3px}
+.pl.ph{left:calc(var(--b)/2 - var(--c)/2);width:var(--c);top:calc(var(--a)/2 - var(--u)*.31);color:var(--cot)}
+.ph-f{transform:translateZ(calc(var(--d)/2)) rotate(36.87deg) translateY(calc(var(--u)*-.62))}
+.ph-b{transform:translateZ(calc(var(--d)/-2)) rotateY(180deg) rotate(-36.87deg) translateY(calc(var(--u)*-.62))}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -388,7 +396,7 @@ function tri(o){
   return out+'</svg>';
 }
 const LBL={opp:'Karşı',adj:'Komşu',hyp:'Hipotenüs'};
-const CUBE='<div class="tri3d" aria-hidden="true"><div class="prism"><div class="pf front"><i class="ra"></i><b class="al">α</b></div><div class="pf back"></div><div class="pf leg"><span>karşı</span><span class="bk">karşı</span></div><div class="pf base"><span>komşu</span></div><div class="pf hyp"><span>hipotenüs</span><span class="bk">hipotenüs</span></div><div class="pl pl-f">komşu</div><div class="pl pl-b">komşu</div></div></div>';
+const CUBE='<div class="tri3d" aria-hidden="true"><div class="prism"><div class="pf front"><i class="ra"></i><b class="al">α</b></div><div class="pf back"></div><div class="pf leg"><span>karşı</span><span class="bk">karşı</span></div><div class="pf base"><span>komşu</span></div><div class="pf hyp"></div><div class="pl pl-f">komşu</div><div class="pl pl-b">komşu</div><div class="pl ph ph-f">hipotenüs</div><div class="pl ph ph-b">hipotenüs</div></div></div>';
 const RC={opp:'var(--sin)',adj:'var(--cos)',hyp:'var(--cot)'};
 
 /* ---------- soru üreticiler ---------- */
@@ -530,7 +538,7 @@ function renderHome(){
   let nextFound=false;
   const nodes=CH.map(c=>{const open=unlocked(c);const st=S.stars[c.id]||0;let isNext=false;if(open&&!st&&!nextFound){isNext=true;nextFound=true;}
     return '<button type="button" class="node'+(open?'':' locked')+(c.boss?' boss':'')+(isNext?' next':'')+'" data-act="chapter" data-id="'+c.id+'" '+(open?'':'aria-disabled="true"')+'>'+(isNext?'<span class="badge-next">SIRADAKİ</span>':'')+'<span class="num" style="background-color:'+c.color+';--nd:'+c.color.replace(')','-d)')+'">'+(c.boss?I.crown:c.id)+'</span><span class="txt"><strong>'+c.name+'</strong><small>'+c.sub.replace(/-/g,'\u2011')+'</small></span>'+(open?'<span class="stars">'+[1,2,3].map(i=>I.star(i<=st)).join('')+'</span>':'<span class="muted">'+I.lock+'</span>')+'</button>';}).join('');
-  app.innerHTML='<div class="wrap">'+installBar()+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1><p class="fticker" id="fticker" aria-live="off">'+tickerHTML(tickI)+'</p></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
+  app.innerHTML='<div class="wrap">'+installBar()+topBar()+'<section class="hero"><div class="hrow"><div class="head"><h1 class="hi"><span class="muted">Selam,</span> '+esc(S.name)+'</h1><div class="fbox"><p class="fticker" id="fticker" aria-live="off">'+tickerHTML(tickI)+'</p></div></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
   applyGlow();
 }
 
