@@ -271,6 +271,16 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-inde
 .pl-b{transform:translateZ(calc(var(--d)/-2)) rotateY(180deg)}
 .welcome .tri3d{--u:30px;margin:6px 0}
 .hero .tri3d{margin-right:-4px}
+/* ana ekrana ekle şeridi ve paneli */
+.instbar{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border-radius:16px;background:linear-gradient(90deg,rgba(46,196,241,.22),rgba(185,140,255,.22));border:1px solid rgba(46,196,241,.45);color:var(--fg);box-shadow:0 4px 0 var(--edge)}
+.instbar svg{color:var(--cos);flex-shrink:0}
+.instbar span{display:flex;flex-direction:column;flex:1;min-width:0;line-height:1.25}
+.instbar small{color:var(--muted);font-weight:600;font-size:13px}
+.instbar .go{flex:0 0 auto;background:var(--cos);color:var(--ink);font-weight:800;border-radius:10px;padding:8px 12px;font-size:14px}
+.sheetwrap{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;justify-content:flex-end}
+.sheetbg{position:absolute;inset:0;background:rgba(5,10,20,.6)}
+.sheet{position:relative;max-width:540px;width:100%;margin:0 auto;max-height:85vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,.14);padding:16px max(16px, env(safe-area-inset-left, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:12px;animation:sheetup .25s ease-out}
+@keyframes sheetup{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -505,7 +515,7 @@ function renderHome(){
   let nextFound=false;
   const nodes=CH.map(c=>{const open=unlocked(c);const st=S.stars[c.id]||0;let isNext=false;if(open&&!st&&!nextFound){isNext=true;nextFound=true;}
     return '<button type="button" class="node'+(open?'':' locked')+(c.boss?' boss':'')+(isNext?' next':'')+'" data-act="chapter" data-id="'+c.id+'" '+(open?'':'aria-disabled="true"')+'>'+(isNext?'<span class="badge-next">SIRADAKİ</span>':'')+'<span class="num" style="background-color:'+c.color+';--nd:'+c.color.replace(')','-d)')+'">'+(c.boss?I.crown:c.id)+'</span><span class="txt"><strong>'+c.name+'</strong><small>'+c.sub.replace(/-/g,'\u2011')+'</small></span>'+(open?'<span class="stars">'+[1,2,3].map(i=>I.star(i<=st)).join('')+'</span>':'<span class="muted">'+I.lock+'</span>')+'</button>';}).join('');
-  app.innerHTML='<div class="wrap">'+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section>'+installTip(true)+'<h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
+  app.innerHTML='<div class="wrap">'+installBar()+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
 }
 
 function startChapter(id){stopAll();const c=CH.find(x=>x.id===id);if(!unlocked(c)){sfx.bad();return;}const slides=c.lesson();if(!slides.length){startQuiz(c);return;}L={c,slides,i:0};view='lesson';renderLesson();}
@@ -599,17 +609,27 @@ function installTip(closable){
   if(closable&&S.tipHidden)return '';
   const ua=navigator.userAgent||'';const ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document);const android=/Android/.test(ua);
   let steps;
-  if(ios)steps='<p><b>1.</b> Bu sayfayı <b>Safari</b>’de aç.</p><p><b>2.</b> Alttaki <b>Paylaş</b> düğmesine dokun '+SHARE_ICO+'</p><p><b>3.</b> Listeyi aşağı kaydır, <b>Ana Ekrana Ekle</b>’yi seç, sonra <b>Ekle</b>.</p>';
+  if(ios)steps='<p><b>1.</b> Bu sayfayı <b>Safari</b>’de aç.</p><p><b>2.</b> Alttaki <b>Paylaş</b> düğmesine dokun '+SHARE_ICO+'. Göremiyorsan sağ alttaki <b>•••</b> menüsünü aç, orada <b>Paylaş</b>’ı seç.</p><p><b>3.</b> Listeyi aşağı kaydır, <b>Ana Ekrana Ekle</b>’yi seç, sonra <b>Ekle</b>.</p>';
   else if(android)steps=(installEvt?'<button class="btn primary" type="button" data-act="install">Uygulamayı yükle</button>':'')+'<p><b>1.</b> Bu sayfayı <b>Chrome</b>’da aç.</p><p><b>2.</b> Sağ üstteki <b>⋮</b> menüsüne dokun.</p><p><b>3.</b> <b>Ana ekrana ekle</b> ya da <b>Uygulamayı yükle</b>’yi seç.</p>';
-  else steps=(installEvt?'<button class="btn primary" type="button" data-act="install">Uygulamayı yükle</button>':'')+'<p><b>iPhone:</b> Safari › Paylaş '+SHARE_ICO+' › Ana Ekrana Ekle</p><p><b>Android:</b> Chrome › ⋮ › Ana ekrana ekle</p>';
+  else steps=(installEvt?'<button class="btn primary" type="button" data-act="install">Uygulamayı yükle</button>':'')+'<p><b>iPhone:</b> Safari › Paylaş '+SHARE_ICO+' (ya da ••• › Paylaş) › Ana Ekrana Ekle</p><p><b>Android:</b> Chrome › ⋮ › Ana ekrana ekle</p>';
   return '<section class="box install"><h3>Telefonuna uygulama gibi ekle</h3><p class="muted">Ana ekrana eklersen tek dokunuşla tam ekran açılır ve ilerlemen kaybolmaz.</p>'+steps+(closable?'<button class="btn ghost" type="button" data-act="tipHide">Tamam, anladım</button>':'')+'</section>';
 }
+function installBar(){if(isStandalone())return '';return '<button type="button" class="instbar" data-act="instOpen"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg><span><b>Ana ekrana ekle</b><small>Tek dokunuşla aç, ilerlemen kaybolmasın</small></span><span class="go">Nasıl?</span></button>';}
+function openInstallSheet(){
+  closeInstallSheet();
+  const w=document.createElement('div');w.className='sheetwrap';w.id='instSheet';
+  const canShare=!!navigator.share;
+  w.innerHTML='<div class="sheetbg" data-act="instClose"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Ana ekrana ekleme">'+installTip(false)+(canShare?'<button class="btn warm" type="button" data-act="shareApp">Arkadaşına gönder</button>':'')+'<button class="btn ghost" type="button" data-act="instClose">Kapat</button></div>';
+  document.body.appendChild(w);
+}
+function closeInstallSheet(){const o=document.getElementById('instSheet');if(o)o.remove();}
+function shareApp(){try{navigator.share({title:'Trigo Avcısı',text:'Trigonometriyi oyunla öğren: dersler, testler ve karaoke şarkı!',url:location.origin+location.pathname}).catch(()=>{});}catch(e){}}
 // iletişim: adres düz metin olarak sayfa kaynağında durmasın diye parçalardan kurulur
 const MAIL=['tuyas2005','gmail.com'].join('@');
 function contactCard(){return '<section class="box contact"><h3>Sana özel uygulama</h3><p>İstediğiniz dersle ilgili uygulama yapılır. Görüş, öneri ve talepleriniz için yazın:</p><div class="row" style="flex-wrap:wrap"><a class="btn ghost mail" href="mailto:'+MAIL+'?subject='+encodeURIComponent('Trigo Avcısı')+'" style="text-decoration:none;color:var(--fg);flex:1 1 220px;min-width:0;overflow-wrap:anywhere">'+MAIL+'</a><button class="btn ghost" type="button" data-act="copyMail" style="flex:1 1 110px">Kopyala</button></div><p class="muted" id="mailMsg" style="min-height:20px;font-size:14px"></p></section>';}
 function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 
-function go(v){if(v!=='ritim')stopAll();view=v;resetArmed=false;if(v==='home')renderHome();else if(v==='ritim')renderRitim();else if(v==='lab')renderLab();else if(v==='sheet')renderSheet();window.scrollTo({top:0});}
+function go(v){closeInstallSheet();if(v!=='ritim')stopAll();view=v;resetArmed=false;if(v==='home')renderHome();else if(v==='ritim')renderRitim();else if(v==='lab')renderLab();else if(v==='sheet')renderSheet();window.scrollTo({top:0});}
 
 /* ---------- ritim modu: şarkı ---------- */
 const LEAD=[
@@ -828,8 +848,11 @@ document.addEventListener('click',e=>{
   else if(act==='syncUndo'){if(SY.i>0){SY.i--;SY.t[SY.i]=null;renderSync();}}
   else if(act==='syncExit'){if(audioPlaying())audio.pause();go('ritim');}
   else if(act==='syncReset'){SYNC={t:null,off:0};saveSync();renderRitim();}
+  else if(act==='instOpen'){openInstallSheet();}
+  else if(act==='instClose'){closeInstallSheet();}
+  else if(act==='shareApp'){shareApp();}
   else if(act==='tipHide'){S.tipHidden=true;save();renderHome();}
-  else if(act==='install'){if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;if(view==='home')renderHome();});}}
+  else if(act==='install'){if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;closeInstallSheet();if(view==='home')renderHome();});}}
   else if(act==='copyMail'){const msg=document.getElementById('mailMsg');const ok=()=>{if(msg)msg.textContent='Adres kopyalandı.';};try{navigator.clipboard.writeText(MAIL).then(ok,()=>{if(msg)msg.textContent=MAIL+' (basılı tutup kopyalayın)';});}catch(e){if(msg)msg.textContent=MAIL+' (basılı tutup kopyalayın)';}}
   else if(act==='copySync'){const ta=document.getElementById('syncCode');const msg=document.getElementById('copyMsg');const done=()=>{msg.textContent='Kopyalandı. Şimdi Claude’a yapıştırıp gönder.';};try{navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();msg.textContent='Kod seçildi, uzun basıp kopyala.';});}catch(e){ta.select();msg.textContent='Kod seçildi, uzun basıp kopyala.';}}
   else if(act==='tempo'){if(!playing){bpm=+t.dataset.bpm;songMsg='';renderRitim();}}
