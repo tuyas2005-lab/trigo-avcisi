@@ -261,7 +261,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-inde
 .front .ra{position:absolute;left:5%;bottom:6%;width:calc(var(--u)*.55);height:calc(var(--u)*.55);border:2px solid var(--ink);border-left:0;border-bottom:0;transform:translate(0,0)}
 .front .al{position:absolute;right:22%;bottom:4%;font-size:calc(var(--u)*.75)}
 .leg{left:calc(var(--d)/-2);top:0;width:var(--d);height:var(--a);transform:rotateY(-90deg);background:linear-gradient(90deg,var(--sin),var(--sin-d))}
-.leg span{transform:rotate(-90deg)}
+
 .base{left:0;top:calc(var(--a) - var(--d)/2);width:var(--b);height:var(--d);transform:rotateX(-90deg);background:linear-gradient(180deg,var(--cos),var(--cos-d))}
 .hyp{left:calc(var(--b)/2 - var(--c)/2);top:calc(var(--a)/2 - var(--d)/2);width:var(--c);height:var(--d);transform:rotateZ(36.87deg) rotateX(90deg);background:linear-gradient(180deg,#FFC27A,var(--cot))}
 .pf.leg,.pf.base,.pf.hyp{box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
@@ -281,6 +281,21 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-inde
 .sheetbg{position:absolute;inset:0;background:rgba(5,10,20,.6)}
 .sheet{position:relative;max-width:540px;width:100%;margin:0 auto;max-height:85vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,.14);padding:16px max(16px, env(safe-area-inset-left, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:12px;animation:sheetup .25s ease-out}
 @keyframes sheetup{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+/* dönen üçgen geliştirme */
+.hero .tri3d{--u:24px;position:relative}
+.tri3d::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:calc(var(--u)*.7);border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);z-index:-1}
+.tri3d::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(91,228,155,.28),transparent 70%);z-index:-1}
+.pf.glow{box-shadow:inset 0 0 0 3px rgba(255,255,255,.85),inset 0 0 26px rgba(255,255,255,.45),0 0 18px 4px rgba(255,255,255,.35)}
+.pf{transition:box-shadow .4s}
+.pf.leg,.pf.base,.pf.hyp{transform-style:preserve-3d}
+.pf>span{grid-area:1/1;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.leg>span{transform:rotate(-90deg)}
+.leg>span.bk{transform:rotateY(180deg) rotate(-90deg)}
+.hyp>span{transform:rotate(180deg)}
+.hyp>span.bk{transform:rotateX(180deg) rotate(180deg)}
+.fticker{margin:6px 0 0;font-family:var(--display);font-weight:800;font-size:17px;line-height:1.3;color:var(--fg);min-height:44px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.fticker.in{animation:tickin .45s ease-out}
+@keyframes tickin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -373,7 +388,7 @@ function tri(o){
   return out+'</svg>';
 }
 const LBL={opp:'Karşı',adj:'Komşu',hyp:'Hipotenüs'};
-const CUBE='<div class="tri3d" aria-hidden="true"><div class="prism"><div class="pf front"><i class="ra"></i><b class="al">α</b></div><div class="pf back"></div><div class="pf leg"><span>karşı</span></div><div class="pf base"><span>komşu</span></div><div class="pf hyp"><span>hipotenüs</span></div><div class="pl pl-f">komşu</div><div class="pl pl-b">komşu</div></div></div>';
+const CUBE='<div class="tri3d" aria-hidden="true"><div class="prism"><div class="pf front"><i class="ra"></i><b class="al">α</b></div><div class="pf back"></div><div class="pf leg"><span>karşı</span><span class="bk">karşı</span></div><div class="pf base"><span>komşu</span></div><div class="pf hyp"><span>hipotenüs</span><span class="bk">hipotenüs</span></div><div class="pl pl-f">komşu</div><div class="pl pl-b">komşu</div></div></div>';
 const RC={opp:'var(--sin)',adj:'var(--cos)',hyp:'var(--cot)'};
 
 /* ---------- soru üreticiler ---------- */
@@ -515,7 +530,8 @@ function renderHome(){
   let nextFound=false;
   const nodes=CH.map(c=>{const open=unlocked(c);const st=S.stars[c.id]||0;let isNext=false;if(open&&!st&&!nextFound){isNext=true;nextFound=true;}
     return '<button type="button" class="node'+(open?'':' locked')+(c.boss?' boss':'')+(isNext?' next':'')+'" data-act="chapter" data-id="'+c.id+'" '+(open?'':'aria-disabled="true"')+'>'+(isNext?'<span class="badge-next">SIRADAKİ</span>':'')+'<span class="num" style="background-color:'+c.color+';--nd:'+c.color.replace(')','-d)')+'">'+(c.boss?I.crown:c.id)+'</span><span class="txt"><strong>'+c.name+'</strong><small>'+c.sub.replace(/-/g,'\u2011')+'</small></span>'+(open?'<span class="stars">'+[1,2,3].map(i=>I.star(i<=st)).join('')+'</span>':'<span class="muted">'+I.lock+'</span>')+'</button>';}).join('');
-  app.innerHTML='<div class="wrap">'+installBar()+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
+  app.innerHTML='<div class="wrap">'+installBar()+topBar()+'<section class="hero"><div class="hrow"><div class="head"><p class="muted" style="font-weight:700">Selam,</p><h1>'+esc(S.name)+'</h1><p class="fticker" id="fticker" aria-live="off">'+tickerHTML(tickI)+'</p></div>'+CUBE+'</div><div class="lvl"><span>Seviye '+(lv+1)+' · <span class="c-cot">'+TITLES[Math.min(lv,TITLES.length-1)]+'</span></span><span class="muted" style="font-size:14px">'+inLv+'/150 XP</span></div><div class="bar"><i style="width:'+(inLv/150*100)+'%"></i></div></section><h2 style="font-size:26px">Macera haritası</h2><div class="map">'+nodes+'</div>'+contactCard()+'</div>';
+  applyGlow();
 }
 
 function startChapter(id){stopAll();const c=CH.find(x=>x.id===id);if(!unlocked(c)){sfx.bad();return;}const slides=c.lesson();if(!slides.length){startQuiz(c);return;}L={c,slides,i:0};view='lesson';renderLesson();}
@@ -598,6 +614,12 @@ function renderSheet(){
   contactCard()+'<button type="button" class="danger" data-act="reset">'+(resetArmed?'Emin misin? Tüm XP ve yıldızlar silinecek. Silmek için tekrar dokun':'İlerlemeyi sıfırla')+'</button></div></div>';
 }
 
+// dönen üçgen: sırayla formül göster, ilgili kenarları parlat
+const TICK=[['sin','Karşı / Hipotenüs',['leg','hyp']],['cos','Komşu / Hipotenüs',['base','hyp']],['tan','Karşı / Komşu',['leg','base']],['cot','Komşu / Karşı',['base','leg']]];
+let tickI=0;
+function tickerHTML(i){const [f,r]=TICK[i];return '<span style="color:'+COL[f]+'">'+f+' α</span> = '+fmt(r);}
+function applyGlow(){const pr=document.querySelector('.hero .prism');if(!pr)return;const on=TICK[tickI][2];['leg','base','hyp'].forEach(k=>{const el=pr.querySelector('.'+k);if(el)el.classList.toggle('glow',on.includes(k));});pr.dataset.f=TICK[tickI][0];}
+setInterval(()=>{const el=document.getElementById('fticker');if(!el)return;tickI=(tickI+1)%TICK.length;el.classList.remove('in');void el.offsetWidth;el.innerHTML=tickerHTML(tickI);el.classList.add('in');applyGlow();},2600);
 // ana ekrana ekleme bilgisi
 let installEvt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(view==='home'||!S.name){if(!S.name)renderWelcome();else renderHome();}});
