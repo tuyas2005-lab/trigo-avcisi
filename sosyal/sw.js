@@ -1,5 +1,5 @@
 /* Çevrimdışı destek: önce ağdan dener, olmazsa son kaydedilen kopyayı verir. Supabase istekleri önbelleğe alınmaz. */
-const CACHE='sosyal-avcisi-v1';
+const CACHE='sosyal-avcisi-v2';
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','index.html','art.js','content1.js','content2.js','config.js','manifest.webmanifest','icon-192.png']).catch(()=>{})));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{

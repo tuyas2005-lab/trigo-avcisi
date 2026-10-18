@@ -62,12 +62,12 @@ $$;
 
 -- Haftanın başlangıcı: Türkiye saatiyle pazartesi 00:00.
 create or replace function public.sa_week_start() returns timestamptz
-language sql stable as $$
+language sql stable set search_path = public as $$
   select date_trunc('week', now() at time zone 'Europe/Istanbul') at time zone 'Europe/Istanbul';
 $$;
 
 create or replace function public.sa_today() returns text
-language sql stable as $$
+language sql stable set search_path = public as $$
   select to_char(now() at time zone 'Europe/Istanbul', 'YYYY-MM-DD');
 $$;
 

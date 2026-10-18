@@ -1,5 +1,4 @@
-/* Sınıf ligi ve öğretmen paneli için Supabase bağlantısı.
-   Boş bırakılırsa uygulama tek kişilik modda çalışır (lig ve öğretmen paneli kapalı).
-   url: Supabase > Project Settings > API > Project URL
-   key: aynı sayfadaki "anon public" ya da "publishable" anahtar (tarayıcıda kullanılmak için yapılmıştır, gizli değildir). */
-window.SA_CONFIG={url:'',key:''};
+/* Sınıf ligi ve öğretmen paneli için Supabase bağlantısı (proje: sosyal-avcisi, Frankfurt).
+   Bu "publishable" anahtar tarayıcıda kullanılmak için yapılmıştır, gizli değildir:
+   tablolar doğrudan okunamaz, yalnızca PIN ve öğrenci jetonu kontrol eden sa_* fonksiyonları çağrılabilir. */
+window.SA_CONFIG={url:'https://wnifpywzbaekcmhtsfzb.supabase.co',key:'sb_publishable_zElM7FR7m0qSn3OXwGq1ng_ywYse4w3'};
