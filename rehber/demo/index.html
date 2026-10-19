@@ -74,7 +74,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex
   <button class="btn gizle-dar" type="button" id="sifirlaBtn" disabled>↺ Sıfırla</button>
   <a class="btn ana" id="indirBtn" href="../indir.html" target="_top">⬇ Ücretsiz indir</a>
 </div>
-<iframe id="uyg" title="Öğrenci Rehberlik Takip Sistemi canlı örnek"></iframe>
+<iframe id="uyg" title="Öğrenci Rehberlik Takip Sistemi canlı örnek" allow="microphone"></iframe>
 <div id="perde">
   <div class="kutu" id="perdeKutu">
     <h1>Programı tarayıcınızda deneyin</h1>
@@ -171,7 +171,10 @@ const ADIMLAR=[
  {sayfa:'panel',sec:'a[data-yol="ogrenciler"]',bas:1,b:'Öğrenciler',m:'Öğrenci listesine gitmek için <b>Öğrenciler</b>\'e basın.'},
  {sayfa:'ogrenciler',sec:'#aramaKutusu',b:'Arama ve süzme',m:'Ad ya da numarayla arayın; sınıf, görüşme konusu ve etiketle süzün.'},
  {sayfa:'ogrenciler',sec:'#ogrenciGovde .tikla-satir',bas:1,b:'Öğrenci dosyası',m:'<b>ÖRNEK ÖĞRENCİ</b>\'ye basarak dosyasını açın.'},
- {sayfa:'dosya',sec:'#btnOgrenciGorusme',b:'Öğrenci görüşmesi',m:'Yeni görüşme resmî <b>Öğrenci Görüşme Formu</b> düzeninde açılır. Notu yazabilir ya da mikrofonla söyleyebilirsiniz.'},
+ {sayfa:'dosya',sec:'#btnOgrenciGorusme',bas:1,b:'Öğrenci görüşmesi',m:'Yeni bir görüşme kaydedelim. <b>+ Öğrenci Görüşmesi</b>\'ne basın; resmî <b>Öğrenci Görüşme Formu</b> düzeninde açılır.'},
+ {sayfa:'form-ogrenci',sec:'#sesTus',b:'🎙️ Formu sesle doldurun',m:'Programın en sevilen özelliği: <b>Sesle Yaz</b>\'a basın ve konuşun, söyledikleriniz forma yazılsın. "virgül", "nokta" diyerek noktalama da koyabilirsiniz. Burada da deneyebilirsiniz (Chrome ya da Edge, mikrofon izni verin).'},
+ {sayfa:'form-ogrenci',sec:'#notAlani',b:'Görüşmenin özeti',m:'Söyledikleriniz buraya yazılır, sonra istediğiniz gibi düzeltirsiniz. Klavyeyle yazmak da her zaman mümkün. Not: Sesle yazma tarayıcının ses tanıma servisini kullanır, yalnızca o sırada internet ister; programın geri kalanı tamamen internetsiz çalışır.'},
+ {sayfa:'form-ogrenci',sec:'#btnYazdir',b:'Kaydedin ve yazdırın',m:'<b>Kaydet</b> ile görüşme öğrencinin dosyasına eklenir; <b>Yazdır</b> ile resmî form düzeninde çıktı alırsınız.'},
  {sayfa:'dosya',sec:'#btnVeliGorusme',b:'Veli görüşmesi',m:'Veli görüşmeleri de resmî <b>Veli Görüşme Formu</b> ile kaydedilir ve yazdırılır.'},
  {sayfa:'dosya',sec:'#dosyaSekmeler',b:'Dosya sekmeleri',m:'Görüşme geçmişi, hatırlatmalar ve yorumlar bu sekmelerde.'},
  {sayfa:'dosya',sec:'a[data-yol="kayit"]',bas:1,b:'Öğrenci kaydı',m:'Yeni öğrenci eklemek için <b>Öğrenci Kayıt</b>\'a basın.'},
@@ -194,6 +197,7 @@ async function sayfayaGit(sayfa){
   if(uygSayfa()===sayfa)return;
   let hedef='web/'+sayfa+'.html';
   if(sayfa==='dosya')hedef+='?id='+encodeURIComponent(K.ornek_id());
+  if(sayfa==='form-ogrenci')hedef+='?ogrenciId='+encodeURIComponent(K.ornek_id())+'&yeni=1';
   uyg.src=hedef;}
 async function hedefBul(ad,jeton){
   if(ad.kabuk)return document.querySelector(ad.sec);

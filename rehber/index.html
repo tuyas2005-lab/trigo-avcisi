@@ -26,6 +26,32 @@
 .cerceve img{display:block;width:100%;height:auto}
 .hero .cerceve{transform:perspective(1600px) rotateY(-6deg) rotateX(2deg)}
 @media (max-width:900px){.hero .cerceve{transform:none}}
+.cipler{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:4px 0 14px}
+.cipler a{display:inline-block;background:var(--panel);border:1px solid var(--line);color:var(--fg);font-weight:800;font-size:14px;padding:7px 12px;border-radius:99px;text-decoration:none}
+.cipler a:hover{border-color:var(--teal)}
+/* sesle doldurma */
+.sesle{background:linear-gradient(135deg,var(--navy),#22406A);color:#fff}
+.sesle .wrap{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+@media (max-width:900px){.sesle .wrap{grid-template-columns:1fr}}
+.sesle .ust{color:#7FD6D9}.sesle .lead,.sesle .ipucu{color:#C9D6E8}.sesle b{color:#fff}
+.sesle-adim{padding-left:22px;margin:18px 0;font-size:17px}.sesle-adim li{margin-bottom:6px}
+.sesle .btn.ana{margin-top:6px}
+.form-sahne{background:#fff;color:#1B2A41;border-radius:16px;padding:18px;box-shadow:0 30px 60px rgba(0,0,0,.35);font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+.fs-bas{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid #147A80;padding-bottom:8px;margin-bottom:8px}
+.fs-bas span{font-weight:800;color:#147A80;letter-spacing:.05em}.fs-bas small{color:#5D6B80}
+.fs-satir{display:flex;gap:12px;font-size:13px;padding:8px 0;border-bottom:1px solid #DCE3EC}.fs-satir>span:first-child{font-weight:700;min-width:120px}
+.fs-satir i{display:inline-block;width:11px;height:11px;border:1.5px solid #8A97A8;border-radius:3px;margin:0 3px -1px 8px}.fs-satir i.on{background:#147A80;border-color:#147A80}
+.fs-ozet{background:#5BB5B8;color:#fff;font-weight:800;text-align:center;padding:6px;margin-top:10px;font-size:13px;letter-spacing:.04em}
+.fs-ses{display:flex;align-items:center;gap:10px;padding:8px 0}
+.fs-tus{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #E2483D;color:#E2483D;font-weight:800;border-radius:99px;padding:5px 12px;font-size:13px}
+.fs-tus .nokta{width:9px;height:9px;border-radius:50%;background:#E2483D;animation:nabiz 1s ease-in-out infinite}
+@keyframes nabiz{50%{transform:scale(1.5);opacity:.5}}
+.fs-dinle{font-size:12px;color:#5D6B80}
+.fs-metin{min-height:150px;background:#FFFDF6;border:1px solid #E6DFC8;border-radius:8px;padding:12px;font-size:15px;line-height:1.6}
+.fs-metin::after{content:'';display:inline-block;width:2px;height:1.1em;background:#1B2A41;margin-left:2px;vertical-align:-2px;animation:imlec .9s step-end infinite}
+@keyframes imlec{50%{opacity:0}}
+/* güvenlik */
+.guvenli .kart .ikon{background:var(--teal2)}
 /* ekran görüntüleri */
 .galeri{display:grid;grid-template-columns:250px 1fr;gap:22px;margin-top:30px;align-items:start}
 .galeri ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -81,15 +107,60 @@ dialog.genis img{display:block;width:100%;height:auto}
     <div>
       <span class="rozet">🌱 Rehber öğretmenler için · Ücretsiz</span>
       <h1>Görüşmeleriniz, formlarınız ve raporlarınız tek programda</h1>
-      <p class="lead">Öğrenci ve veli görüşmelerini kaydedin, resmî görüşme formu düzeninde yazdırın; takvim, gündem ve dönem sonu faaliyet raporu kendiliğinden hazır olsun.</p>
+      <p class="lead">Görüşme formlarını <b>konuşarak doldurun</b>, resmî form düzeninde yazdırın; takvim, gündem ve dönem sonu faaliyet raporu kendiliğinden hazır olsun. Program <b>internetsiz</b> çalışır, bilgileriniz bilgisayarınızda kalır.</p>
       <div class="cta">
         <a class="btn ana" href="indir.html">⬇ Ücretsiz indir</a>
         <a class="btn cizgi" href="#canli">▶ Canlı örneği dene</a>
       </div>
+      <ul class="cipler" aria-label="Öne çıkanlar">
+        <li><a href="#sesle">🎙️ Formu sesle doldurun</a></li>
+        <li><a href="#guvenli">📴 İnternetsiz çalışır</a></li>
+        <li><a href="#guvenli">🔒 Verileriniz yalnızca sizin bilgisayarınızda kalır</a></li>
+      </ul>
       <div class="bilgi" id="surumBilgi">Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez</div>
-      <div class="not"><span>🔒</span><span><b>Verileriniz yalnızca sizin bilgisayarınızda kalır.</b> Program bir sunucuya bağlanmaz; öğrenci ve görüşme bilgileri geliştiriciye ya da başka birine gönderilmez.</span></div>
     </div>
     <div class="cerceve" aria-hidden="true"><div class="cubuk"><i></i><i></i><i></i></div><img src="img/panel-k.webp" srcset="img/panel-k.webp 720w, img/panel.webp 1440w" sizes="(max-width:900px) 100vw, 560px" width="720" height="450" alt=""></div>
+  </div>
+</section>
+
+<section id="sesle" class="sesle">
+  <div class="wrap">
+    <div>
+      <p class="ust">En sevilen özellik</p>
+      <h2>Konuşun, görüşme formu dolsun</h2>
+      <p class="lead">Görüşmeden sonra uzun notlar yazmakla uğraşmayın. <b>Sesle Yaz</b>'a basın, görüşmeyi anlatın; söyledikleriniz resmî görüşme formunun "Çalışmanın Özeti" alanına yazılsın.</p>
+      <ol class="sesle-adim">
+        <li><b>Sesle Yaz</b>'a basın.</li>
+        <li>Konuşun. "virgül", "nokta" diyerek noktalama koyun.</li>
+        <li>Metni gözden geçirin, <b>Kaydet</b> ve <b>Yazdır</b>.</li>
+      </ol>
+      <p class="ipucu">Canlı örnekte siz de deneyebilirsiniz (Chrome ya da Edge). Sesle yazma isteğe bağlıdır; tarayıcının ses tanıma servisini kullandığı için yalnızca o sırada internet ister. İsterseniz klavyeyle yazarsınız, programın geri kalanı tamamen internetsiz çalışır.</p>
+      <a class="btn ana" href="#canli">🎙️ Canlı örnekte dene</a>
+    </div>
+    <div class="form-sahne" aria-hidden="true">
+      <div class="fs-bas"><span>ÖĞRENCİ GÖRÜŞME FORMU</span><small>Görüşme tarihi · bugün</small></div>
+      <div class="fs-satir"><span>Görüşme Konusu</span><span><i class="on"></i> Akademik Konular <i></i> Sosyal Uyum</span></div>
+      <div class="fs-ozet">ÇALIŞMANIN ÖZETİ</div>
+      <div class="fs-ses"><span class="fs-tus"><span class="nokta"></span> Kaydı Durdur</span><span class="fs-dinle">🔴 Dinleniyor…</span></div>
+      <div class="fs-metin" id="sesMetin"></div>
+    </div>
+  </div>
+</section>
+
+<section id="guvenli" class="guvenli">
+  <div class="wrap">
+    <p class="ust">İnternetsiz ve güvenli</p>
+    <h2>Bilgileriniz bilgisayarınızdan çıkmaz</h2>
+    <p class="lead">Rehberlik kayıtları en hassas bilgilerdir. Bu yüzden program internete bağlanmadan, yalnızca sizin bilgisayarınızda çalışır.</p>
+    <div class="izgara">
+      <div class="kart"><div class="ikon">📴</div><h3>İnternetsiz çalışır</h3><p>Program bir sunucuya bağlanmaz. Okulda internet olmasa da çalışır.</p></div>
+      <div class="kart"><div class="ikon">💻</div><h3>Veriler yalnızca sizde</h3><p>Öğrenci, veli ve görüşme bilgileri bilgisayarınızdaki program klasöründe durur; geliştiriciye ya da başka birine gönderilmez.</p></div>
+      <div class="kart"><div class="ikon">👤</div><h3>Hesap yok, kayıt yok</h3><p>Programı kullanmak için hesap açmazsınız, e-posta vermezsiniz.</p></div>
+      <div class="kart"><div class="ikon">🔐</div><h3>Kopyalamaya karşı şifre</h3><p>Program klasörü izinsiz başka bir bilgisayara kopyalanırsa orada kilitlenir; şifre girilmeden hiçbir öğrenci bilgisi görüntülenemez.</p></div>
+      <div class="kart"><div class="ikon">💾</div><h3>Otomatik yedek</h3><p>Her gün kendiliğinden yedek alınır; isterseniz USB belleğe ek yedek, istediğiniz tarihe geri dönüş.</p></div>
+      <div class="kart"><div class="ikon">⚖️</div><h3>KVKK'ya uygun kullanım için</h3><p>Veriler sizin bilgisayarınızda kaldığı için kim eriştiğine siz karar verirsiniz. Ayrıntılar <a href="kosullar.html">Kullanım Koşulları</a>'nda.</p></div>
+    </div>
+    <p class="ipucu" style="margin-top:18px">Tek istisna isteğe bağlı sesle yazmadır: kullandığınız anda söyledikleriniz tarayıcının (Chrome/Edge) ses tanıma servisine gider. Kullanmazsanız hiçbir bilgi bilgisayarınızdan çıkmaz.</p>
   </div>
 </section>
 
@@ -110,7 +181,7 @@ dialog.genis img{display:block;width:100%;height:auto}
     <p class="ust">Neler yapar?</p>
     <h2>Rehberlik servisinin günlük işleri için</h2>
     <div class="izgara">
-      <div class="kart"><div class="ikon">📝</div><h3>Resmî form düzeninde görüşmeler</h3><p>Öğrenci ve veli görüşme formlarının bütün alanları. Notu yazın ya da mikrofonla söyleyin; form düzeninde yazdırın.</p></div>
+      <div class="kart"><div class="ikon">🎙️</div><h3>Sesle doldurulan görüşme formları</h3><p>Öğrenci ve veli görüşme formlarının bütün alanları. Notu mikrofonla söyleyin ya da yazın; resmî form düzeninde yazdırın.</p></div>
       <div class="kart"><div class="ikon">📥</div><h3>e-Okul sınıf listesi</h3><p>Sınıf Listesi dosyasını (PDF, Excel, CSV) yükleyin; öğrencileri tek tek girmeyin. Görüşme geçmişi korunur.</p></div>
       <div class="kart"><div class="ikon">📅</div><h3>Gündem, takvim, bildirim</h3><p>Takip randevuları, sınıf etkinlikleri ve toplantılar; vakti gelince bildirim ve zil.</p></div>
       <div class="kart"><div class="ikon">📊</div><h3>Raporlar ve faaliyet raporu</h3><p>Tarih, sınıf ve konuya göre istatistikler, sınıf kapsaması, takip uyarıları. Dönem sonu faaliyet raporu tek tıkla.</p></div>
@@ -124,8 +195,8 @@ dialog.genis img{display:block;width:100%;height:auto}
   <div class="wrap">
     <p class="ust">Canlı örnek</p>
     <h2>İndirmeden önce deneyin</h2>
-    <p class="lead">Aşağıda gerçek program çalışıyor. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir, isterseniz <b>Eğitimi geç</b> diyebilirsiniz. Kendiniz de en fazla 20 deneme kaydı yapabilirsiniz. Deneme kayıtları yalnızca bu tarayıcıda durur, hiçbir yere gönderilmez.</p>
-    <div class="demo"><iframe src="demo/" title="Öğrenci Rehberlik Takip Sistemi canlı örnek" loading="lazy"></iframe></div>
+    <p class="lead">Aşağıda gerçek program çalışıyor. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir ve formu <b>sesle doldurmayı</b> gösterir, isterseniz <b>Eğitimi geç</b> diyebilirsiniz. Kendiniz de en fazla 20 deneme kaydı yapabilirsiniz. Deneme kayıtları yalnızca bu tarayıcıda durur, hiçbir yere gönderilmez.</p>
+    <div class="demo"><iframe src="demo/" title="Öğrenci Rehberlik Takip Sistemi canlı örnek" loading="lazy" allow="microphone"></iframe></div>
     <p class="ipucu" style="margin-top:12px"><a href="demo/" target="_blank" rel="noopener">Tam ekran aç ↗</a> · Canlı örnek bilgisayarda en iyi görünür.</p>
   </div>
 </section>
@@ -187,6 +258,17 @@ const CFG=window.RG_CONFIG||{},pencere=document.getElementById('pencere'),pencer
 function ac(html,genis){pencereIc.innerHTML='<button class="kapat" type="button" data-kapat aria-label="Kapat">✕</button>'+html;pencere.classList.toggle('genis',!!genis);if(!pencere.open)pencere.showModal();}
 pencere.addEventListener('click',e=>{if(e.target===pencere||e.target.closest('[data-kapat]'))pencere.close();});
 if(window.RG_DOSYA)document.getElementById('surumBilgi').textContent='Sürüm '+RG_DOSYA.surum+' · Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez';
+
+/* sesle doldurma canlandırması: kelimeler konuşuluyormuş gibi tek tek yazılır */
+(function(){
+  const el=document.getElementById('sesMetin');if(!el)return;
+  const METIN='Öğrenci son haftalarda derslere odaklanmakta zorlandığını, sınav kaygısı yaşadığını anlattı. Ders çalışma planı birlikte hazırlandı, nefes egzersizi çalışıldı. İki hafta sonra takip görüşmesi yapılacak.';
+  const kelimeler=METIN.split(' ');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=METIN;return;}
+  let i=0,zaman=null;
+  function yaz(){el.textContent=kelimeler.slice(0,++i).join(' ');zaman=setTimeout(i<kelimeler.length?yaz:()=>{i=0;yaz();},i<kelimeler.length?170+Math.random()*160:3500);}
+  new IntersectionObserver(g=>{if(g[0].isIntersecting){if(!zaman)yaz();}else{clearTimeout(zaman);zaman=null;}}).observe(el);
+})();
 
 /* ekran görüntüleri */
 const EKRAN=[['panel','Panel','Günün özeti, ajanda ve grafikler'],['dosya','Öğrenci dosyası','Görüşmeler, hatırlatmalar, etiketler'],['form','Görüşme formu','Resmî form düzeninde, sesle yazım'],['raporlar','Raporlar','Kapsama, takip uyarıları, faaliyet raporu'],['takvim','Takvim','Görüşmeler ve etkinlikler'],['ogrenciler','Öğrenciler','Arama ve süzme']];
