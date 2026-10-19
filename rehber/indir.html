@@ -36,6 +36,71 @@
 .adim>span{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-weight:900;display:grid;place-items:center}
 .adim h3{margin:4px 0 4px}
 .adim p{margin:0;color:var(--muted)}
+/* kurulum görselleri: işletim sistemi pencerelerinin sade canlandırması; turuncu numaralar tıklanacak yeri gösterir */
+.isletim{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:8px}
+.isletim button{border:0;background:none;font:800 15px var(--body);color:var(--muted);padding:9px 18px;border-radius:9px;cursor:pointer}
+.isletim button[aria-selected="true"]{background:var(--navy);color:#fff}
+.adim>div{min-width:0}
+.sahne{margin:14px 0 4px;max-width:480px}
+.sahne figcaption{font-size:12px;color:var(--muted);margin-top:6px}
+.ekran{position:relative;background:#fff;color:#1f2937;border-radius:10px;box-shadow:0 10px 30px rgba(15,23,36,.18),0 0 0 1px rgba(15,23,36,.12);font:13px/1.45 "Segoe UI",system-ui,-apple-system,sans-serif;overflow:visible}
+.adim .ekran p{color:inherit;margin:0 0 8px}
+.adim .ekran .kucuk{color:#4b5563}
+.adim .ekran.smart .kucuk{color:#dbeafe}
+.ekran .cubuk-baslik{background:#f3f4f6;border-bottom:1px solid #e5e7eb;padding:7px 12px;font-size:12px;color:#374151;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ekran .govde{position:relative;padding:12px 14px}
+.ekran .satir{position:relative;padding:5px 8px;border-radius:5px;overflow-wrap:anywhere}
+.ekran .satir.secili{background:#dbeafe;padding-right:40px}
+.ekran .satir.soluk{color:#9ca3af}
+.ekran .menu{position:absolute;background:#fff;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.18);padding:4px;min-width:150px;z-index:2}
+.ekran .menu div{position:relative;padding:5px 10px;border-radius:5px}
+.ekran .vurgu{background:#fde6d4;font-weight:700;outline:2px solid #E8833A}
+.ekran .buyuk{font-size:15px;font-weight:600;margin:0 0 8px}
+.ekran .kucuk{font-size:12px;color:#4b5563;margin:0 0 8px}
+.ekran .yol{display:flex;gap:8px;margin-bottom:10px}
+.ekran .kutu-yazi{position:relative;flex:1;min-width:0;overflow-wrap:anywhere;border:1px solid #9ca3af;border-radius:4px;padding:4px 8px;font-family:Consolas,monospace;font-size:12px;outline:2px solid #E8833A}
+.ekran .dugme{position:relative;display:inline-block;border:1px solid #9ca3af;border-radius:5px;padding:4px 14px;background:#f9fafb;font-size:12px}
+.ekran .dugme.mavi{background:#0067c0;color:#fff;border-color:#0067c0;outline:2px solid #E8833A;outline-offset:2px}
+.ekran .dugmeler{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.ekran .dugmeler.dikey{flex-direction:column;align-items:stretch}
+.ekran .dugmeler.dikey .dugme{text-align:center}
+.ekran.smart{background:#0f5cad;color:#fff}
+.ekran.smart .govde{padding:16px 18px}
+.ekran.smart .baslik-buyuk{font-size:19px;font-weight:600;margin:0 0 8px}
+.ekran.smart p{margin:0 0 8px}.ekran.smart .kucuk{color:#dbeafe}
+.ekran.smart .bag{position:relative;cursor:default}
+.ekran .dugme.beyaz{background:transparent;color:#fff;border:2px solid #fff;padding:5px 14px}
+.ekran.smart .dugme.beyaz:first-child{outline:2px solid #E8833A;outline-offset:2px}
+.ekran.konsol{background:#0c0c0c;color:#e5e7eb}
+.ekran.konsol .cubuk-baslik{background:#1f1f1f;color:#d1d5db;border-color:#333}
+.ekran.konsol pre{margin:0;font:12px/1.5 Consolas,Menlo,monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding-right:24px}
+.ekran.mac .cubuk-baslik{justify-content:center;position:relative;background:#ececec}
+.isiklar{position:absolute;left:10px;display:flex;gap:6px}.isiklar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.isiklar i:nth-child(2){background:#febc2e}.isiklar i:nth-child(3){background:#28c840}
+.ekran.mac-konsol .cubuk-baslik{background:#2b2b2b;color:#ddd;justify-content:center;position:relative}
+.ekran.uyari{max-width:300px}
+.ekran .orta{text-align:center;padding:18px}
+.ekran .buyuk-ikon{font-size:34px;margin-bottom:6px}
+.ekran .ikonlar{display:flex;align-items:center;gap:18px;padding:18px}
+.ekran .ikon-dosya{position:relative;text-align:center;font-size:40px;line-height:1}
+.ekran .ikon-dosya>span{display:block;font-size:11px;margin-top:6px;line-height:1.3;min-width:120px}
+.ekran .ok{font-size:22px;color:#6b7280}
+.ekran .yan-yana{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);padding:0}
+.ekran .kenar{background:#f5f5f7;padding:10px;border-right:1px solid #e5e7eb;border-radius:0 0 0 10px}
+.ekran .kenar b{display:block;font-size:11px;color:#6b7280;margin-bottom:4px}
+.ekran .kenar div{position:relative;padding:4px 6px;border-radius:5px}
+.ekran .surukle{opacity:.85;transform:rotate(-4deg)}
+.not-etiket{font-style:normal;font-size:11px;font-weight:700;color:#C2410C;margin-left:6px}
+.isaret{position:absolute;right:-16px;top:-16px;width:26px;height:26px;border-radius:50%;background:#E8833A;color:#fff;font:900 14px/26px var(--body);text-align:center;font-style:normal;box-shadow:0 0 0 3px #fff,0 4px 10px rgba(0,0,0,.25);z-index:3}
+.isaret::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid #E8833A;animation:isaret-halka 1.6s ease-out infinite}
+.isaret.yan{right:8px;top:50%;transform:translateY(-50%)}
+.isaret.sonra{right:auto;left:calc(100% + 10px);top:50%;transform:translateY(-50%)}
+.isaret.uyar{background:#C2413A}.isaret.uyar::after{border-color:#C2413A}
+@keyframes isaret-halka{0%{opacity:.9;transform:scale(.8)}100%{opacity:0;transform:scale(1.5)}}
+.sahne.gercek{max-width:300px}
+.sahne .resim{position:relative;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,36,.18)}
+.sahne .resim img{display:block;width:100%;height:auto;border-radius:14px}
+.sahne .resim .isaret{right:auto;transform:translate(-50%,-50%)}
+@media (prefers-reduced-motion:reduce){.isaret::after{animation:none}}
 code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:.92em}
 .iki{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media (max-width:760px){.iki{grid-template-columns:1fr}}
@@ -109,13 +174,109 @@ code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:.92em}
 <section id="kurulum" class="alt">
   <div class="wrap dar">
     <p class="ust">Kurulum</p>
-    <h2>Beş adımda kurun</h2>
-    <div class="adim"><span>1</span><div><h3>Zip'i klasöre çıkarın</h3><p><b>Windows:</b> inen zip dosyasına sağ tıklayıp <b>Tümünü ayıkla</b> deyin. <b>Mac:</b> zip'e çift tıklayın. <b>Programı zip'in içinden çalıştırmayın</b>; çalışmaz.</p></div></div>
-    <div class="adim"><span>2</span><div><h3>Klasörü kalıcı bir yere koyun</h3><p>Çıkan <b>Ogrenci-Rehberlik-Takip</b> klasörünü OneDrive'ın eşitlemediği yerel bir konuma taşıyın, örneğin <code>C:\OgrenciRehberlikTakip</code>. Masaüstü ve Belgeler bazı bilgisayarlarda OneDrive'a bağlıdır; emin değilseniz <code>C:\</code> altını kullanın.</p></div></div>
-    <div class="adim"><span>3</span><div><h3>Başlatın</h3><p><b>Windows:</b> <code>Baslat.bat</code> dosyasına çift tıklayın. "Windows bilgisayarınızı korudu" uyarısı çıkarsa <b>Ek bilgi</b>'ye, ardından <b>Yine de çalıştır</b>'a tıklayın (yalnızca ilk seferde). <b>Mac:</b> <code>Baslat.command</code> dosyasına sağ tıklayıp <b>Aç</b>'ı seçin, uyarıda tekrar <b>Aç</b> deyin (yalnızca ilk seferde). Açılan pencereyi kapatmayın; program tarayıcınızda açılır ve masaüstüne kısayol eklenir.</p></div></div>
-    <div class="adim"><span>4</span><div><h3>Python</h3><p><b>Windows:</b> Python paketin içinde hazır gelir, bir şey kurmanız gerekmez. (32 bit Windows ya da Windows 7/8 kullanıyorsanız <a href="https://www.python.org/downloads/" rel="noopener">python.org</a>'dan Python kurun ve <b>Add python.exe to PATH</b> kutusunu işaretleyin.) <b>Mac:</b> Python bir kez kurulur. "Komut satırı geliştirici araçlarını yüklemek ister misiniz?" penceresi açılırsa <b>Yükle</b> deyin, bitince <code>Baslat.command</code>'a tekrar çift tıklayın. Pencere açılmazsa <a href="https://www.python.org/downloads/" rel="noopener">python.org/downloads</a> adresinden Mac için Python'u kurun.</p></div></div>
-    <div class="adim"><span>5</span><div><h3>Koşulları onaylayıp etkinleştirin</h3><p>İlk açılışta koşulları onaylayın ve bir <b>kopyalamaya karşı şifre</b> belirleyin. Bu bir giriş şifresi değildir, her açılışta sorulmaz; klasör izinsiz başka bilgisayara kopyalanırsa programı orada kilitler. Şifreyi bir yere not edin.</p></div></div>
-    <div class="not" style="margin-top:24px"><span>📘</span><span>Ayrıntılı kullanım kılavuzu program klasöründeki <b>KILAVUZ.md</b> dosyasındadır. Program açıldığında içinde bir <b>ÖRNEK ÖĞRENCİ</b> kaydı bulunur; gerçek veri girmeden önce silebilirsiniz.</span></div>
+    <h2>Adım adım kurun</h2>
+    <p class="lead" style="margin-bottom:18px">Turuncu numaralar nereye tıklayacağınızı gösterir.</p>
+    <div class="isletim" role="tablist" aria-label="İşletim sistemi">
+      <button type="button" role="tab" data-os="win" aria-selected="true">⊞ Windows</button>
+      <button type="button" role="tab" data-os="mac" aria-selected="false"> Mac</button>
+    </div>
+
+    <div class="os-adimlar" data-os="win">
+      <div class="adim"><span>1</span><div><h3>Zip'i ayıklayın</h3><p>İndirilenler klasöründe <b>Ogrenci-Rehberlik-Takip-<span class="sNo">x</span>-Windows.zip</b> dosyasına <b>sağ tıklayın</b> ve <b>Tümünü ayıkla…</b>'yı seçin.</p>
+        <figure class="sahne"><div class="ekran win"><div class="cubuk-baslik">📁 İndirilenler</div><div class="govde" style="min-height:190px">
+          <div class="satir secili">🗜️ Ogrenci-Rehberlik-Takip-<span class="sNo">x</span>-Windows.zip</div><div class="satir soluk">📄 belge.pdf</div>
+          <div class="menu" style="left:46%;top:42px"><div>Aç</div><div class="vurgu">Tümünü ayıkla…<i class="isaret yan">1</i></div><div>Paylaş</div><div>Kopyala</div><div>Sil</div></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>2</span><div><h3>Yeri seçip ayıklayın</h3><p>Açılan pencerede yolu <code>C:\OgrenciRehberlikTakip</code> yapın (OneDrive dışında bir yer), sonra <b>Ayıkla</b>'ya basın.</p>
+        <figure class="sahne"><div class="ekran win"><div class="cubuk-baslik">Sıkıştırılmış (Zip) Klasörleri Ayıkla</div><div class="govde">
+          <p class="buyuk">Bir hedef seçin ve dosyaları ayıklayın</p>
+          <p class="kucuk">Dosyalar bu klasöre ayıklanacak:</p>
+          <div class="yol"><span class="kutu-yazi">C:\OgrenciRehberlikTakip<i class="isaret yan">1</i></span><span class="dugme">Gözat…</span></div>
+          <p class="kucuk">☑ Bittiğinde ayıklanan dosyaları göster</p>
+          <div class="dugmeler"><span class="dugme mavi">Ayıkla<i class="isaret">2</i></span><span class="dugme">İptal</span></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>3</span><div><h3>Baslat.bat'a çift tıklayın</h3><p>Açılan <b>Ogrenci-Rehberlik-Takip</b> klasöründe <b>Baslat.bat</b> dosyasına <b>çift tıklayın</b>. Python paketin içinde hazır gelir, ayrıca bir şey kurmanız gerekmez.</p>
+        <figure class="sahne"><div class="ekran win"><div class="cubuk-baslik">📁 C:\OgrenciRehberlikTakip\Ogrenci-Rehberlik-Takip</div><div class="govde">
+          <div class="satir">📁 python</div><div class="satir">📁 uygulama</div><div class="satir secili">⚙️ Baslat.bat <em class="not-etiket">← çift tıklayın</em><i class="isaret yan">1</i></div>
+          <div class="satir">📄 KILAVUZ.md</div><div class="satir">📄 KULLANIM-KOSULLARI.txt</div><div class="satir">🖼️ simge.ico</div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>4</span><div><h3>Uyarı çıkarsa: Yine de çalıştır</h3><p>"Windows bilgisayarınızı korudu" penceresi çıkarsa önce <b>Ek bilgi</b>'ye, sonra <b>Yine de çalıştır</b>'a basın. İnternetten indirilen dosyalarda yalnızca ilk seferde çıkar.</p>
+        <figure class="sahne"><div class="ekran smart"><div class="govde">
+          <p class="baslik-buyuk">Windows bilgisayarınızı korudu</p>
+          <p>Microsoft Defender SmartScreen tanınmayan bir uygulamanın başlatılmasını engelledi.</p>
+          <p><u class="bag">Ek bilgi<i class="isaret sonra">1</i></u></p>
+          <p class="kucuk">Uygulama: Baslat.bat<br>Yayımcı: Bilinmeyen yayımcı</p>
+          <div class="dugmeler"><span class="dugme beyaz">Yine de çalıştır<i class="isaret">2</i></span><span class="dugme beyaz">Çalıştırma</span></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>5</span><div><h3>Siyah pencereyi açık bırakın</h3><p>Bir siyah pencere açılır ve program tarayıcınızda kendiliğinden gelir. <b>Bu pencereyi kapatmayın</b>; kapatınca program durur. Masaüstüne de bir kısayol eklenir, sonraki açılışlarda onu kullanın.</p>
+        <figure class="sahne"><div class="ekran konsol"><div class="cubuk-baslik">C:\Windows\system32\cmd.exe</div><div class="govde">
+          <pre>==============================================
+ ÖĞRENCİ REHBERLİK TAKİP SİSTEMİ  (sürüm <span class="sNo">x</span>)
+==============================================
+ Adres        : http://localhost:8090/
+
+ Bu pencereyi KAPATMAYIN. Programı kapatmak
+ için bu pencereyi kapatın.</pre><i class="isaret uyar" style="right:14px;top:60px">!</i>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>6</span><div><h3>Etkinleştirin</h3><p>İlk açılışta bir <b>kopyalamaya karşı şifre</b> belirleyin (iki kez), Kullanım Koşulları kutusunu işaretleyin ve <b>Etkinleştir ve Başla</b>'ya basın. Bu bir giriş şifresi değildir, her açılışta sorulmaz; bir yere not edin.</p>
+        <figure class="sahne gercek"><div class="resim"><img src="img/kurulum-etkinlestir.webp" width="448" height="740" alt="Programın ilk kurulum ekranı: kopyalamaya karşı şifre, şifre tekrar, koşul onayı ve Etkinleştir ve Başla düğmesi" loading="lazy">
+          <i class="isaret" style="left:92%;top:63%">1</i><i class="isaret" style="left:10%;top:78%">2</i><i class="isaret" style="left:92%;top:92.4%">3</i></div><figcaption>Programın gerçek ekranı</figcaption></figure></div></div>
+      <p class="ipucu">32 bit Windows ya da Windows 7/8 kullanıyorsanız önce <a href="https://www.python.org/downloads/" rel="noopener">python.org</a>'dan Python kurun ve kurulumda <b>Add python.exe to PATH</b> kutusunu işaretleyin.</p>
+    </div>
+
+    <div class="os-adimlar" data-os="mac" hidden>
+      <div class="adim"><span>1</span><div><h3>Zip'i açın</h3><p>İndirilenler klasöründe <b>Ogrenci-Rehberlik-Takip-<span class="sNo">x</span>-Mac.zip</b> dosyasına <b>çift tıklayın</b>; yanında <b>Ogrenci-Rehberlik-Takip</b> klasörü oluşur.</p>
+        <figure class="sahne"><div class="ekran mac"><div class="cubuk-baslik"><span class="isiklar"><i></i><i></i><i></i></span>İndirilenler</div><div class="govde ikonlar">
+          <div class="ikon-dosya">🗜️<span>Ogrenci-Rehberlik-<br>Takip-<span class="sNo">x</span>-Mac.zip</span><i class="isaret" style="left:60%;top:-6px">1</i></div><div class="ok">→</div><div class="ikon-dosya">📁<span>Ogrenci-Rehberlik-<br>Takip</span></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>2</span><div><h3>Klasörü Belgeler'e taşıyın</h3><p><b>Ogrenci-Rehberlik-Takip</b> klasörünü sürükleyip kenar çubuğundaki <b>Belgeler</b>'e bırakın. İndirilenler'de bırakmayın; o klasör zamanla temizlenebilir.</p>
+        <figure class="sahne"><div class="ekran mac"><div class="cubuk-baslik"><span class="isiklar"><i></i><i></i><i></i></span>Finder</div><div class="govde yan-yana">
+          <div class="kenar"><b>Sık Kullanılanlar</b><div>⬇ İndirilenler</div><div class="vurgu">📄 Belgeler<i class="isaret yan">1</i></div><div>🖥 Masaüstü</div></div>
+          <div class="ikonlar"><div class="ikon-dosya surukle">📁<span>Ogrenci-Rehberlik-<br>Takip</span></div></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>3</span><div><h3>Baslat.command'a sağ tıklayıp Aç deyin</h3><p>Klasördeki <b>Baslat.command</b> dosyasına <b>sağ tıklayın</b> (ya da Control tuşuyla tıklayın) ve <b>Aç</b>'ı seçin.</p>
+        <figure class="sahne"><div class="ekran mac"><div class="cubuk-baslik"><span class="isiklar"><i></i><i></i><i></i></span>Ogrenci-Rehberlik-Takip</div><div class="govde" style="min-height:180px">
+          <div class="satir">📁 uygulama</div><div class="satir secili">⚙️ Baslat.command</div><div class="satir">📄 KILAVUZ.md</div><div class="satir">📄 KULLANIM-KOSULLARI.txt</div>
+          <div class="menu" style="left:40%;top:52px"><div class="vurgu">Aç<i class="isaret yan">1</i></div><div>Birlikte Aç ›</div><div>Bilgi Al</div><div>Çöp Sepetine Taşı</div></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>4</span><div><h3>Uyarıda tekrar Aç</h3><p>"Geliştirici doğrulanamadı" uyarısında <b>Aç</b>'a basın; yalnızca ilk seferde sorulur.</p>
+        <figure class="sahne"><div class="ekran mac uyari"><div class="govde orta">
+          <div class="buyuk-ikon">⚠️</div><p class="buyuk">"Baslat.command" açılsın mı?</p>
+          <p class="kucuk">macOS, bu uygulamanın geliştiricisini doğrulayamıyor. Açmak istediğinizden emin misiniz?</p>
+          <div class="dugmeler dikey"><span class="dugme mavi">Aç<i class="isaret">1</i></span><span class="dugme">İptal</span></div>
+        </div></div></figure>
+        <div class="not uyari" style="margin-top:12px"><span>ℹ️</span><span><b>Aç düğmesi çıkmıyorsa</b> (macOS 15 ve sonrası): <b>Sistem Ayarları → Gizlilik ve Güvenlik</b>'i açın, aşağıdaki "Baslat.command engellendi" satırının yanında <b>Yine de Aç</b>'a basın ve şifrenizi girin.</span></div></div></div>
+
+      <div class="adim"><span>5</span><div><h3>Python'u bir kez kurun</h3><p>Mac'te Python bir kez kurulur. "Komut satırı geliştirici araçları" penceresi çıkarsa <b>Yükle</b>'ye basın; kurulum bitince <b>Baslat.command</b>'a tekrar çift tıklayın. Pencere çıkmazsa <a href="https://www.python.org/downloads/" rel="noopener">python.org/downloads</a>'tan Mac için Python'u kurun.</p>
+        <figure class="sahne"><div class="ekran mac uyari"><div class="govde orta">
+          <div class="buyuk-ikon">🛠️</div><p class="buyuk">"python3" komutu, komut satırı geliştirici araçlarını gerektirir.</p>
+          <p class="kucuk">Araçları şimdi yüklemek istiyor musunuz?</p>
+          <div class="dugmeler"><span class="dugme">Şimdi Değil</span><span class="dugme mavi">Yükle<i class="isaret">1</i></span></div>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>6</span><div><h3>Terminal penceresini açık bırakın</h3><p>Bir Terminal penceresi açılır ve program tarayıcınızda kendiliğinden gelir. <b>Bu pencereyi kapatmayın</b>; kapatınca program durur.</p>
+        <figure class="sahne"><div class="ekran konsol mac-konsol"><div class="cubuk-baslik"><span class="isiklar"><i></i><i></i><i></i></span>Terminal — Baslat.command</div><div class="govde">
+          <pre> ÖĞRENCİ REHBERLİK TAKİP SİSTEMİ  (sürüm <span class="sNo">x</span>)
+ Adres        : http://localhost:8090/
+
+ Bu pencereyi KAPATMAYIN.</pre><i class="isaret uyar" style="right:14px;top:40px">!</i>
+        </div></div></figure></div></div>
+
+      <div class="adim"><span>7</span><div><h3>Etkinleştirin</h3><p>İlk açılışta bir <b>kopyalamaya karşı şifre</b> belirleyin (iki kez), Kullanım Koşulları kutusunu işaretleyin ve <b>Etkinleştir ve Başla</b>'ya basın. Bu bir giriş şifresi değildir; bir yere not edin.</p>
+        <figure class="sahne gercek"><div class="resim"><img src="img/kurulum-etkinlestir.webp" width="448" height="740" alt="Programın ilk kurulum ekranı" loading="lazy">
+          <i class="isaret" style="left:92%;top:63%">1</i><i class="isaret" style="left:10%;top:78%">2</i><i class="isaret" style="left:92%;top:92.4%">3</i></div><figcaption>Programın gerçek ekranı</figcaption></figure></div></div>
+    </div>
+
+    <p class="ipucu" style="margin-top:6px">Pencere görüntüleri temsilîdir; Windows ve macOS sürümüne göre biraz farklı görünebilir.</p>
+    <div class="not" style="margin-top:18px"><span>📘</span><span>Ayrıntılı kullanım kılavuzu program klasöründeki <b>KILAVUZ.md</b> dosyasındadır. Program açıldığında içinde bir <b>ÖRNEK ÖĞRENCİ</b> kaydı bulunur; gerçek veri girmeden önce silebilirsiniz.</span></div>
   </div>
 </section>
 
@@ -140,6 +301,7 @@ if(D){
   document.getElementById('sSurum').innerHTML=D.surum+(not.onemli?' <span class="onemli">ÖNEMLİ GÜNCELLEME</span>':'');
   document.getElementById('sTarih').textContent=tarihYaz(not.tarih);
   dugmeler.forEach(b=>{const p=D[b.dataset.pf];if(p)b.href='indir/'+p.dosya;});
+  document.querySelectorAll('.sNo').forEach(e=>e.textContent=D.surum);
   document.querySelectorAll('[data-boyut]').forEach(e=>{const p=D[e.dataset.boyut];if(p)e.textContent=mb(p.boyut);});
   if(D.windows&&!D.windows.python)document.getElementById('winNot').textContent='Bu pakette Python yok; Python bir kez kurulur.';
 }
@@ -161,6 +323,11 @@ dugmeler.forEach(b=>b.addEventListener('click',e=>{
   if(b.getAttribute('aria-disabled')==='true'){e.preventDefault();return;}
   say(b.dataset.pf);document.getElementById('yedekBag').href=b.href;document.getElementById('tamam').hidden=false;
   setTimeout(()=>document.getElementById('kurulum').scrollIntoView(),1200);}));
+/* kurulum: Windows / Mac sekmeleri; Mac'ten gelen ziyaretçiye Mac adımları açılır */
+function osSec(os){document.querySelectorAll('.isletim [data-os]').forEach(b=>b.setAttribute('aria-selected',b.dataset.os===os));document.querySelectorAll('.os-adimlar').forEach(d=>d.hidden=d.dataset.os!==os);}
+document.querySelector('.isletim').addEventListener('click',e=>{const b=e.target.closest('[data-os]');if(b)osSec(b.dataset.os);});
+if(/Mac|iPhone|iPad/.test((navigator.platform||'')+' '+navigator.userAgent))osSec('mac');
+dugmeler.forEach(b=>b.addEventListener('click',()=>{if(b.getAttribute('aria-disabled')!=='true')osSec(b.dataset.pf==='mac'?'mac':'win');}));
 okunduMu();guncelle();
 </script>
 </body>
