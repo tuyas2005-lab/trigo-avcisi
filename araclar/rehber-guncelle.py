@@ -3,10 +3,15 @@
 
 Kullanım:
     python3 araclar/rehber-guncelle.py Ogrenci-Rehberlik-Takip-Yayin.zip
+    python3 araclar/rehber-guncelle.py Yayin.zip --windows Yayin-Windows.zip
+
+Windows paketi taşınabilir Python'u (python/ klasörü) içinde getirir; Mac paketinde bu klasör olmaz
+(Mac'te Python bir kez kurulur). Tek zip verilirse ve içinde python/ varsa Windows paketi hepsini, Mac
+paketi python/ hariç kalanını alır. Windows paketi ayrı hazırlandıysa --windows ile verin.
 
 Yaptıkları:
-  1. rehber/indir/ altına indirme dosyasını yazar (tek klasörlü, geliştirme dosyaları ve
-     kişisel olabilecek dosyalar ayıklanmış; eski sürüm dosyası silinir) ve rehber/indir/surum.js'yi günceller.
+  1. rehber/indir/ altına Windows ve Mac indirme dosyalarını yazar (tek klasörlü, geliştirme dosyaları ve
+     kişisel olabilecek dosyalar ayıklanmış; eski sürüm dosyaları silinir) ve rehber/indir/surum.js'yi günceller.
   2. rehber/demo/web/ ve rehber/demo/program.zip'i (canlı örnek) programın kendi dosyalarından üretir.
   3. KULLANIM-KOSULLARI.txt metnini rehber/kosullar.html ve rehber/indir.html içine aynen yerleştirir.
 
@@ -55,14 +60,16 @@ def oku(zip_yolu):
     return dosyalar
 
 
-def indirme_dosyasi(dosyalar, surum):
+def eski_zipleri_sil():
     hedef_dizin = os.path.join(REHBER, "indir")
     os.makedirs(hedef_dizin, exist_ok=True)
     for eski in os.listdir(hedef_dizin):
         if eski.endswith(".zip"):
             os.remove(os.path.join(hedef_dizin, eski))
-    ad = "%s-%s.zip" % (KLASOR_ADI, surum)
-    yol = os.path.join(hedef_dizin, ad)
+
+
+def indirme_dosyasi(dosyalar, ad):
+    yol = os.path.join(REHBER, "indir", ad)
     with zipfile.ZipFile(yol, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for dosya_adi, (bilgi, veri) in sorted(dosyalar.items()):
             if DISLA.search(dosya_adi):
@@ -71,7 +78,7 @@ def indirme_dosyasi(dosyalar, surum):
             yeni.external_attr = bilgi.external_attr  # Baslat.command çalıştırılabilir kalsın
             yeni.compress_type = zipfile.ZIP_DEFLATED
             z.writestr(yeni, veri)
-    return ad, os.path.getsize(yol)
+    return {"dosya": ad, "boyut": os.path.getsize(yol)}
 
 
 def canli_ornek(dosyalar):
@@ -129,18 +136,42 @@ def kosullar_html(metin):
     return "\n".join(cikti).replace("</ul>\n<ul>", "")
 
 
-def main():
-    if len(sys.argv) != 2:
-        sys.exit(__doc__)
-    dosyalar = oku(sys.argv[1])
+def surum_oku(dosyalar):
     sunucu = dosyalar["uygulama/sunucu.py"][1].decode("utf-8")
     surum = re.search(r'^SURUM\s*=\s*"([^"]+)"', sunucu, re.M).group(1)
     kosul = re.search(r'^KOSUL_SURUMU\s*=\s*"([^"]+)"', sunucu, re.M).group(1)
+    return surum, kosul
 
-    ad, boyut = indirme_dosyasi(dosyalar, surum)
+
+def main():
+    argumanlar = sys.argv[1:]
+    windows_zip = None
+    if "--windows" in argumanlar:
+        i = argumanlar.index("--windows")
+        if i + 1 >= len(argumanlar):
+            sys.exit(__doc__)
+        windows_zip = argumanlar[i + 1]
+        del argumanlar[i:i + 2]
+    if len(argumanlar) != 1:
+        sys.exit(__doc__)
+    dosyalar = oku(argumanlar[0])
+    surum, kosul = surum_oku(dosyalar)
+    win_dosyalar = oku(windows_zip) if windows_zip else dosyalar
+    if surum_oku(win_dosyalar)[0] != surum:
+        sys.exit("Hata: Windows paketinin sürümü (%s) ana paketle (%s) aynı değil." % (surum_oku(win_dosyalar)[0], surum))
+    # Taşınabilir Python yalnızca Windows'ta çalışır; Mac paketinde gereksiz yer kaplamasın.
+    mac_dosyalar = {a: v for a, v in dosyalar.items() if not a.startswith("python/")}
+    python_var = any(a.startswith("python/") for a in win_dosyalar)
+
+    eski_zipleri_sil()
+    windows = indirme_dosyasi(win_dosyalar, "%s-%s-Windows.zip" % (KLASOR_ADI, surum))
+    windows["python"] = python_var
+    mac = indirme_dosyasi(mac_dosyalar, "%s-%s-Mac.zip" % (KLASOR_ADI, surum))
     with open(os.path.join(REHBER, "indir", "surum.js"), "w", encoding="utf-8") as f:
         f.write("/* araclar/rehber-guncelle.py üretir; elle değiştirmeyin. */\n")
-        f.write("window.RG_DOSYA=%s;\n" % json.dumps({"surum": surum, "kosulSurumu": kosul, "dosya": ad, "boyut": boyut}, ensure_ascii=False))
+        f.write("window.RG_DOSYA=%s;\n" % json.dumps({"surum": surum, "kosulSurumu": kosul, "windows": windows, "mac": mac}, ensure_ascii=False))
+    if not python_var:
+        print("Uyarı: Windows paketinde python/ klasörü yok; Windows kullanıcılarının da Python kurması gerekecek.")
 
     canli_ornek(dosyalar)
 
@@ -160,7 +191,7 @@ def main():
     with open(os.path.join(REHBER, "surumler.js"), encoding="utf-8") as f:
         if "surum:'%s'" % surum not in f.read().replace('"', "'").replace(" ", ""):
             print("Uyarı: rehber/surumler.js içinde %s sürümünün notu yok. Tarih ve değişiklikleri ekleyin." % surum)
-    print("Tamam: sürüm %s, koşul sürümü %s, %s (%.1f MB)" % (surum, kosul, ad, boyut / 1e6))
+    print("Tamam: sürüm %s, koşul sürümü %s, Windows %.1f MB, Mac %.1f MB" % (surum, kosul, windows["boyut"] / 1e6, mac["boyut"] / 1e6))
 
 
 if __name__ == "__main__":

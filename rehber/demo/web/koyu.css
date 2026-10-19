@@ -273,6 +273,9 @@ html.koyu .okul-duzey{background:#202c3c;color:#a4c4eb}
 html.koyu .kosul-pencere{background:var(--kart,#171e29)}
 html.koyu .kosul-pencere iframe{background:#171e29}
 html.koyu .hakkinda-uyari{background:#40341a;border:1px solid #8a7854}
+html.koyu .surum-hatirlatma{background:#40341a;border:1px solid #8a7854;color:#fce5bd}
+html.koyu .surum-hatirlatma svg{stroke:#f6c475}
+html.koyu .surum-hatirlatma a{color:#f9c791}
 /* ---- lisans-kur.html ---- */
 html.koyu .lk-aciklama{background:#18243a;border:1px solid #3e4e65}
 /* ---- lisans-kilit.html ---- */

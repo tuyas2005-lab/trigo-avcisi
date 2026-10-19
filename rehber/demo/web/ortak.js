@@ -118,7 +118,7 @@ function apiHataGoster(e) {
    birlikte değiştirilir). Uyuşmazsa: yeni ekran dosyaları, arka planda hâlâ
    çalışan ESKİ bir sunucu süreciyle konuşuyor demektir (projede tekrar eden
    "eski pencere açık kaldı" durumu) — kullanıcıya üstte kalıcı bir uyarı gösterilir. */
-var ARAYUZ_SURUMU = "3.4";
+var ARAYUZ_SURUMU = "3.6";
 
 /* ---- görünüm teması (tema.js ile birlikte çalışır) ---- */
 function temaTercihi() { try { return localStorage.getItem("rehberlikTema") || "acik"; } catch (e) { return "acik"; } }
@@ -897,6 +897,42 @@ function alarmlariYukle() {
       tus.disabled = true;
       apiPost("/api/kosullar/kabul", {}).then(function () { kutu.remove(); bildirim("Teşekkürler, koşullar kabul edildi."); })
         .catch(function (e) { tus.disabled = false; apiHataGoster(e); });
+    });
+  }).catch(function () {});
+})();
+
+
+/* ============================================================
+   GÜNCELLEME HATIRLATMASI (sürüm 3.5)
+   Program internete bağlanmaz. Yalnızca kendi sürüm tarihine bakar: sürüm
+   6 aydan (182 gün) eskiyse Panel'in üstünde kapatılabilir bir not gösterir.
+   Kapatılan not 30 gün sonra yeniden görünür.
+   ============================================================ */
+(function surumHatirlatmasi() {
+  if (!/panel\.html$/.test(location.pathname) || !document.getElementById("ana")) return;
+  var ANAHTAR = "rehberlikSurumHatirlatmaKapandi";
+  fetch("/api/baslangic", { cache: "no-store" }).then(function (y) { return y.ok ? y.json() : null; }).then(function (b) {
+    if (!b || !b.surumTarihi) return;
+    var p = String(b.surumTarihi).split(".");
+    var surumGunu = new Date(+p[2], +p[1] - 1, +p[0]);
+    var gun = Math.floor((Date.now() - surumGunu.getTime()) / 86400000);
+    if (!(gun > 182)) return;
+    var kapandi = 0;
+    try { kapandi = +(localStorage.getItem(ANAHTAR) || 0); } catch (e) {}
+    if (kapandi && (Date.now() - kapandi) < 30 * 86400000) return;
+    var web = (b.gelistirici && b.gelistirici.web) || "";
+    var ay = Math.floor(gun / 30);
+    var not = document.createElement("div");
+    not.className = "surum-hatirlatma";
+    not.innerHTML = ikonSvg("bilgi") + '<div><b>Programınızın sürümü (' + kacHTML(b.surum) + ') yaklaşık ' + ay + ' aylık.</b> ' +
+      'Yeni sürüm ve önemli hata düzeltmeleri yayımlanmış olabilir.' +
+      (web ? ' Lütfen <a href="' + kacHTML(web) + '" target="_blank" rel="noopener">' + kacHTML(web.replace(/^https?:\/\//, "")) + '</a> adresini ziyaret edin.' : '') +
+      '</div><button type="button" title="Kapat (30 gün sonra yeniden hatırlatılır)">Kapat</button>';
+    var ana = document.getElementById("ana");
+    ana.insertBefore(not, ana.firstChild);
+    not.querySelector("button").addEventListener("click", function () {
+      try { localStorage.setItem(ANAHTAR, String(Date.now())); } catch (e) {}
+      not.remove();
     });
   }).catch(function () {});
 })();

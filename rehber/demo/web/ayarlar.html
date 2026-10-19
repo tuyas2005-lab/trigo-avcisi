@@ -260,6 +260,7 @@
       <div class="icerik">
         <ul class="kucuk" style="margin:0;padding-left:18px;line-height:1.7">
           <li><b>pypdf</b> — PDF okuma kütüphanesi (BSD lisansı). Lisans metni: <code>uygulama/kutuphane/pypdf-LISANS.txt</code></li>
+          <li><b>Python 3.12</b> çalışma ortamı — yalnız Windows paketinde (Python Software Foundation lisansı). Lisans metni: <code>python/LICENSE.txt</code></li>
           <li><b>Nunito / Nunito Sans</b> yazı tipleri (SIL Open Font License 1.1). Lisans metinleri: <code>uygulama/web/assets/font/</code></li>
         </ul>
       </div>
@@ -653,6 +654,8 @@ function topluCiktiHazirla(b) {
       satir("Lisans", "Ücretsiz kullanım (satılamaz, ücret karşılığı dağıtılamaz)") +
       satir("Geliştirici", g.ad ? kacHTML(g.ad) : "") +
       satir("Web sitesi", web) +
+      satir("Güncellemeler", web ? "Yeni sürümler, hata düzeltmeleri ve duyurular yalnızca " + web + " adresinde yayımlanır. Lütfen bu adresi düzenli olarak takip edin." : "") +
+      satir("Bu sürümün tarihi", kacHTML(b.surumTarihi || "")) +
       satir("İletişim", ep) +
       satir("Geliştirme talepleri", (web || ep) ? "Yeni özellik ve kuruma özel uyarlama talepleri için yukarıdaki adresten ulaşabilirsiniz." : "") +
       satir("Veri klasörü", '<code>' + kacHTML(b.veriKlasoru || "") + '</code>');

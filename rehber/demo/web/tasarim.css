@@ -668,6 +668,14 @@ body.menu-dar #yan:hover .kullanici{justify-content:flex-start;padding:14px 16px
 .hakkinda-izgara dd{margin:0;color:var(--metin);word-break:break-word}
 .hakkinda-uyari{background:#fff7e6;border:1px solid #f5d38f;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.6;margin-top:14px}
 
+/* ---- güncelleme hatırlatması (sürüm 3.5) ---- */
+.surum-hatirlatma{display:flex;gap:12px;align-items:center;margin:0 0 14px;padding:12px 16px;border-radius:14px;
+  background:#fff7e6;border:1px solid #f5d38f;color:#5c3b00;font-size:14px;line-height:1.5;box-shadow:var(--golge)}
+.surum-hatirlatma svg{flex:0 0 22px;width:22px;height:22px;stroke:#c27803}
+.surum-hatirlatma>div{flex:1}
+.surum-hatirlatma a{font-weight:800;color:#9a4f00}
+.surum-hatirlatma button{flex:0 0 auto;padding:6px 12px;font-size:13px}
+
 /* ---- canlı örnek (araclar/rehber-guncelle.py ekler): kısa ekranda sol menü kendi içinde kaydırılır ---- */
 #yan nav{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
 #yan nav::-webkit-scrollbar{width:6px}
