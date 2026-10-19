@@ -118,7 +118,7 @@ function apiHataGoster(e) {
    birlikte değiştirilir). Uyuşmazsa: yeni ekran dosyaları, arka planda hâlâ
    çalışan ESKİ bir sunucu süreciyle konuşuyor demektir (projede tekrar eden
    "eski pencere açık kaldı" durumu) — kullanıcıya üstte kalıcı bir uyarı gösterilir. */
-var ARAYUZ_SURUMU = "3.6";
+var ARAYUZ_SURUMU = "3.7";
 
 /* ---- görünüm teması (tema.js ile birlikte çalışır) ---- */
 function temaTercihi() { try { return localStorage.getItem("rehberlikTema") || "acik"; } catch (e) { return "acik"; } }

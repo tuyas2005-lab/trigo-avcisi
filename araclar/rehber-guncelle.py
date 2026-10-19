@@ -99,10 +99,14 @@ def canli_ornek(dosyalar):
         with open(hedef, "wb") as f:
             f.write(veri)
     # Kısa ekranlarda sol menü kesilmesin: menü kendi içinde kaydırılsın (programın kendisinde de önerilen düzeltme).
+    # Program 3.7'den beri bunu kendisi yapıyor; o durumda eklenmez.
     tasarim = os.path.join(web, "tasarim.css")
     if os.path.exists(tasarim):
-        with open(tasarim, "a", encoding="utf-8") as f:
-            f.write(MENU_DUZELTME)
+        with open(tasarim, encoding="utf-8") as f:
+            menu_kayiyor = re.search(r"#yan nav\{[^}]*overflow-y\s*:\s*auto", f.read())
+        if not menu_kayiyor:
+            with open(tasarim, "a", encoding="utf-8") as f:
+                f.write(MENU_DUZELTME)
     # Tarayıcıda çalışacak Python dosyaları (web klasörü statik olarak sunulduğu için dahil değil).
     with zipfile.ZipFile(os.path.join(demo, "program.zip"), "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for dosya_adi, (bilgi, veri) in sorted(dosyalar.items()):

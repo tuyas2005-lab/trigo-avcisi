@@ -2,6 +2,9 @@
    Yeni sürümde EN ÜSTE ekleyin. tarih: 'YYYY-AA-GG' (bilinmiyorsa ''). onemli: true ise kırmızı "ÖNEMLİ GÜNCELLEME" etiketi çıkar.
    Her madde düz metindir; **kalın** yazmak için iki yıldız kullanabilirsiniz. */
 window.RG_SURUMLER=[
+ {surum:'3.7',tarih:'2026-10-20',onemli:true,baslik:'Sol menü küçük ekranlarda kaydırılabiliyor',maddeler:[
+  'Dizüstü bilgisayar gibi küçük ekranlarda sol menünün alt kısmı (Raporlar, Okul Raporu, Ayarlar) görünmüyor ve tıklanamıyordu. Menü artık kendi içinde kaydırılabiliyor; ince bir kaydırma çubuğu çıkar.',
+  'Programın adı (üstte) ve kullanıcı kutusu (altta) yerinde sabit kalır.']},
  {surum:'3.6',tarih:'2026-10-20',onemli:false,baslik:'Kurulumsuz Windows paketi',maddeler:[
   'Windows paketinin içinde Python hazır gelir (Python 3.12 resmî taşınabilir sürümü). Python kurmanıza gerek yoktur; zip\'i çıkartıp **Baslat.bat**\'a çift tıklamanız yeterlidir.',
   'Mac için ayrı paket vardır; Mac\'te Python bir kez kurulur.',
