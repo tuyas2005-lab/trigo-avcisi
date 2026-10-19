@@ -60,12 +60,15 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex
 .balon .btn.ana{background:var(--accent);color:var(--panel)}
 .bekle{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--panel);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.3)}
 :focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+[hidden]{display:none!important}
+#perde a{color:var(--accent);font-weight:700}
 @media (prefers-reduced-motion:reduce){.coach .hole,.balon{transition:none}.coach .hole::after,.balon .bas{animation:none}}
 </style>
 </head>
 <body>
 <div class="serit">
-  <span class="ad">Öğrenci Rehberlik Takip Sistemi <i>Canlı örnek</i></span>
+  <a class="btn" id="anaBtn" href="../" target="_top" title="Ana sayfaya dön" aria-label="Ana sayfaya dön">←<span class="gizle-dar"> Ana sayfa</span></a>
+  <span class="ad"><span class="gizle-dar">Öğrenci Rehberlik Takip Sistemi</span> <i>Canlı örnek</i></span>
   <div class="sayac" id="sayac" aria-live="polite">– / 20 deneme kaydı<div><i style="width:0"></i></div></div>
   <button class="btn" type="button" id="egitimBtn" disabled>❔ Eğitim</button>
   <button class="btn gizle-dar" type="button" id="sifirlaBtn" disabled>↺ Sıfırla</button>
@@ -78,11 +81,15 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex
     <p>Gerçek program burada, bilgisayarınıza hiçbir şey kurmadan açılır. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir. Deneme kayıtları yalnızca bu tarayıcıda durur, en fazla 20 öğrenci eklenebilir.</p>
     <button class="btn ana" type="button" id="baslaBtn">▶ Canlı örneği başlat</button>
     <p class="kucuk" style="margin-top:12px">İlk açılışta yaklaşık 14 MB indirilir.</p>
+    <p class="kucuk anaBag" style="margin-top:18px"><a href="../" target="_top">← Ana sayfaya dön</a></p>
   </div>
 </div>
 <script src="../indir/surum.js"></script>
 <script>
 const PYODIDE='https://cdn.jsdelivr.net/pyodide/v0.27.7/full/';
+/* Site içine gömülüyken (ana sayfadaki çerçeve) ana sayfa bağlantısına gerek yok; tam ekranda görünür. */
+const GOMULU=(()=>{try{return window.top!==window.self;}catch(e){return true;}})();
+if(GOMULU)document.querySelectorAll('#anaBtn,.anaBag').forEach(e=>e.hidden=true);
 const SINIR=20,EGITIM_KEY='rg-canli-egitim',BASLADI_KEY='rg-canli-basladi';
 const uyg=document.getElementById('uyg'),perde=document.getElementById('perde'),kutu=document.getElementById('perdeKutu');
 let py=null,K=null,kaydetZaman=null;
@@ -90,7 +97,7 @@ const utcFark=()=>-new Date().getTimezoneOffset();
 const ls={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
 
 function ilerleme(metin,yuzde){kutu.innerHTML='<h1>Canlı örnek hazırlanıyor</h1><div class="cubuk"><i style="width:'+yuzde+'%"></i></div><p class="kucuk">'+metin+'</p>';}
-function hata(metin){kutu.innerHTML='<h1>Canlı örnek açılamadı</h1><p>'+metin+'</p><a class="btn ana" href="../indir.html" target="_top">Programı indirin</a>';}
+function hata(metin){kutu.innerHTML='<h1>Canlı örnek açılamadı</h1><p>'+metin+'</p><a class="btn ana" href="../indir.html" target="_top">Programı indirin</a>'+(GOMULU?'':'<p class="kucuk" style="margin-top:18px"><a href="../" target="_top">← Ana sayfaya dön</a></p>');}
 function betik(src){return new Promise((tamam,olmadi)=>{const s=document.createElement('script');s.src=src;s.onload=tamam;s.onerror=()=>olmadi(new Error('yüklenemedi'));document.head.appendChild(s);});}
 function idbEsitle(okuma){return new Promise((tamam,olmadi)=>py.FS.syncfs(okuma,e=>e?olmadi(e):tamam()));}
 function kaydet(){clearTimeout(kaydetZaman);kaydetZaman=setTimeout(()=>idbEsitle(false).catch(()=>{}),300);}
