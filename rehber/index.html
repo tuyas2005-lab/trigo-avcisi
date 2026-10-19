@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1B2A41">
+<meta name="description" content="Rehber öğretmenler için ücretsiz görüşme kaydı, resmî görüşme formu çıktısı, takvim ve rapor programı. Windows ve Mac'te internetsiz çalışır; verileriniz yalnızca sizin bilgisayarınızda kalır.">
+<title>Öğrenci Rehberlik Takip Sistemi · Ücretsiz rehberlik programı</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="site.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+.hero{padding:56px 0 60px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:32px}}
+.rozet{display:inline-flex;gap:8px;align-items:center;background:var(--teal2);color:var(--teal);font-weight:800;font-size:14px;padding:6px 12px;border-radius:99px;margin-bottom:16px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 14px}
+.hero .bilgi{color:var(--muted);font-weight:700;font-size:14px}
+.hero .not{margin-top:20px;max-width:560px}
+.cerceve{border-radius:14px;overflow:hidden;box-shadow:0 30px 60px rgba(27,42,65,.22),0 0 0 1px var(--line);background:var(--panel)}
+.cerceve .cubuk{display:flex;gap:6px;padding:9px 12px;background:var(--panel2)}
+.cerceve .cubuk i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.cerceve img{display:block;width:100%;height:auto}
+.hero .cerceve{transform:perspective(1600px) rotateY(-6deg) rotateX(2deg)}
+@media (max-width:900px){.hero .cerceve{transform:none}}
+/* ekran görüntüleri */
+.galeri{display:grid;grid-template-columns:250px 1fr;gap:22px;margin-top:30px;align-items:start}
+.galeri ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.galeri li button{width:100%;text-align:left;border:0;background:transparent;color:var(--fg);font:800 15px var(--body);padding:12px 14px;border-radius:12px;cursor:pointer}
+.galeri li button span{display:block;font:600 13px var(--body);color:var(--muted)}
+.galeri li button[aria-selected="true"]{background:var(--panel);box-shadow:var(--shadow)}
+.galeri .cerceve{cursor:zoom-in}
+@media (max-width:820px){.galeri{grid-template-columns:1fr}.galeri ol{flex-direction:row;overflow-x:auto;padding-bottom:4px}.galeri li{flex:none}.galeri li button span{display:none}}
+/* canlı örnek */
+.demo{margin-top:28px;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--panel)}
+.demo iframe{display:block;width:100%;height:min(820px,86vh);border:0}
+/* adımlar */
+.adimlar{counter-reset:a;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:28px}
+.adimlar .kart{position:relative;padding-top:52px}
+.adimlar .kart::before{counter-increment:a;content:counter(a);position:absolute;top:18px;left:22px;width:28px;height:28px;border-radius:50%;background:var(--warm);color:#fff;font-weight:900;display:grid;place-items:center}
+.video{margin-top:28px;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9;position:relative;box-shadow:var(--shadow)}
+.video iframe,.video button{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video button{cursor:pointer;background:#000 center/cover}
+.video button span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:var(--warm);display:grid;place-items:center}
+.video button span::after{content:'';border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px}
+/* yazılar */
+.suzgec{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.suzgec button{border:0;background:var(--panel);color:var(--fg);font:700 14px var(--body);padding:8px 14px;border-radius:99px;cursor:pointer}
+.suzgec button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.yazi{cursor:pointer;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.yazi:hover{transform:translateY(-2px);border-color:var(--teal)}
+.yazi .kim{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);margin-bottom:8px}
+.yazi .devam{margin-top:auto;padding-top:14px;font-weight:800;color:var(--teal);font-size:15px}
+/* sss */
+details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:10px}
+summary{font-weight:800;cursor:pointer;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';font-size:22px;line-height:1;color:var(--teal)}
+details[open] summary::after{content:'–'}
+details p,details li{color:var(--muted)}
+/* pencere */
+dialog{border:0;border-radius:20px;padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 32px);background:var(--panel);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.genis{width:min(1280px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(15,23,36,.65);backdrop-filter:blur(3px)}
+.pencere{padding:26px;position:relative}
+dialog.genis .pencere{padding:0}
+dialog.genis img{display:block;width:100%;height:auto}
+.kapat{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:var(--panel2);color:var(--fg);font-size:18px;cursor:pointer;z-index:2}
+.okuma h2{font-size:28px;margin-right:40px}
+.okuma h3{margin-top:22px;font-size:18px}
+.okuma ul{padding-left:22px}.okuma li{margin-bottom:6px}
+</style>
+</head>
+<body data-sayfa="ana">
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="rozet">🌱 Rehber öğretmenler için · Ücretsiz</span>
+      <h1>Görüşmeleriniz, formlarınız ve raporlarınız tek programda</h1>
+      <p class="lead">Öğrenci ve veli görüşmelerini kaydedin, resmî görüşme formu düzeninde yazdırın; takvim, gündem ve dönem sonu faaliyet raporu kendiliğinden hazır olsun.</p>
+      <div class="cta">
+        <a class="btn ana" href="indir.html">⬇ Ücretsiz indir</a>
+        <a class="btn cizgi" href="#canli">▶ Canlı örneği dene</a>
+      </div>
+      <div class="bilgi" id="surumBilgi">Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez</div>
+      <div class="not"><span>🔒</span><span><b>Verileriniz yalnızca sizin bilgisayarınızda kalır.</b> Program bir sunucuya bağlanmaz; öğrenci ve görüşme bilgileri geliştiriciye ya da başka birine gönderilmez.</span></div>
+    </div>
+    <div class="cerceve" aria-hidden="true"><div class="cubuk"><i></i><i></i><i></i></div><img src="img/panel-k.webp" srcset="img/panel-k.webp 720w, img/panel.webp 1440w" sizes="(max-width:900px) 100vw, 560px" width="720" height="450" alt=""></div>
+  </div>
+</section>
+
+<section id="ekranlar" class="alt">
+  <div class="wrap">
+    <p class="ust">Ekran görüntüleri</p>
+    <h2>Programa yakından bakın</h2>
+    <p class="lead">Görüntülerdeki öğrenciler ve okul uydurmadır.</p>
+    <div class="galeri">
+      <ol role="tablist" aria-label="Ekranlar" id="galeriListe"></ol>
+      <div class="cerceve" id="galeriBuyuk" role="tabpanel"><div class="cubuk"><i></i><i></i><i></i></div><img id="galeriResim" alt="" width="1440" height="900"></div>
+    </div>
+  </div>
+</section>
+
+<section id="ozellikler">
+  <div class="wrap">
+    <p class="ust">Neler yapar?</p>
+    <h2>Rehberlik servisinin günlük işleri için</h2>
+    <div class="izgara">
+      <div class="kart"><div class="ikon">📝</div><h3>Resmî form düzeninde görüşmeler</h3><p>Öğrenci ve veli görüşme formlarının bütün alanları. Notu yazın ya da mikrofonla söyleyin; form düzeninde yazdırın.</p></div>
+      <div class="kart"><div class="ikon">📥</div><h3>e-Okul sınıf listesi</h3><p>Sınıf Listesi dosyasını (PDF, Excel, CSV) yükleyin; öğrencileri tek tek girmeyin. Görüşme geçmişi korunur.</p></div>
+      <div class="kart"><div class="ikon">📅</div><h3>Gündem, takvim, bildirim</h3><p>Takip randevuları, sınıf etkinlikleri ve toplantılar; vakti gelince bildirim ve zil.</p></div>
+      <div class="kart"><div class="ikon">📊</div><h3>Raporlar ve faaliyet raporu</h3><p>Tarih, sınıf ve konuya göre istatistikler, sınıf kapsaması, takip uyarıları. Dönem sonu faaliyet raporu tek tıkla.</p></div>
+      <div class="kart"><div class="ikon">🏫</div><h3>Okul raporu</h3><p>Birden çok rehber öğretmen, öğrenci adı içermeyen özet paketleriyle okul geneli faaliyet raporunu birlikte hazırlar.</p></div>
+      <div class="kart"><div class="ikon">💾</div><h3>Otomatik yedek</h3><p>Her gün kendiliğinden yedek; istenirse USB belleğe ek yedek, istenen tarihe geri dönüş.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="canli" class="alt">
+  <div class="wrap">
+    <p class="ust">Canlı örnek</p>
+    <h2>İndirmeden önce deneyin</h2>
+    <p class="lead">Aşağıda gerçek program çalışıyor. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir, isterseniz <b>Eğitimi geç</b> diyebilirsiniz. Kendiniz de en fazla 20 deneme kaydı yapabilirsiniz. Deneme kayıtları yalnızca bu tarayıcıda durur, hiçbir yere gönderilmez.</p>
+    <div class="demo"><iframe src="demo/" title="Öğrenci Rehberlik Takip Sistemi canlı örnek" loading="lazy"></iframe></div>
+    <p class="ipucu" style="margin-top:12px"><a href="demo/" target="_blank" rel="noopener">Tam ekran aç ↗</a> · Canlı örnek bilgisayarda en iyi görünür.</p>
+  </div>
+</section>
+
+<section id="kurulum">
+  <div class="wrap">
+    <p class="ust">Nasıl kullanılır?</p>
+    <h2>Dört adımda başlayın</h2>
+    <div id="videoAlan"></div>
+    <div class="adimlar">
+      <div class="kart"><h3>İndirin</h3><p>Kullanım koşullarını okuyup zip dosyasını indirin. Kayıt gerekmez.</p></div>
+      <div class="kart"><h3>Klasöre çıkarın</h3><p>Zip'e sağ tıklayıp <b>Tümünü ayıkla</b> deyin. Klasörü OneDrive dışında, örneğin <code>C:\</code> altında bir yere koyun.</p></div>
+      <div class="kart"><h3>Başlatın</h3><p>Windows'ta <b>Baslat.bat</b>, Mac'te <b>Baslat.command</b> dosyasına çift tıklayın. Program tarayıcınızda açılır.</p></div>
+      <div class="kart"><h3>Etkinleştirin</h3><p>İlk açılışta koşulları onaylayıp bir <b>kopyalamaya karşı şifre</b> belirleyin. Bu bir giriş şifresi değildir.</p></div>
+    </div>
+    <p style="margin-top:20px"><a href="indir.html#kurulum">Ayrıntılı kurulum adımları →</a></p>
+  </div>
+</section>
+
+<section id="kose" class="alt">
+  <div class="wrap">
+    <p class="ust">Rehberlik Köşesi</p>
+    <h2>Okuyun, paylaşın, kullanın</h2>
+    <p class="lead">Veli toplantısında, sınıf rehberlik saatinde ya da bir görüşmeden önce açıp kullanabileceğiniz kısa yazılar.</p>
+    <div class="suzgec" id="suzgec" role="group" aria-label="Okuyucuya göre süz">
+      <button type="button" aria-pressed="true" data-k="">Tümü</button><button type="button" aria-pressed="false" data-k="Öğretmen">Öğretmen</button><button type="button" aria-pressed="false" data-k="Veli">Veli</button><button type="button" aria-pressed="false" data-k="Öğrenci">Öğrenci</button>
+    </div>
+    <div class="izgara" id="yazilar"></div>
+  </div>
+</section>
+
+<section id="sss">
+  <div class="wrap dar">
+    <p class="ust">Sıkça sorulanlar</p>
+    <h2>Merak edilenler</h2>
+    <div style="margin-top:24px">
+      <details open><summary>Program gerçekten ücretsiz mi?</summary><p>Evet. Program ücretsizdir; kurulum kılavuzu ve hata düzeltmeleri de ücretsizdir. Yalnızca yeni özellik ya da okulunuza özel uyarlama talepleri ücretlidir (<a href="iletisim.html">Geliştirme talebi</a>).</p></details>
+      <details><summary>Verilerim nerede tutuluyor? (KVKK)</summary><p>Bütün öğrenci, veli ve görüşme bilgileri yalnızca programın kurulu olduğu bilgisayarda, program klasöründeki <code>veri</code> klasöründe tutulur. Program bu bilgileri geliştiriciye ya da başka birine göndermez. Tek istisna isteğe bağlı <b>sesli yazım</b> özelliğidir: Chrome/Edge'in ses tanıma servisini kullandığı için söylediğiniz metin o servise gider ve internet gerektirir; istemezseniz notları elle yazabilirsiniz. Verilerin hukuka uygun işlenmesi ve korunması kullanıcının ve kurumunun sorumluluğundadır (<a href="kosullar.html">Kullanım Koşulları</a>, madde 4).</p></details>
+      <details><summary>Python kurmam gerekiyor mu?</summary><p>Program Python 3 ile çalışır. Mac'lerde ve birçok Windows bilgisayarda zaten kuruludur. Kurulu değilse <code>Baslat.bat</code> size ne yapacağınızı söyler: <a href="https://www.python.org/downloads/" rel="noopener">python.org</a>'dan indirip kurarken <b>Add python.exe to PATH</b> kutusunu işaretleyin.</p></details>
+      <details><summary>Zip'e çift tıkladım, program açılmadı.</summary><p>Programı zip'in içinden çalıştırmayın. Önce zip'e sağ tıklayıp <b>Tümünü ayıkla</b> deyin, sonra çıkan klasördeki <b>Baslat.bat</b>'a çift tıklayın.</p></details>
+      <details><summary>Kopyalamaya karşı şifre nedir?</summary><p>İlk açılışta belirlediğiniz bir şifredir; her açılışta sorulmaz. Program klasörü izinsiz olarak başka bir bilgisayara kopyalanırsa program orada kilitlenir ve şifre girilmeden öğrenci verisi görüntülenemez. Kendi bilgisayarınızı değiştirdiğinizde bu şifreyle açarsınız; şifreyi bir yere not edin.</p></details>
+      <details><summary>Güncellemeleri nasıl takip ederim?</summary><p>Güncellemeler ve hata düzeltmeleri yalnızca <a href="surumler.html">Sürüm Notları</a> sayfasında duyurulur. Kendi sürümünüzü programda <b>Ayarlar → Hakkında</b> bölümünde görüp oradaki sürümle karşılaştırın. İsterseniz <a href="iletisim.html#abone">e-posta listesine</a> gönüllü olarak katılabilirsiniz.</p></details>
+      <details><summary>MEB'in programı mı?</summary><p>Hayır. Bu program Millî Eğitim Bakanlığı'nın ya da herhangi bir kamu kurumunun resmî yazılımı değildir, bu kurumlarla bağlantısı yoktur ve onlar tarafından onaylanmamıştır. Form düzenleri kullanım kolaylığı için hazırlanmıştır; resmî kayıtların ilgili resmî sistemlere girilmesi kullanıcının sorumluluğundadır.</p></details>
+      <details><summary>Klasörü OneDrive'a koyabilir miyim?</summary><p>Koymayın. OneDrive'ın eşitlediği bir klasörde program dosyaları kilitlenebilir. Klasörü tamamen yerel bir yere, örneğin <code>C:\OgrenciRehberlikTakip</code> içine koyun.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="pencere"><div class="pencere" id="pencereIc"></div></dialog>
+
+<script src="config.js"></script>
+<script src="indir/surum.js"></script>
+<script src="yazilar.js"></script>
+<script src="site.js"></script>
+<script>
+const CFG=window.RG_CONFIG||{},pencere=document.getElementById('pencere'),pencereIc=document.getElementById('pencereIc');
+function ac(html,genis){pencereIc.innerHTML='<button class="kapat" type="button" data-kapat aria-label="Kapat">✕</button>'+html;pencere.classList.toggle('genis',!!genis);if(!pencere.open)pencere.showModal();}
+pencere.addEventListener('click',e=>{if(e.target===pencere||e.target.closest('[data-kapat]'))pencere.close();});
+if(window.RG_DOSYA)document.getElementById('surumBilgi').textContent='Sürüm '+RG_DOSYA.surum+' · Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez';
+
+/* ekran görüntüleri */
+const EKRAN=[['panel','Panel','Günün özeti, ajanda ve grafikler'],['dosya','Öğrenci dosyası','Görüşmeler, hatırlatmalar, etiketler'],['form','Görüşme formu','Resmî form düzeninde, sesle yazım'],['raporlar','Raporlar','Kapsama, takip uyarıları, faaliyet raporu'],['takvim','Takvim','Görüşmeler ve etkinlikler'],['ogrenciler','Öğrenciler','Arama ve süzme']];
+const liste=document.getElementById('galeriListe'),resim=document.getElementById('galeriResim');
+liste.innerHTML=EKRAN.map((e,i)=>'<li><button type="button" role="tab" data-i="'+i+'">'+e[1]+'<span>'+e[2]+'</span></button></li>').join('');
+function ekranSec(i){liste.querySelectorAll('button').forEach((b,k)=>b.setAttribute('aria-selected',k===i));resim.src='img/'+EKRAN[i][0]+'.webp';resim.alt=EKRAN[i][1]+' ekranı: '+EKRAN[i][2];}
+liste.addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)ekranSec(+b.dataset.i);});
+document.getElementById('galeriBuyuk').addEventListener('click',()=>ac('<img src="'+resim.src+'" alt="'+resim.alt+'">',true));
+ekranSec(0);
+
+/* video (config.js'de verilirse) */
+function ytId(v){if(!v)return '';const m=String(v).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(v)?v:'');}
+const vid=ytId(CFG.video);
+if(vid){const a=document.getElementById('videoAlan');a.innerHTML='<div class="video"><button type="button" aria-label="Videoyu oynat" style="background-image:url(https://i.ytimg.com/vi/'+vid+'/hqdefault.jpg)"><span></span></button></div>';
+  a.querySelector('button').addEventListener('click',()=>{a.firstChild.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+vid+'?autoplay=1&rel=0" title="Nasıl kullanılır?" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';});}
+
+/* Rehberlik Köşesi */
+const YAZI=window.RG_YAZILAR||[];let kim='';
+function yazilar(){document.getElementById('yazilar').innerHTML=YAZI.filter(a=>!kim||a.who===kim).map(a=>'<button class="kart yazi" type="button" data-yazi="'+a.id+'"><div class="ikon">'+a.ico+'</div><div class="kim">'+a.who+' için</div><h3>'+a.t+'</h3><p>'+a.s+'</p><span class="devam">Oku →</span></button>').join('');}
+yazilar();
+document.getElementById('suzgec').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;kim=b.dataset.k;document.querySelectorAll('#suzgec button').forEach(x=>x.setAttribute('aria-pressed',x===b));yazilar();});
+document.getElementById('yazilar').addEventListener('click',e=>{const b=e.target.closest('[data-yazi]');if(!b)return;const a=YAZI.find(x=>x.id===b.dataset.yazi);ac('<article class="okuma"><div class="ust">'+a.who+' için</div><h2>'+a.t+'</h2>'+a.b+'</article>');});
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veli Görüşme Formu</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="resmi-form.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler" class="etkin">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">&nbsp;</div>
+  </aside>
+  <main id="ana">
+    <div class="rf-sayfa">
+      <div id="icerikKok"><div class="yukleniyor">Yükleniyor…</div></div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var p = new URLSearchParams(location.search);
+var ogrenciId = p.get("ogrenciId");
+var gorusmeId = p.get("gorusmeId");
+var yazdirModu = p.get("yazdir") === "1";
+var B = {};
+var ogrenci = null;
+var gorusme = null;
+
+if (!ogrenciId) {
+  document.getElementById("icerikKok").innerHTML = '<div class="bos">Öğrenci belirtilmedi.</div>';
+} else {
+  Promise.all([apiGet("/api/baslangic"), apiGet("/api/ogrenci/" + encodeURIComponent(ogrenciId))]).then(function (r) {
+    B = r[0]; ogrenci = r[1];
+    document.getElementById("kullaniciKutu").innerHTML =
+      kacHTML(B.ayarlar.rehberAdSoyad || B.kullanici) + "<br>" + kacHTML(B.ayarlar.unvan || "Rehber Öğretmen");
+    if (gorusmeId) {
+      return apiGet("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/gorusme/" + encodeURIComponent(gorusmeId)).then(function (g) { gorusme = g; });
+    }
+  }).then(function () {
+    document.title = "Veli Görüşme Formu — " + ogrenci.adSoyad;
+    ciz();
+    if (yazdirModu) setTimeout(function () { window.print(); }, 400);
+  }).catch(function (e) {
+    document.getElementById("icerikKok").innerHTML = '<div class="bos">Form yüklenemedi.</div>';
+    apiHataGoster(e);
+  });
+}
+
+function ciz() {
+  var o = ogrenci;
+  var tarih = gorusme ? gorusme.tarih : B.bugun;
+  var simdi = new Date();
+  var saat = gorusme ? (gorusme.saat || "") : ("0" + simdi.getHours()).slice(-2) + ":" + ("0" + simdi.getMinutes()).slice(-2);
+  var h = '';
+  h += '<div class="rf-araclar yazdirma-gizle">' +
+    '<a class="geri-buton" href="dosya.html?id=' + encodeURIComponent(ogrenciId) + '">← ' + kacHTML(o.adSoyad) + ' — Öğrenci Dosyasına Dön</a>' +
+    '<div class="sag"><button id="btnKapat">Kapat</button><button id="btnYazdir">Yazdır</button><button class="birincil" id="btnKaydet">Kaydet</button></div></div>';
+
+  h += '<div class="rf-kart"><span class="rf-yan-kod">B.K.G.5.c</span>' +
+    '<table class="rf-tablo"><colgroup><col class="rf-kolon-etiket"><col class="rf-kolon-deger">' +
+    '<col class="rf-kolon-etiket"><col class="rf-kolon-deger"></colgroup>' +
+    '<thead><tr><td colspan="4" style="border:0;padding:0"><div class="rf-ust">' +
+    (B.logoSurum ? '<img class="rf-logo" src="' + okulLogoUrl(B.logoSurum) + '" alt="Okul logosu">' : '') +
+    '<img class="rf-ust-img" src="assets/veli-header.png" alt="T.C. Millî Eğitim Bakanlığı — Veli Görüşme Formu">' +
+    '<div class="rf-tarih-ust"><span class="rf-tarih-etiket">Görüşme Tarihi</span><input type="text" id="gorusmeTarihi" value="' + kacHTML(tarih) + '">' +
+    '<span class="rf-tarih-etiket rf-saat-etiket">Görüşme Saati</span><input type="text" id="gorusmeSaati" placeholder="ss:dd" maxlength="5" value="' + kacHTML(saat) + '"></div>' +
+    '</div></td></tr></thead>' +
+    '<tbody>' +
+    '<tr><td class="rf-etiket-hucre">Öğrencinin Adı Soyadı</td><td><input type="text" value="' + kacHTML(o.adSoyad) + '" readonly></td>' +
+    '<td class="rf-etiket-hucre">Öğrencinin Cinsiyeti</td><td><div class="rf-secenekler">' +
+    '<label class="rf-secenek"><input type="radio" disabled' + (o.cinsiyet === "K" ? " checked" : "") + '> K</label>' +
+    '<label class="rf-secenek"><input type="radio" disabled' + (o.cinsiyet === "E" ? " checked" : "") + '> E</label></div></td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Velinin Adı Soyadı</td><td><input type="text" value="' + kacHTML(o.veliAdSoyad || "—") + '" readonly></td>' +
+    '<td class="rf-etiket-hucre">Öğrencinin Sınıfı / Numarası</td><td><input type="text" value="' + kacHTML(o.sinif || "—") + ' — ' + kacHTML(o.okulNo || "—") + '" readonly></td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Öğrenciye Yakınlığı</td><td><input type="text" value="' + kacHTML(o.veliYakinlik || "—") + '" readonly></td>' +
+    '<td class="rf-etiket-hucre">Veli; Telefon / e-posta</td><td><input type="text" value="' + kacHTML(o.veliTelefon || "—") + '" readonly></td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Görüşme Konusu</td><td colspan="3" id="konuAlan"></td></tr>' +
+    '<tr class="rf-bant-baslik"><td colspan="4">Çalışmanın Özeti</td></tr>' +
+    '<tr class="rf-gorusme-satir rf-aktif"><td colspan="4" class="rf-gorusme-sag">' +
+    '<div class="rf-ses-cubuk"><span class="rf-ses-tusu" id="sesTus"><span class="nokta"></span> Sesle Yaz</span>' +
+    '<button type="button" class="rf-duzenle-tusu" id="notDuzenleBtn" title="Fazla boşlukları temizler, cümle başlarını büyütür (internete çıkmaz)">Noktalama / Büyük Harf Düzenle</button>' +
+    '<span class="rf-ses-durum" id="sesDurum"></span></div>' +
+    '<textarea class="rf-not-kutu" id="notAlani" rows="5">' + kacHTML(gorusme ? gorusme.notMetin : "") + '</textarea></td></tr>' +
+    '<tr class="rf-alt-satiri"><td colspan="4" style="border:0;padding:0"><div class="rf-alt"><div class="rf-imza"><div class="cizgi"><b>' +
+    kacHTML(B.ayarlar.rehberAdSoyad || "—") + '</b><span>' + kacHTML(B.ayarlar.unvan || "Rehber Öğretmen") + '</span></div></div></div>' +
+    '<div class="rf-footer">' + kacHTML(B.ayarlar.okulAdi || "") + '</div></td></tr>' +
+    '</tbody></table></div>';
+
+  document.getElementById("icerikKok").innerHTML = h;
+
+  document.getElementById("konuAlan").innerHTML = secenekGrubuOlustur(gorusme ? gorusme.konu : [], B.konuSecenekleri);
+
+  var notAlani = document.getElementById("notAlani");
+  var ayna = document.createElement("div");
+  ayna.className = "rf-not-yazdirma";
+  notAlani.insertAdjacentElement("afterend", ayna);
+  var senkron = function () { ayna.textContent = notAlani.value; };
+  senkron(); otoBuyutTextarea(notAlani);
+  notAlani.addEventListener("input", function () { otoBuyutTextarea(notAlani); senkron(); });
+
+  sesliYazimKurulumu(document.getElementById("sesTus"), document.getElementById("sesDurum"), notAlani,
+    { baslatMetin: " Sesle Yaz", durdurMetin: " Kaydı Durdur" });
+  duzenleTusuEkle(document.getElementById("notDuzenleBtn"), notAlani);
+
+  document.getElementById("gorusmeSaati").addEventListener("input", function () {
+    var r = this.value.replace(/[^0-9]/g, "").slice(0, 4);
+    this.value = r.length > 2 ? r.slice(0, 2) + ":" + r.slice(2) : r;
+  });
+  document.getElementById("btnYazdir").addEventListener("click", function () { window.print(); });
+  document.getElementById("btnKaydet").addEventListener("click", kaydet);
+  document.getElementById("btnKapat").addEventListener("click", function () {
+    onayModali({
+      baslik: "Görüşmeyi Kapat",
+      mesaj: "Kaydetmek ister misiniz?",
+      evetMetin: "Evet, Kaydet", hayirMetin: "Hayır, Kaydetme",
+    }).then(function (sonuc) {
+      if (sonuc === true) kaydet();
+      else if (sonuc === false) location.href = "dosya.html?id=" + encodeURIComponent(ogrenciId);
+    });
+  });
+}
+
+function kaydet() {
+  var veri = {
+    tur: "veli",
+    tarih: document.getElementById("gorusmeTarihi").value.trim(),
+    saat: document.getElementById("gorusmeSaati").value.trim(),
+    konu: secilenleriTopla(document.getElementById("konuAlan")),
+    notMetin: document.getElementById("notAlani").value,
+  };
+  if (!veri.tarih) { bildirim("Görüşme tarihi zorunludur.", true); return; }
+  var istek = gorusme
+    ? apiPut("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/gorusme/" + encodeURIComponent(gorusmeId), veri)
+    : apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/gorusme", veri);
+  istek.then(function () {
+    bildirim("Görüşme kaydedildi.");
+    setTimeout(function () { location.href = "dosya.html?id=" + encodeURIComponent(ogrenciId); }, 450);
+  }).catch(apiHataGoster);
+}
+</script>
+</body>
+</html>

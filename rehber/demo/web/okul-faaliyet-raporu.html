@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okul Geneli Dönem Sonu Faaliyet Raporu</title>
+<style>
+@font-face{font-family:"Nunito Sans";font-weight:200 1000;src:url(assets/font/nunito-sans-latin-wght-normal.woff2) format("woff2-variations");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Nunito Sans";font-weight:200 1000;src:url(assets/font/nunito-sans-latin-ext-wght-normal.woff2) format("woff2-variations");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+:root{--l:#1c3557;--t:#0e7490;--c:#d5dde7;--s:#5d6a7c}
+*{box-sizing:border-box}
+body{margin:0;background:#e9eef3;color:#1a2433;font:13.5px/1.55 "Nunito Sans","Segoe UI",Tahoma,sans-serif}
+.arac{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;align-items:center;padding:12px;background:#1c3557;color:#fff}
+.arac button{font:inherit;font-weight:700;border:0;border-radius:9px;padding:8px 16px;cursor:pointer;background:#fff;color:#1c3557}
+.arac button.ana{background:#0e7490;color:#fff}
+.arac span{font-size:13px;opacity:.85}
+.sayfa{width:210mm;min-height:297mm;margin:18px auto;background:#fff;padding:18mm 16mm 16mm;box-shadow:0 8px 30px rgba(20,35,60,.15);position:relative}
+.kapak{display:flex;flex-direction:column;justify-content:space-between}
+.kapak .ust{text-align:center;color:var(--s);font-weight:700;letter-spacing:.5px}
+.kapak .ust b{display:block;font-size:13px;color:#1a2433}
+.kapak .orta{text-align:center;margin-top:40mm}
+.kapak .orta.logolu{margin-top:14mm}
+.kapak .kapak-logo{display:block;width:52mm;height:52mm;object-fit:contain;margin:0 auto 12mm}
+.kapak .orta .serit{width:70px;height:6px;border-radius:6px;background:linear-gradient(90deg,#1c3557,#0e7490);margin:0 auto 18px}
+.kapak h1{font-size:28px;line-height:1.25;margin:0 0 10px;color:var(--l)}
+.kapak .yil{font-size:17px;font-weight:700;color:var(--t)}
+.kapak .donem{margin-top:6px;color:var(--s)}
+.kapak .alt{display:flex;justify-content:space-between;border-top:2px solid var(--c);padding-top:14px;font-size:13px}
+.kapak .alt b{display:block;font-size:14px}
+h2{font-size:16px;color:var(--l);margin:22px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--c);break-after:avoid}
+h2:first-child{margin-top:0}
+h2 .no{color:var(--t);margin-right:6px}
+p.aciklama{color:var(--s);margin:4px 0 10px;font-size:12.5px}
+table{width:100%;border-collapse:collapse;margin:6px 0 4px;break-inside:auto}
+th{background:#f1f5f9;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#475569;padding:6px 8px;border:1px solid var(--c)}
+td{padding:6px 8px;border:1px solid var(--c);vertical-align:middle}
+td.s,th.s{text-align:center}td.r,th.r{text-align:right}
+tr{break-inside:avoid}
+tr.toplam td{font-weight:800;background:#f8fafc}
+.ozet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 12px}
+.ozet div{border:1px solid var(--c);border-radius:10px;padding:8px 10px}
+.ozet b{display:block;font-size:22px;color:var(--l);line-height:1.2}
+.ozet span{font-size:11.5px;color:var(--s)}
+.cubuk{display:inline-block;height:8px;border-radius:6px;background:#0e7490;vertical-align:middle;margin-right:6px}
+.degerlendirme{min-height:60mm;border:1px dashed #9fb0c5;border-radius:10px;padding:10px 12px;white-space:pre-wrap;outline:none}
+.degerlendirme:empty::before{content:attr(data-ipucu);color:#94a3b8}
+.imzalar{display:flex;justify-content:space-between;margin-top:24mm;text-align:center;break-inside:avoid}
+.imzalar>div{width:40%;display:flex;flex-direction:column;align-items:center}
+.imzalar .cizgi{width:80%;border-top:1px solid #1a2433;margin:0 auto 6px}
+.imzalar b{min-height:1.45em;line-height:1.45}
+.imzalar span{line-height:1.45}
+.dipnot{font-size:11px;color:var(--s);margin-top:14px}
+.bos{color:var(--s);font-style:italic}
+/* ===== Renkli / 3B görünüm (sürüm 2.2) — bölüm rengi .bolum üzerindeki --hr değişkeninden gelir ===== */
+:root{--r1:#2563eb;--r2:#0e9f8e;--r3:#f59e0b;--r4:#8b5cf6;--r5:#e11d48;--r6:#0891b2;--r7:#16a34a;--r8:#ea580c;--r9:#475569}
+/* kapak */
+.kapak{overflow:hidden}
+
+.kapak::after{content:"";position:absolute;left:0;right:0;bottom:0;height:9mm;
+  background:linear-gradient(90deg,var(--r1),var(--r2),var(--r3),var(--r4),var(--r5))}
+.kapak .ust{position:relative;color:#d6e6fb!important;margin:-18mm -16mm 0;padding:11mm 16mm 10mm;line-height:1.7;
+  background:linear-gradient(120deg,#1c3557 0%,#1f5fa8 55%,#0e9f8e 100%);overflow:hidden}
+.kapak .ust::after{content:"";position:absolute;right:-30px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08)}
+.kapak .ust::before{content:"";position:absolute;left:-40px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+@media print{.kapak .ust{margin:0;border-radius:16px;padding:9mm 10mm}}
+.kapak .ust b{color:#fff!important}
+.kapak .orta .serit{width:120px;height:8px;background:linear-gradient(90deg,var(--r1),var(--r2),var(--r3))}
+.kapak h1{color:#1c3557;font-size:30px}
+.kapak .yil{display:inline-block;margin-top:6px;padding:6px 18px;border-radius:30px;color:#fff;
+  background:linear-gradient(135deg,#0e9f8e,#2563eb);box-shadow:0 4px 0 #1b4f9c,0 10px 18px -6px rgba(30,80,160,.5)}
+.kapak .kapak-logo{filter:drop-shadow(0 10px 14px rgba(20,35,60,.25))}
+.kapak .alt{position:relative;z-index:1;border-top:0;margin-bottom:12mm;gap:14px}
+.kapak .alt>div{flex:1;background:#f4f8fd;border-radius:14px;padding:10px 14px;box-shadow:0 3px 0 #d3dfee,0 8px 16px -8px rgba(20,35,60,.25)}
+/* bölüm başlıkları: numaralı renkli rozet */
+h2{border-bottom:0!important;display:flex;align-items:center;gap:10px;font-size:16.5px!important;margin:26px 0 10px!important;
+  padding:7px 18px 7px 8px!important;border-radius:40px;width:fit-content;max-width:100%;
+  background:linear-gradient(135deg,var(--hr,#2563eb),color-mix(in srgb,var(--hr,#2563eb) 70%,#fff));color:#fff!important;
+  box-shadow:0 4px 0 color-mix(in srgb,var(--hr,#2563eb) 65%,#000),0 10px 18px -8px color-mix(in srgb,var(--hr,#2563eb) 70%,transparent);break-after:avoid;page-break-after:avoid}
+h2 .no{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
+  background:#fff;color:var(--hr,#2563eb)!important;font-weight:900;margin:0!important;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+h2{text-shadow:0 1px 1px rgba(0,0,0,.15)}
+/* özet kartları: renkli 3B */
+.ozet{gap:12px!important;margin:10px 0 18px!important}
+.ozet div{border:0!important;border-radius:16px!important;padding:12px 14px!important;color:#fff;position:relative;overflow:hidden}
+.ozet div::after{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.15)}
+.ozet b{color:#fff!important;font-size:26px!important}
+.ozet span{color:rgba(255,255,255,.9)!important;font-weight:700}
+.ozet div:nth-child(1){background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 5px 0 #1e3a8a,0 12px 20px -8px rgba(29,78,216,.6)}
+.ozet div:nth-child(2){background:linear-gradient(135deg,#14b8a6,#0f766e);box-shadow:0 5px 0 #115e59,0 12px 20px -8px rgba(15,118,110,.6)}
+.ozet div:nth-child(3){background:linear-gradient(135deg,#fbbf24,#d97706);box-shadow:0 5px 0 #92400e,0 12px 20px -8px rgba(217,119,6,.6)}
+.ozet div:nth-child(4){background:linear-gradient(135deg,#a78bfa,#6d28d9);box-shadow:0 5px 0 #4c1d95,0 12px 20px -8px rgba(109,40,217,.6)}
+/* tablolar: yuvarlak köşeli, kabartmalı, başlık bölüm renginde */
+table{border-collapse:separate!important;border-spacing:0;border-radius:14px;overflow:hidden;margin:8px 0 10px!important;
+  box-shadow:0 4px 0 #d3dce8,0 12px 22px -10px rgba(20,35,60,.35);border:1px solid #dbe3ee}
+th{border:0!important;color:#fff!important;font-weight:800;padding:9px 10px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tr,#2563eb) 88%,#fff),var(--tr,#2563eb))!important}
+td{border:0!important;border-top:1px solid #e8eef5!important;padding:7px 10px!important}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--tr,#2563eb) 6%,#fff)}
+tr.toplam td{background:color-mix(in srgb,var(--tr,#2563eb) 16%,#fff)!important;color:#0f1d33;border-top:2px solid color-mix(in srgb,var(--tr,#2563eb) 45%,#fff)!important}
+.cubuk{height:10px!important;border-radius:10px!important;background:linear-gradient(90deg,color-mix(in srgb,var(--tr,#2563eb) 55%,#fff),var(--tr,#2563eb))!important;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
+p.aciklama{background:#f6f8fb;border-left:3px solid #cbd5e1;padding:5px 10px;border-radius:0 8px 8px 0}
+.degerlendirme{border:0!important;background:linear-gradient(180deg,#fbfcfe,#f1f5fb);border-radius:14px!important;
+  box-shadow:inset 0 2px 6px rgba(20,35,60,.08),0 4px 0 #d3dce8}
+.imzalar .cizgi{border-top:2px solid #1c3557!important}
+.bolum{--tr:var(--hr);break-inside:avoid;page-break-inside:avoid}
+.bolum.uzun{break-inside:auto;page-break-inside:auto}
+.kapsama-rozet{display:inline-block;min-width:46px;padding:2px 8px;border-radius:20px;font-weight:800;color:#fff;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.kapsama-rozet.iyi{background:linear-gradient(135deg,#22c55e,#15803d)}
+.kapsama-rozet.orta{background:linear-gradient(135deg,#fbbf24,#d97706)}
+.kapsama-rozet.dusuk{background:linear-gradient(135deg,#f87171,#b91c1c)}
+/* ===== Okul geneli rapor eklentileri (sürüm 2.9) ===== */
+td.isi{font-weight:700}
+td.r{white-space:nowrap}
+.bolum td:first-child{min-width:92px}
+.duzey-kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:8px 0 12px}
+.duzey-kart{border-radius:14px;padding:10px 12px;background:#fff;border:1px solid #dbe3ee;box-shadow:0 4px 0 #d3dce8,0 10px 18px -10px rgba(20,35,60,.3);break-inside:avoid;position:relative;overflow:hidden}
+.duzey-kart::before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--hr,#2563eb)}
+.duzey-kart h4{margin:2px 0 6px;font-size:14px;color:#1c3557}
+.duzey-kart h4 small{font-weight:600;color:#5d6a7c;font-size:11.5px}
+.duzey-kart ol{margin:0;padding-left:18px;font-size:12.5px}
+.duzey-kart li{margin:2px 0}
+.duzey-kart li b{color:var(--hr,#2563eb)}
+table.one-cikan td{vertical-align:top}
+table.one-cikan td:nth-child(n+3){width:27%}
+.oc-konu{font-size:12.5px;font-weight:700;color:#1a2433;line-height:1.3}
+table.one-cikan th{white-space:nowrap}
+table.one-cikan td{vertical-align:middle!important}
+.oc-cubuk{display:flex;align-items:center;gap:6px;margin-top:3px}
+.oc-cubuk i{display:block;height:7px;border-radius:7px;background:linear-gradient(90deg,color-mix(in srgb,var(--tr,#2563eb) 55%,#fff),var(--tr,#2563eb))}
+.oc-cubuk b{font-size:12px;color:var(--tr,#2563eb)}
+.aylik{display:flex;align-items:flex-end;gap:8px;height:150px;padding:10px 6px 0;margin:8px 0 6px;border-bottom:2px solid #dbe3ee}
+.aylik .ay{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.aylik .sutun{width:70%;max-width:38px;display:flex;flex-direction:column-reverse;border-radius:8px 8px 0 0;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.08)}
+.aylik .sutun i{display:block}
+.aylik .sutun i.o{background:linear-gradient(180deg,#60a5fa,#2563eb)}
+.aylik .sutun i.v{background:linear-gradient(180deg,#c4b5fd,#7c3aed)}
+.aylik .deger{font-size:11.5px;font-weight:800;color:#1c3557;margin-bottom:3px}
+.aylik-etiket{display:flex;gap:8px;padding:0 6px}
+.aylik-etiket span{flex:1;text-align:center;font-size:11px;color:#5d6a7c;font-weight:700}
+.lejant{display:flex;gap:14px;font-size:12px;color:#5d6a7c;margin:4px 0 8px}
+.lejant i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.guncellik{margin:6px 0 0;padding-left:18px}
+.ek-baslik{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:18px 0 6px;padding:8px 12px;border-radius:12px;
+  background:color-mix(in srgb,var(--hr,#2563eb) 8%,#fff);border:1px dashed color-mix(in srgb,var(--hr,#2563eb) 45%,#fff);break-after:avoid}
+.ek-baslik b{color:#1c3557;font-size:14.5px}
+.ek-baslik span:not(.ek-rozet){flex-basis:100%;font-size:12px;color:#5d6a7c}
+.ek-rozet{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;padding:2px 9px;border-radius:20px;
+  background:linear-gradient(135deg,#f59e0b,#ea580c);box-shadow:0 2px 0 #9a3412}
+.guncellik li{margin:1px 0}
+@page{size:A4;margin:14mm 13mm 14mm}
+@media print{
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .arac{display:none}
+  .sayfa{margin:0;box-shadow:none;width:auto;min-height:auto;padding:0;page-break-after:always}
+  .sayfa:last-child{page-break-after:auto}
+  .kapak{height:268mm}
+  .degerlendirme{border-color:#cbd5e1}
+  .degerlendirme:empty::before{content:""}
+}
+</style>
+</head>
+<body>
+<div class="arac">
+  <button class="ana" id="yazdirBtn">Yazdır / PDF olarak kaydet</button>
+  <button id="kapatBtn">Kapat</button>
+  <span>İpucu: "Genel Değerlendirme ve Öneriler" bölümünü başkan öğretmen doldurur; tıklayıp yazın, bu bilgisayarda hatırlanır.</span>
+</div>
+<div id="rapor"><div class="sayfa"><p class="bos">Rapor hazırlanıyor…</p></div></div>
+
+<script src="ortak.js"></script>
+<script>
+/* Okul geneli faaliyet raporu: Okul Raporu sayfasında birleştirilen paketlerden
+   (bu bilgisayar + gelen paketler) sınıf DÜZEYİ bazında üretilir. Şube ve öğrenci
+   adı yoktur; öğretmen adı yalnızca 8. bölümde (toplantılar) yer alır. */
+var q = new URLSearchParams(location.search);
+document.getElementById("yazdirBtn").addEventListener("click", function () { window.print(); });
+document.getElementById("kapatBtn").addEventListener("click", function () { window.close(); if (!window.closed) history.back(); });
+
+function yuzde(a, b) { return b ? Math.round(1000 * a / b) / 10 : 0; }
+function yz(a, b) { return ("%" + yuzde(a, b)).replace(".", ","); }
+function e(s) { return kacHTML(s); }
+function ondalik(x) { return String(x).replace(".", ","); }
+function tablo(basliklar, satirlar, toplam) {
+  if (!satirlar.length) return '<p class="bos">Bu dönemde kayıt yok.</p>';
+  return '<table><thead><tr>' + basliklar.map(function (b) { return '<th class="' + (b[1] || "") + '">' + e(b[0]) + '</th>'; }).join("") +
+    '</tr></thead><tbody>' + satirlar.map(function (s) {
+      return '<tr>' + s.map(function (h, i) { return hucre(h, basliklar[i][1]); }).join("") + '</tr>';
+    }).join("") + (toplam ? '<tr class="toplam">' + toplam.map(function (h, i) { return hucre(h, basliklar[i][1]); }).join("") + '</tr>' : "") +
+    '</tbody></table>';
+}
+/* hücre {isi:..} nesnesi olabilir: yoğunluğa göre bölüm renginde boyanır (ısı tablosu) */
+function hucre(h, sinif) {
+  if (h && typeof h === "object") {
+    var p = h.max ? Math.round(8 + 62 * h.n / h.max) : 0;
+    var st = h.n ? ' style="background:color-mix(in srgb,var(--tr,#2563eb) ' + p + '%,#fff)' + (p > 45 ? ';color:#fff' : '') + '"' : "";
+    return '<td class="' + (sinif || "") + ' isi"' + st + '>' + (h.n ? gSayi(h.n) : '<span style="color:#b6c0cc">0</span>') + '</td>';
+  }
+  return '<td class="' + (sinif || "") + '">' + h + '</td>';
+}
+function egitimYili(t) {
+  var p = String(t || "").split(".");
+  if (p.length !== 3) return "";
+  var y = +p[2], a = +p[1];
+  return a >= 8 ? (y + "–" + (y + 1)) : ((y - 1) + "–" + y);
+}
+function kapsamaRozet(oran) {
+  return '<span class="kapsama-rozet ' + (oran >= 70 ? "iyi" : oran >= 40 ? "orta" : "dusuk") + '">%' + oran + '</span>';
+}
+var BOLUM_RENKLERI = ["#2563eb", "#0e9f8e", "#f59e0b", "#8b5cf6", "#0891b2", "#e11d48", "#16a34a", "#ea580c", "#475569"];
+function bolumlereAyir(sayfa) {
+  var cocuklar = Array.prototype.slice.call(sayfa.children), bolum = null, sira = 0;
+  cocuklar.forEach(function (c) {
+    if (c.tagName === "H2") {
+      bolum = document.createElement("section");
+      bolum.className = "bolum";
+      bolum.style.setProperty("--hr", BOLUM_RENKLERI[sira++ % BOLUM_RENKLERI.length]);
+      sayfa.insertBefore(bolum, c);
+    }
+    if (bolum) bolum.appendChild(c);
+  });
+  sayfa.querySelectorAll(".bolum").forEach(function (b) { if (b.querySelectorAll("tbody tr").length > 18 || b.querySelectorAll("table").length > 1) b.classList.add("uzun"); });
+  /* kısa tablolar sayfa sonunda bölünmesin (ör. yalnız "Toplam" satırı sonraki sayfaya kaymasın) */
+  sayfa.querySelectorAll("table").forEach(function (t) { if (t.querySelectorAll("tr").length <= 18) { t.style.breakInside = "avoid"; t.style.pageBreakInside = "avoid"; } });
+  sayfa.querySelectorAll(".duzey-kartlar, .aylik").forEach(function (x) { x.style.breakInside = "avoid"; });
+}
+function ekBaslik(metin, aciklama) {
+  return '<div class="ek-baslik"><span class="ek-rozet">Ek analiz</span><b>' + e(metin) + '</b>' + (aciklama ? '<span>' + e(aciklama) + '</span>' : '') + '</div>';
+}
+function sure(dk) { var s = Math.floor(dk / 60), d = dk % 60; return dk ? (s ? s + " sa" : "") + (d ? " " + d + " dk" : "") : "—"; }
+
+Promise.all([apiGet("/api/baslangic"), apiGet("/api/okul-raporu?" + q.toString())]).then(function (r) {
+  var A = r[0].ayarlar || {}, v = r[1];
+  var bas = v.donem.baslangic, bit = v.donem.bitis;
+  var D = v.duzeyKodlari, DA = v.duzeyler, DT = v.duzeyTablo, T = v.toplam;
+  var bugun = new Date(), bugunMetin = ("0" + bugun.getDate()).slice(-2) + "." + ("0" + (bugun.getMonth() + 1)).slice(-2) + "." + bugun.getFullYear();
+  var duzeySutun = DA.map(function (d) { return [d, "s"]; });
+  var h = "";
+
+  /* ---- kapak ---- */
+  h += '<div class="sayfa kapak"><div class="ust"><b>T.C.</b>' + e(A.ilceIl || "") + '<br><b>' + e(A.okulAdi || "Okul adı (Ayarlar'dan girin)") + '</b>Rehberlik ve Psikolojik Danışma Servisi</div>' +
+    '<div class="orta' + (r[0].logoSurum ? ' logolu' : '') + '">' + (r[0].logoSurum ? '<img class="kapak-logo" src="' + okulLogoUrl(r[0].logoSurum) + '" alt="Okul logosu">' : '') +
+    '<div class="serit"></div><h1>Okul Geneli Rehberlik ve Psikolojik Danışma<br>Hizmetleri Dönem Sonu Faaliyet Raporu</h1>' +
+    '<div class="yil">' + e(egitimYili(bit)) + ' Eğitim-Öğretim Yılı</div>' +
+    '<div class="donem">Rapor dönemi: ' + e(bas) + ' – ' + e(bit) + ' · Sınıf düzeyleri: ' + DA.map(e).join(", ") + '</div></div>' +
+    '<div class="alt"><div>Hazırlayan<b>' + e(A.rehberAdSoyad || "") + '</b>Rehberlik Servisi adına</div>' +
+    '<div style="text-align:right">Rapor tarihi<b>' + e(bugunMetin) + '</b></div></div></div>';
+
+  h += '<div class="sayfa">';
+
+  /* ---- 1. Genel Özet ---- */
+  h += '<h2><span class="no">1.</span>Genel Özet</h2>';
+  h += '<div class="ozet">' +
+    '<div><b>' + gSayi(T.toplam) + '</b><span>Toplam görüşme</span></div>' +
+    '<div><b>' + gSayi(T.ogrenci) + '</b><span>Öğrenci görüşmesi</span></div>' +
+    '<div><b>' + gSayi(T.veli) + '</b><span>Veli görüşmesi</span></div>' +
+    '<div><b>%' + T.kapsama + '</b><span>Kapsama (' + gSayi(T.gorusulen) + '/' + gSayi(T.kayitli) + ' öğrenci)</span></div></div>';
+  function satir(ad, alan, bicim) {
+    bicim = bicim || gSayi;
+    return [e(ad)].concat(DT.map(function (d) { return bicim(d[alan], d); })).concat(['<b>' + bicim(T[alan], T) + '</b>']);
+  }
+  var tp = v.toplantiToplam;
+  h += tablo([["Gösterge"]].concat(duzeySutun).concat([["Toplam", "s"]]), [
+    satir("Öğrenci sayısı", "kayitli"),
+    satir("Sınıf (şube) sayısı", "sube"),
+    satir("Toplam görüşme", "toplam"),
+    satir("Öğrenci görüşmesi", "ogrenci"),
+    satir("Veli görüşmesi", "veli"),
+    satir("Veli görüşmesi oranı", "veliOrani", function (x) { return "%" + x; }),
+    satir("Kuruma yönlendirilen öğrenci", "yonlendirilenOgrenci"),
+    [e("Yapılan toplantı")].concat(DT.map(function () { return '<span style="color:#b6c0cc">—</span>'; }))
+      .concat(['<b>' + gSayi(tp.adet) + (tp.dakika ? " (" + sure(tp.dakika) + ")" : "") + '</b>'])
+  ]);
+  h += '<p class="aciklama">Veli görüşmesi oranı: o düzeydeki görüşmelerin yüzde kaçının veliyle yapıldığını gösterir. Toplantılar sınıf düzeyine bağlı olmadığından yalnızca toplamda verilmiştir.</p>';
+  /* E: aylık dağılım */
+  if (v.aylik.length) {
+    var enCokAy = v.aylik.reduce(function (a, x) { return Math.max(a, x.toplam); }, 1);
+    h += ekBaslik("Aylara Göre Görüşme Dağılımı", "Görüşmelerin hangi aylarda yoğunlaştığını gösterir.") +
+      '<div class="lejant"><span><i style="background:#2563eb"></i>Öğrenci görüşmesi</span><span><i style="background:#7c3aed"></i>Veli görüşmesi</span></div>' +
+      '<div class="aylik">' + v.aylik.map(function (a) {
+        return '<div class="ay"><span class="deger">' + (a.toplam ? gSayi(a.toplam) : "") + '</span><div class="sutun" style="height:' + Math.round(100 * a.toplam / enCokAy) + '%">' +
+          (a.ogrenci ? '<i class="o" style="flex:' + a.ogrenci + '"></i>' : '') + (a.veli ? '<i class="v" style="flex:' + a.veli + '"></i>' : '') + '</div></div>';
+      }).join("") + '</div><div class="aylik-etiket">' + v.aylik.map(function (a) { return '<span>' + e(a.ay.slice(0, 3)) + '</span>'; }).join("") + '</div>';
+  }
+
+  /* ---- 2-3-4: düzey matrisleri (ısı tablosu) ---- */
+  function matris(liste, adBaslik) {
+    var max = 0, genel = 0;
+    liste.forEach(function (x) { genel += x.toplam; D.forEach(function (d) { max = Math.max(max, x.sayilar[d] || 0); }); });
+    var enCok = liste.reduce(function (a, x) { return Math.max(a, x.toplam); }, 1);
+    var top = D.map(function (d) { return liste.reduce(function (a, x) { return a + (x.sayilar[d] || 0); }, 0); });
+    return tablo([[adBaslik]].concat(duzeySutun).concat([["Toplam", "s"], ["Oran", "r"]]),
+      liste.map(function (x) {
+        return [e(x.ad)].concat(D.map(function (d) { return { n: x.sayilar[d] || 0, max: max }; }))
+          .concat(['<b>' + gSayi(x.toplam) + '</b>', '<span class="cubuk" style="width:' + Math.round(46 * x.toplam / enCok) + 'px"></span>' + yz(x.toplam, genel)]);
+      }), ["Toplam"].concat(top.map(gSayi)).concat([gSayi(genel), ""]));
+  }
+  h += '<h2><span class="no">2.</span>Görüşme Konuları</h2><p class="aciklama">Bir görüşmede birden fazla konu işaretlenebildiğinden toplam, görüşme sayısını aşabilir. Renkli hücreler (yoğunluk haritası): renk koyulaştıkça o konu o sınıf düzeyinde daha yoğundur.</p>';
+  h += matris(v.konu, "Konu");
+  /* A: öne çıkan konular */
+  h += ekBaslik("Sınıf Düzeylerinin Öne Çıkan Konuları", "Her sınıf düzeyinde en sık görüşülen 3 konu ve o düzeydeki payı.") +
+    '<table class="one-cikan"><thead><tr><th>Sınıf düzeyi</th><th class="s">Görüşme</th><th>1. sıradaki konu</th><th>2. sıradaki konu</th><th>3. sıradaki konu</th></tr></thead><tbody>' +
+    v.oneCikan.map(function (d) {
+      var hucreler = [0, 1, 2].map(function (i) {
+        var k = d.konular[i];
+        return '<td>' + (k ? '<div class="oc-konu">' + e(k.ad) + '</div><div class="oc-cubuk"><i style="width:' + Math.min(100, k.oran * 2) + '%"></i><b>%' + k.oran + '</b></div>' : '<span style="color:#b6c0cc">—</span>') + '</td>';
+      }).join("");
+      return '<tr><td><b>' + e(d.duzey) + '</b></td><td class="s">' + gSayi(d.gorusme) + '</td>' + hucreler + '</tr>';
+    }).join("") + '</tbody></table>';
+
+  h += '<h2><span class="no">3.</span>Başvuru Şekli (Öğrenci Görüşmeleri)</h2>';
+  h += matris(v.basvuru, "Başvuru şekli");
+  h += '<h2><span class="no">4.</span>Yapılan Çalışma Türü (Öğrenci Görüşmeleri)</h2>';
+  h += matris(v.calisma, "Çalışma türü");
+
+  /* ---- 5. Sınıf düzeyi bazında görüşme ve kapsama (+ B, C, F) ---- */
+  h += '<h2><span class="no">5.</span>Sınıf Düzeyi Bazında Görüşme ve Kapsama</h2>';
+  h += tablo([["Sınıf düzeyi"], ["Kayıtlı öğrenci", "s"], ["Görüşülen öğrenci", "s"], ["Kapsama", "s"], ["Görüşme sayısı", "s"], ["100 öğrenciye düşen görüşme", "s"], ["Öğrenci başına görüşme", "s"]],
+    DT.map(function (d) { return [e(d.duzey), gSayi(d.kayitli), gSayi(d.gorusulen), kapsamaRozet(d.kapsama), gSayi(d.toplam), ondalik(d.yuzOgrenci), ondalik(d.ogrenciBasina)]; }),
+    ["Toplam", gSayi(T.kayitli), gSayi(T.gorusulen), kapsamaRozet(T.kapsama), gSayi(T.toplam), ondalik(T.yuzOgrenci), ondalik(T.ogrenciBasina)]);
+  h += '<p class="aciklama">Kapsama: kendisiyle veya velisiyle en az bir kez görüşülen farklı öğrencilerin kayıtlı öğrencilere oranı (toplam satırı, düzeylerin ortalaması değil, tüm okulun oranıdır). ' +
+    '100 öğrenciye düşen görüşme: mevcutları farklı düzeyleri adil karşılaştırır. Öğrenci başına görüşme: yüksekse o düzeyde sorunlar tek görüşmeyle çözülmüyor, takip gerektiriyor demektir.</p>';
+  if (v.etiket.length) {
+    var emax = 0; v.etiket.forEach(function (x) { D.forEach(function (d) { emax = Math.max(emax, x.sayilar[d] || 0); }); });
+    h += ekBaslik("Öğrenci İhtiyaç Etiketleri", "Kayıtlardaki etiketlere göre düzey bazında öğrenci sayısı.");
+    h += tablo([["Etiket"]].concat(duzeySutun).concat([["Toplam", "s"], ["Dönemde görüşülen", "s"]]),
+      v.etiket.map(function (x) {
+        return [e(x.ad)].concat(D.map(function (d) { return { n: x.sayilar[d] || 0, max: emax }; }))
+          .concat(['<b>' + gSayi(x.toplam) + '</b>', gSayi(x.gorusulen) + ' <span style="color:#5d6a7c">(' + yz(x.gorusulen, x.toplam) + ')</span>']);
+      }));
+    h += '<p class="aciklama">Öğrenci kayıtlarındaki etiketlere göre (ör. maddi destek ihtiyacı, kaynaştırma) düzey bazında öğrenci sayısı ve bu öğrencilerden kaçıyla dönem içinde görüşüldüğü.</p>';
+  }
+
+  /* ---- 7. Sınıf etkinlikleri (düzey bazında) ---- */
+  h += '<h2><span class="no">6.</span>Gerçekleştirilen Sınıf Etkinlikleri</h2>';
+  h += matris(v.etkinlik, "Etkinlik");
+
+  /* ---- 9. Değerlendirme (başkan) ---- */
+  var anahtar = "okulFaaliyetDegerlendirme:" + bas + ":" + bit;
+  var kayitli = "";
+  try { kayitli = localStorage.getItem(anahtar) || ""; } catch (x) {}
+  h += '<h2><span class="no">7.</span>Genel Değerlendirme ve Öneriler</h2>' +
+    '<div class="degerlendirme" id="degerlendirme" contenteditable="true" data-ipucu="Rehberlik servisi adına okul geneli değerlendirme: sınıf düzeylerinde öne çıkan ihtiyaçlar, yapılan çalışmaların etkisi ve gelecek dönem için öneriler… (buraya tıklayıp yazın)">' + e(kayitli) + '</div>';
+
+  h += '<div class="imzalar"><div><div class="cizgi"></div><b>' + e(A.rehberAdSoyad || "") + '</b><span>Rehberlik Servisi adına</span></div>' +
+    '<div><div class="cizgi"></div><b>&nbsp;</b><span>Okul Müdürü</span></div></div>';
+  /* H: veri güncelliği */
+  h += '<div class="dipnot"><b>Veri kaynakları:</b><ul class="guncellik">' + v.guncellik.map(function (g) {
+    return '<li>' + (g.duzeyler.length ? g.duzeyler.map(e).join(", ") : "—") + ': ' + e(g.olusturma) + ' tarihli veri' + (g.sonGorusme ? ' (son görüşme kaydı ' + e(g.sonGorusme) + ')' : '') + '</li>';
+  }).join("") + '</ul>Bu rapor yalnızca toplu (sayısal) bilgiler içerir; öğrenci adı, şube veya görüşme içeriği yer almaz (6698 sayılı KVKK). ' +
+    'Öğrenci Rehberlik Takip Sistemi ile ' + e(bugunMetin) + ' tarihinde oluşturulmuştur.</div>';
+  h += '</div>';
+
+  document.getElementById("rapor").innerHTML = h;
+  document.querySelectorAll("#rapor .sayfa:not(.kapak)").forEach(bolumlereAyir);
+  document.title = "Okul Faaliyet Raporu " + bas + " – " + bit;
+  var d = document.getElementById("degerlendirme");
+  d.addEventListener("input", function () { try { localStorage.setItem(anahtar, d.innerText); } catch (x) {} });
+}).catch(function (err) {
+  document.getElementById("rapor").innerHTML = '<div class="sayfa"><p class="bos">Rapor oluşturulamadı: ' + kacHTML(err.message) + '</p></div>';
+});
+</script>
+</body>
+</html>

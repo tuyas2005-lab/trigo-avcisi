@@ -1,0 +1,143 @@
+/* ============================================================
+   Resmi Görüşme Formu — MEB Öğrenci / Veli Görüşme Formu'nun
+   birebir görsel düzenine sadık, canlı (editable) form kabuğu.
+   Renkler orijinal PDF'ten örneklenmiştir.
+   ============================================================ */
+:root{
+  --rf-zemin:#dbeeeb;
+  --rf-kart:#ffffff;
+  --rf-koyu:#2e625f;      /* şerit / başlık / imza yazısı */
+  --rf-bant:#51b2ae;      /* ÇALIŞMANIN ÖZETİ bandı, kalın kenarlık */
+  --rf-kirmizi:#eb1c2e;   /* amblem vurgusu */
+  --rf-cizgi:#bcd6d3;     /* ince tablo çizgileri */
+  --rf-cizgi-koyu:#8fb6b2;
+  --rf-metin:#233533;
+  --rf-soluk:#5c7573;
+}
+.rf-sayfa{background:var(--rf-zemin);padding:26px;border-radius:10px}
+.rf-kart{background:var(--rf-kart);border-radius:16px;box-shadow:0 8px 28px rgba(30,60,58,.16);
+  max-width:900px;margin:0 auto;padding:22px 26px 20px;position:relative}
+
+/* ---- üst başlık: gerçek MEB formundan birebir alınan amblem + şerit + form
+   adı görseli (tek parça imaj — elle çizilen iki ayrı şeklin üst üste binmesi
+   sorununu ortadan kaldırır ve orijinal formla piksel piksel eşleşir).
+   Görsel daraltılıp ortalanarak hem genişlik hem yükseklik kazanılır. ---- */
+.rf-ust{padding:0 2px 6px;position:relative}
+.rf-ust-img{display:block;width:72%;max-width:480px;height:auto;margin:0 auto}
+/* okul logosu: başlık görselinin solundaki boşlukta (Ayarlar > Okul Bilgileri'nden yüklenir) */
+.rf-logo{position:absolute;left:8px;top:50%;transform:translateY(-55%);width:70px;height:70px;object-fit:contain}
+
+/* ---- görüşme tarihi: sayfanın üstünde, başlığın sağ üst köşesinde ---- */
+.rf-tarih-ust{position:absolute;top:2px;right:6px;text-align:center;line-height:1.2}
+.rf-tarih-etiket{display:block;font-size:10px;font-weight:700;color:var(--rf-koyu);
+  text-transform:uppercase;letter-spacing:.3px;margin-bottom:1px}
+.rf-tarih-ust input{width:98px;text-align:center;font:inherit;font-size:12.5px;font-weight:600;
+  color:var(--rf-metin);border:1px solid var(--rf-cizgi-koyu);border-radius:5px;
+  padding:1px 4px;line-height:1.25;background:#fff}
+.rf-saat-etiket{margin-top:3px}
+.rf-ust{min-height:76px}
+.rf-tarih-ust input:focus{outline:1.5px solid var(--rf-bant);border-radius:5px}
+
+/* ---- ana tablo ---- */
+.rf-tablo{width:100%;table-layout:fixed;border-collapse:collapse;border:2px solid var(--rf-koyu);font-size:13.5px;color:var(--rf-metin)}
+.rf-tablo colgroup col.rf-kolon-etiket{width:19%}
+.rf-tablo colgroup col.rf-kolon-deger{width:31%}
+.rf-tablo td,.rf-tablo th{border:1px solid var(--rf-cizgi-koyu);padding:5px 9px;vertical-align:top}
+.rf-tablo .rf-etiket-hucre{background:#f2f8f7;font-weight:600;font-size:12.5px;overflow-wrap:break-word;word-break:break-word;white-space:normal}
+.rf-tablo input[type=text],.rf-tablo input[type=date]{
+  width:100%;border:none;background:transparent;font:inherit;color:var(--rf-metin);padding:1px 2px}
+.rf-tablo input[type=text]:focus,.rf-tablo input[type=date]:focus{outline:1.5px solid var(--rf-bant);border-radius:3px}
+.rf-tablo input[readonly]{color:var(--rf-metin);background:#fbfdfd}
+
+/* bant başlık (ÇALIŞMANIN ÖZETİ) */
+.rf-bant-baslik td{background:var(--rf-bant);color:#fff;font-weight:800;text-align:center;
+  text-transform:uppercase;letter-spacing:.6px;padding:5px;font-size:13px}
+
+/* seçenek (checkbox / radio) grupları — "(  )" kağıt formu hissi.
+   Çoktan seçmeli metinler küçültülerek satır sayısı ve yükseklik azaltılır. */
+.rf-secenekler{display:flex;flex-wrap:wrap;gap:3px 14px}
+.rf-secenek{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;cursor:pointer;white-space:nowrap}
+.rf-secenek input{width:11px;height:11px;accent-color:var(--rf-koyu);cursor:pointer;margin:0}
+.rf-secenek span.diger-cizgi{border-bottom:1px dotted var(--rf-soluk);min-width:50px;display:inline-block}
+
+/* görüşme satırı: artık tam genişlik — tarih sayfanın üstüne taşındığı için
+   bu satırın tamamı not/çalışma alanına ayrılır (bkz. .rf-tarih-ust) */
+.rf-gorusme-satir td{padding:0;border:1px solid var(--rf-cizgi-koyu)}
+.rf-gorusme-sag{padding:7px 10px;position:relative}
+
+.rf-tamamlandi .rf-not-metin{white-space:pre-wrap;line-height:1.5;font-size:13.5px;color:var(--rf-metin)}
+.rf-aktif .rf-gorusme-sag{background:#e4f2ef;box-shadow:inset 3px 0 0 var(--rf-bant)}
+.rf-bos .rf-gorusme-sag{color:var(--rf-soluk);font-style:italic;font-size:13.5px}
+
+/* ses kayıt tuşu + otomatik büyüyen not alanı */
+.rf-ses-cubuk{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.rf-ses-tusu{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:18px;
+  border:1.5px solid var(--rf-koyu);background:#fff;color:var(--rf-koyu);font-weight:700;font-size:13.5px;cursor:pointer}
+.rf-ses-tusu:hover{background:#eef6f5}
+.rf-ses-tusu .nokta{width:8px;height:8px;border-radius:50%;background:var(--rf-kirmizi)}
+.rf-ses-tusu.kayitta{background:var(--rf-kirmizi);border-color:var(--rf-kirmizi);color:#fff}
+.rf-ses-tusu.kayitta .nokta{background:#fff;animation:rf-nabiz 1.1s ease-in-out infinite}
+@keyframes rf-nabiz{0%,100%{opacity:1}50%{opacity:.2}}
+.rf-ses-durum{font-size:12.5px;color:var(--rf-soluk)}
+.rf-duzenle-tusu{padding:6px 12px;border-radius:16px;border:1px solid var(--rf-cizgi-koyu);
+  background:#fff;color:var(--rf-metin);font:inherit;font-size:12.5px;cursor:pointer}
+.rf-duzenle-tusu:hover{background:#f3f6f5}
+.rf-not-kutu{width:100%;border:1px solid var(--rf-cizgi-koyu);border-radius:6px;padding:9px 10px;
+  font:inherit;font-size:14.5px;line-height:1.6;color:var(--rf-metin);resize:none;overflow:hidden;
+  min-height:54px;background:#fffef9}
+.rf-not-kutu:focus{outline:1.5px solid var(--rf-bant)}
+
+/* yazdırma/PDF çıktısında not metni — textarea öğeleri sayfa sonunda
+   bölünemediği için (tarayıcı kısıtı), yazdırırken textarea'yı gizleyip
+   yerine normal akan bu metni gösteriyoruz; böylece uzun bir not ikinci
+   sayfaya düzgün şekilde devam edebiliyor. */
+.rf-not-yazdirma{display:none}
+
+/* alt bilgi: imza / kaydet */
+.rf-alt{display:flex;justify-content:flex-end;align-items:flex-end;padding:6px 6px 2px;gap:28px}
+.rf-imza{text-align:center;font-size:13px}
+.rf-imza b{display:block;font-size:13.5px;color:var(--rf-metin)}
+.rf-imza span{color:var(--rf-soluk);font-size:12px}
+.rf-imza .cizgi{border-top:1px solid var(--rf-cizgi-koyu);margin-top:12px;padding-top:4px}
+
+.rf-footer{text-align:center;color:var(--rf-koyu);font-weight:800;font-size:12px;
+  letter-spacing:.3px;margin-top:8px;text-transform:uppercase}
+.rf-yan-kod{position:absolute;left:-30px;top:50%;transform:translateY(-50%) rotate(180deg);
+  writing-mode:vertical-rl;color:var(--rf-bant);font-weight:800;font-size:13px;letter-spacing:1px}
+
+/* ekran araç çubuğu (yazdırmada gizlenir) */
+.rf-araclar{max-width:900px;margin:0 auto 14px;display:flex;justify-content:space-between;align-items:center}
+.rf-araclar .sag{display:flex;gap:8px}
+
+/* ---- A4 sayfalama: form birden fazla sayfaya taşarsa üst başlık (amblem+şerit)
+   her sayfada tekrar edilir (thead), satırlar mümkün olduğunca bölünmeden
+   sayfa geçer; sadece not alanı uzun ise ikinci sayfaya doğal şekilde akar. ---- */
+@page{ size:A4; margin:14mm 12mm; }
+
+@media print{
+  .rf-sayfa{background:#fff;padding:0}
+  .rf-araclar,#yan,#bildirim{display:none!important}
+  #ana{padding:0}
+  .rf-kart{box-shadow:none;max-width:100%}
+  .rf-ses-cubuk{display:none!important}
+  .rf-not-kutu{display:none!important}
+  .rf-not-yazdirma{display:block!important;white-space:pre-wrap;font-size:13.5px;
+    line-height:1.45;color:var(--rf-metin);padding:1px 2px}
+
+  .rf-tablo thead{display:table-header-group}
+  .rf-tablo tr{page-break-inside:avoid;break-inside:avoid}
+  .rf-tablo tr.rf-gorusme-satir,.rf-tablo tr.rf-gorusme-satir td{
+    page-break-inside:auto;break-inside:auto}
+  .rf-ust{padding-bottom:4px}
+  .rf-logo{width:19mm;height:19mm;left:2mm}
+}
+
+/* ---- seçenekler: fareyle üzerine gelince büyüt + gölge, seçili olanı vurgula (yalnızca ekranda) ---- */
+@media screen{
+  .rf-secenek{position:relative;border-radius:6px;padding:1px 4px;margin:0 -4px;
+    transition:transform .14s ease,box-shadow .14s ease,background-color .14s ease,color .14s ease;transform-origin:left center}
+  .rf-secenek:has(input:not(:disabled)):hover{transform:scale(1.22);z-index:3;background:#fff;color:var(--rf-koyu);
+    box-shadow:0 4px 14px rgba(30,60,58,.28),0 0 0 1px var(--rf-cizgi-koyu)}
+  .rf-secenek:has(input:checked){color:var(--rf-koyu);font-weight:800;background:#e2f2ef;box-shadow:inset 0 0 0 1px #9fd0c8}
+  .rf-secenek:has(input:checked:not(:disabled)):hover{background:#d4ede8}
+}

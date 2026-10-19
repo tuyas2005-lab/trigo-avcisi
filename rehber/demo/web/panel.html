@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel" class="etkin">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+    <header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik" id="karsilamaBaslik">Hoş geldiniz</h2>
+        <p id="karsilamaAlt">Rehberlik servisinin bugünkü özeti</p>
+        <div class="bant-arac">
+          <a class="dugme birincil-dugme" href="ogrenciler.html">Öğrenci Bul</a>
+          <a class="dugme" href="sinif-etkinlik.html">+ Sınıf Etkinliği</a>
+          <a class="dugme" href="toplanti.html">+ Toplantı</a>
+          <a class="dugme" href="ogrenci-kayit.html">+ Öğrenci Kayıt</a>
+        </div>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/panel.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="kpi-satir" id="kpiSatir">
+      <div class="yukleniyor">Yükleniyor…</div>
+    </div>
+
+    <div class="pano">
+      <div class="kart">
+        <h2><span class="kart-ikon">__IK_gundem__</span>Bugünün Ajandası <a class="kart-bag" href="gundem.html">Tüm gündem →</a></h2>
+        <div class="icerik" id="ajandaAlan"><div class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+      <div class="kart">
+        <h2><span class="kart-ikon uyari">__IK_uyari__</span>Takip Bekleyen Öğrenciler <a class="kart-bag" href="raporlar.html#takip">Tümü →</a></h2>
+        <div class="icerik" id="takipAlan"><div class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+    </div>
+
+    <div class="pano">
+      <div class="kart">
+        <h2><span class="kart-ikon">__IK_rapor__</span>Son 7 Gün — Günlük Görüşme Sayısı</h2>
+        <div class="icerik"><div id="sutunGrafik" class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+      <div class="kart">
+        <h2><span class="kart-ikon">__IK_hedef__</span>Görüşme Konusu Dağılımı (Bu Ay)</h2>
+        <div class="icerik"><div id="halkaGrafik" class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2><span class="kart-ikon">__IK_ogrenciler__</span>Son Görüşülen Öğrenciler</h2>
+      <table>
+        <thead><tr><th>Öğrenci</th><th>Sınıf</th><th>Tür</th><th>Konu</th><th>Tarih</th></tr></thead>
+        <tbody id="sonGorusulenlerGovde"><tr><td colspan="5" class="bos">Yükleniyor…</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+document.querySelectorAll(".kart-ikon").forEach(function (el) {
+  var m = el.textContent.match(/__IK_(\w+)__/);
+  if (m) el.innerHTML = ikonSvg(m[1]);
+});
+
+var AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+var GUNLER = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+function selamla() {
+  var sa = new Date().getHours();
+  return sa < 11 ? "Günaydın" : (sa < 18 ? "İyi günler" : "İyi akşamlar");
+}
+var simdi = new Date();
+var tarihMetni = simdi.getDate() + " " + AYLAR[simdi.getMonth()] + " " + simdi.getFullYear() + ", " + GUNLER[simdi.getDay()];
+
+apiGet("/api/baslangic").then(function (b) {
+  var ad = b.ayarlar.rehberAdSoyad || b.kullanici || "";
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(ad) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  document.getElementById("karsilamaBaslik").textContent = selamla() + (ad ? ", " + ad : "");
+  document.getElementById("karsilamaAlt").textContent = tarihMetni + (b.ayarlar.okulAdi ? " · " + b.ayarlar.okulAdi : "");
+}).catch(function () {});
+
+/* ---- bugünün ajandası (gündemden) ---- */
+apiGet("/api/gundem").then(function (g) {
+  var alan = document.getElementById("ajandaAlan");
+  var gunler = g.gunler || [];
+  var bugun = gunler.filter(function (x) { return x.bugunMu; })[0];
+  var hedef = bugun, baslik = "";
+  if (!bugun || !bugun.ogeler.length) {
+    hedef = gunler.filter(function (x) { return !x.bugunMu; })[0];
+    baslik = hedef ? '<div class="kucuk soluk" style="margin-bottom:8px">Bugün planlı iş yok. Sıradaki gün: <b>' + kacHTML(hedef.baslik) + '</b></div>' : "";
+  }
+  if (!hedef || !hedef.ogeler.length) {
+    alan.innerHTML = bosDurumHtml("Yaklaşan iş yok", "Öğrenci dosyalarından hatırlatma ekleyebilir, sınıf etkinliği veya toplantı planlayabilirsiniz.", "gundem");
+    return;
+  }
+  var ogeler = hedef.ogeler.slice().sort(function (a, b) { return (a.saat || "99") < (b.saat || "99") ? -1 : 1; });
+  alan.innerHTML = baslik + '<div class="ajanda-liste">' + ogeler.slice(0, 7).map(function (o) {
+    var tur = gundemOgeTuru(o);
+    var kim = o.adSoyad ? kacHTML(o.adSoyad) + (o.sinif ? ' <span class="soluk">(' + kacHTML(o.sinif) + ')</span>' : "") : kacHTML(o.sinif || "");
+    var metin = (o.metin || "").replace(/^\d{1,2}:\d{2}(–\d{1,2}:\d{2})?\s*—\s*/, "");
+    return '<a class="ajanda-oge" href="' + gundemOgeUrl(o) + '">' +
+      '<span class="ajanda-saat">' + kacHTML(o.saat || "—") + '</span>' +
+      '<span class="ajanda-govde"><span class="ajanda-ust">' + turCipHtml(tur) + ' <b>' + kim + '</b></span>' +
+      '<span class="ajanda-metin">' + kacHTML(metin) + '</span></span></a>';
+  }).join("") + '</div>' +
+  (ogeler.length > 7 ? '<div class="kucuk soluk" style="margin-top:8px">+' + (ogeler.length - 7) + ' iş daha — <a href="gundem.html">gündemde görün</a></div>' : "");
+}).catch(function () { document.getElementById("ajandaAlan").innerHTML = '<div class="bos">Gündem yüklenemedi.</div>'; });
+
+apiGet("/api/panel").then(function (v) {
+  var kpi = document.getElementById("kpiSatir");
+  kpi.className = "kpi-satir dort";
+  var izlemeCip = v.bekleyenIzleme > 0
+    ? '<a class="kpi-cip dikkat" href="gundem.html" title="Tamamlanmamış izleme hatırlatmaları">' + gSayi(v.bekleyenIzleme) + ' bekleyen izleme</a>'
+    : '<span class="kpi-cip iyi">Bekleyen izleme yok</span>';
+  var yilAlt = kacHTML(v.egitimYili) + ' eğitim yılı';
+  kpi.innerHTML =
+    '<div class="kpi iyi"><div class="kpi-baslik">Bugünkü Görüşme</div>' +
+      '<div class="kpi-deger">' + gSayi(v.bugunToplam) + '</div>' +
+      '<div class="kpi-alt">' + gSayi(v.bugunOgrenci) + ' öğrenci · ' + gSayi(v.bugunVeli) + ' veli</div>' + izlemeCip + '</div>' +
+    '<div class="kpi"><div class="kpi-baslik">Bu Ay Görüşme</div>' +
+      '<div class="kpi-deger">' + gSayi(v.ayToplam) + degisimRozeti(v.ayToplam, v.oncekiAyToplam, v.oncekiAyAdi + " ayının aynı günlerine göre") + '</div>' +
+      '<div class="kpi-alt">' + gSayi(v.ayOgrenci) + ' öğrenci · ' + gSayi(v.ayVeli) + ' veli</div>' +
+      '<div class="kpi-alt kpi-alt-soluk">' + kacHTML(v.ayAdi) + '</div></div>' +
+    '<div class="kpi kpi-toplam"><div class="kpi-baslik">Toplam Görüşme</div>' +
+      '<div class="kpi-deger">' + gSayi(v.yilToplam) + '</div>' +
+      '<div class="kpi-ayrim"><span class="ogr"><i></i>Öğrenci <b>' + gSayi(v.yilOgrenci) + '</b></span>' +
+      '<span class="vel"><i></i>Veli <b>' + gSayi(v.yilVeli) + '</b></span></div>' +
+      '<div class="kpi-cubuk iki" title="Öğrenci / veli görüşmesi oranı"><i style="width:' +
+        (v.yilToplam ? Math.round(100 * v.yilOgrenci / v.yilToplam) : 0) + '%"></i></div>' +
+      '<div class="kpi-alt kpi-alt-soluk">' + yilAlt + '</div></div>' +
+    '<div class="kpi kpi-kapsama"><div class="kpi-baslik" title="Kendisiyle veya velisiyle en az bir kez görüşülen FARKLI öğrenci sayısı. Aynı öğrenciyle yapılan tekrar görüşmeler bir kez sayılır.">Görüşülen Öğrenci</div>' +
+      '<div class="kpi-deger">' + gSayi(v.yilGorusulenOgrenci) + '<span class="kpi-bolu">/' + gSayi(v.toplamOgrenci) + '</span></div>' +
+      '<div class="kpi-cubuk" title="Kapsama: kayıtlı öğrencilerin %' + v.kapsamaOrani + '\'i ile görüşüldü"><i style="width:' + Math.min(100, v.kapsamaOrani) + '%"></i></div>' +
+      '<div class="kpi-ayrim"><span class="ogr" title="Kendisiyle en az bir öğrenci görüşmesi yapılan farklı öğrenci"><i></i>Kendisiyle <b>' + gSayi(v.yilOgrenciKisi) + '</b></span>' +
+      '<span class="vel" title="Kendisiyle görüşülmemiş, yalnızca velisiyle görüşülmüş öğrenci"><i></i>Yalnız velisiyle <b>' + gSayi(v.yilYalnizVeliKisi) + '</b></span></div>' +
+      '<div class="kpi-alt kpi-alt-soluk">kapsama %' + v.kapsamaOrani + ' · ' + yilAlt + '</div></div>';
+
+  /* takip bekleyenler */
+  var tk = document.getElementById("takipAlan");
+  var takipListe = v.takipUyarilari || [];
+  if (!Array.isArray(v.takipUyarilari)) {
+    tk.innerHTML = bosDurumHtml("Bu bölüm yüklenemedi", "Program tam yeniden başlatılmamış görünüyor — siyah program penceresini kapatıp Baslat.bat ile yeniden açın.", "uyari");
+  } else if (!takipListe.length) {
+    tk.innerHTML = bosDurumHtml("Harika, takip bekleyen öğrenci yok", "Etiketli tüm öğrencilerle son " + (v.takipEsikGun || 30) + " gün içinde görüşülmüş.", "hedef");
+  } else {
+    tk.innerHTML = '<div class="kucuk soluk" style="margin-bottom:8px">Etiketi olup son ' + (v.takipEsikGun || 30) +
+      ' gündür görüşülmeyen <b>' + gSayi(v.takipToplam || takipListe.length) + '</b> öğrenci var.</div><div class="takip-liste">' +
+      takipListe.map(function (o) {
+        return '<a class="takip-oge" href="dosya.html?id=' + encodeURIComponent(o.ogrenciId) + '">' + avatarHtml(o.adSoyad) +
+          '<span class="takip-govde"><b>' + kacHTML(o.adSoyad) + '</b> <span class="soluk">' + kacHTML(o.sinif || "") + '</span><br>' +
+          o.etiketler.map(function (e) { return '<span class="rozet-etiket kucuk-rozet ' + e.renk + '">' + kacHTML(e.ad) + '</span>'; }).join(" ") +
+          '</span><span class="takip-sure' + (o.gecenGun === null ? " hic" : "") + '">' + gunFarkiMetni(o.gecenGun) + '</span></a>';
+      }).join("") + '</div>';
+  }
+
+  cizSutun(document.getElementById("sutunGrafik"), v.son7Gun.map(function (g) {
+    return { ad: g.bugunMu ? "Bugün" : g.kisaAd, sayi: g.sayi, vurgu: g.bugunMu };
+  }));
+
+  cizHalka(document.getElementById("halkaGrafik"), konuHalkaVerisi(v.konuDagilimi || [], 5), "görüşme", v.ayToplam);
+
+  var govde = document.getElementById("sonGorusulenlerGovde");
+  if (!v.sonGorusulenler.length) {
+    govde.innerHTML = '<tr><td colspan="5">' + bosDurumHtml("Henüz görüşme kaydı yok", "Bir öğrenci dosyası açıp ilk görüşmeyi kaydedin.", "ogrenciler") + '</td></tr>';
+  } else {
+    govde.innerHTML = v.sonGorusulenler.map(function (s) {
+      return '<tr class="tikla-satir" onclick="location.href=\'dosya.html?id=' + encodeURIComponent(s.ogrenciId) + '\'">' +
+        '<td><span class="ad-hucre">' + avatarHtml(s.adSoyad) + kacHTML(s.adSoyad) + '</span></td><td>' + kacHTML(s.sinif) + '</td>' +
+        '<td>' + turCipHtml(s.tur === "veli" ? { sinif: "aile", ad: "Veli" } : { sinif: "izleme", ad: "Öğrenci" }) + '</td>' +
+        '<td>' + kacHTML(s.konu) + '</td><td style="white-space:nowrap">' + kacHTML(s.tarih) + '</td></tr>';
+    }).join("");
+  }
+}).catch(apiHataGoster);
+</script>
+</body>
+</html>

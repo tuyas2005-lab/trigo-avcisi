@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Program Etkinleştirme</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+<style>
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  .lk-kart{max-width:440px;width:100%}
+  .lk-kart>.icerik{padding:22px 24px 20px}
+  .lk-logo{text-align:center;margin-bottom:6px}
+  .lk-logo h1{font-size:17px;color:var(--lacivert);margin:0 0 3px}
+  .lk-logo .alt{color:var(--soluk);font-size:13px}
+  .lk-aciklama{font-size:13.5px;line-height:1.6;color:var(--metin);background:#eef4ff;
+    border:1px solid #cfe0f7;border-radius:7px;padding:11px 13px;margin:16px 0 18px}
+  .lk-alan{margin-bottom:13px}
+  .lk-buton{width:100%;margin-top:4px;padding:10px;font-size:14.5px}
+  .lk-kosul{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.5;color:var(--metin);margin:4px 0 12px;cursor:pointer}
+  .lk-kosul input{margin-top:3px;width:16px;height:16px;flex:0 0 16px}
+  .lk-kosul a{font-weight:700}
+</style>
+</head>
+<body>
+<div class="lk-sarma">
+<div class="lk-gorsel">
+  <img src="assets/basliklar/karsilama.webp" alt="" onerror="this.remove()">
+  <div class="lk-gorsel-metin"><span class="lk-marka">__MARKA__</span><b>Hoş geldiniz</b><span>Öğrenci ve veli görüşmeleriniz bu bilgisayarda, internete çıkmadan güvenle saklanır.</span></div>
+</div>
+<div class="kart lk-kart">
+  <div class="icerik">
+    <div class="lk-logo">
+      <h1>Öğrenci Rehberlik Takip Sistemi</h1>
+      <div class="alt">İlk Kurulum — Program Etkinleştirme</div>
+    </div>
+    <div class="lk-aciklama">
+      Bu, bir <b>giriş şifresi değildir</b> — program her açılışta bu şifreyi sormayacaktır.
+      Bu şifre, yalnızca program klasörü <b>başka bir bilgisayara kopyalanırsa</b> izinsiz
+      kullanımı engellemek için bir kez belirlenir. Bu bilgisayarda program belirlediğiniz
+      şifreye hiç ihtiyaç duymadan çalışmaya devam edecektir. Klasör başka bir bilgisayara
+      kopyalanırsa, o bilgisayarda program hemen kilitlenir ve doğru şifre girilmeden hiçbir
+      öğrenci verisi görüntülenemez.
+      <br><br>
+      <b>Yasal dayanak:</b> Bu koruma, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)
+      kapsamında öğrenci ve veli kişisel verilerinin yetkisiz kişilerce erişilmesini veya
+      kopyalanmasını önlemek amacıyla uygulanmaktadır.
+    </div>
+    <div class="lk-alan">
+      <label>Kopyalamaya Karşı Şifre</label>
+      <input type="password" id="sifre1" placeholder="En az 4 karakter" autocomplete="new-password">
+    </div>
+    <div class="lk-alan">
+      <label>Şifre (Tekrar)</label>
+      <input type="password" id="sifre2" placeholder="Şifreyi tekrar yazın" autocomplete="new-password">
+    </div>
+    <label class="lk-kosul"><input type="checkbox" id="kosulKabul">
+      <span><a href="kullanim-kosullari.html" target="_blank" rel="noopener">Kullanım Koşulları ve Sorumluluk Reddi</a>'ni okudum ve kabul ediyorum.
+      Programa girdiğim verilerin hukuka uygun işlenmesi, korunması ve yedeklenmesinin benim ve kurumumun sorumluluğunda olduğunu biliyorum.</span></label>
+    <button class="birincil lk-buton" id="btnKur">Etkinleştir ve Başla</button>
+  </div>
+</div>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+document.getElementById("btnKur").addEventListener("click", function () {
+  var s1 = document.getElementById("sifre1").value;
+  var s2 = document.getElementById("sifre2").value;
+  if (s1.length < 4) { bildirim("Şifre en az 4 karakter olmalıdır.", true); return; }
+  if (s1 !== s2) { bildirim("Girdiğiniz şifreler birbiriyle uyuşmuyor.", true); return; }
+  if (!document.getElementById("kosulKabul").checked) { bildirim("Devam etmek için Kullanım Koşulları'nı kabul etmelisiniz.", true); return; }
+  var btn = document.getElementById("btnKur");
+  btn.disabled = true; btn.textContent = "Etkinleştiriliyor…";
+  apiPost("/api/lisans/kur", { sifre: s1, kosulKabul: true }).then(function () {
+    bildirim("Program etkinleştirildi.");
+    setTimeout(function () { location.href = "panel.html"; }, 500);
+  }).catch(function (e) {
+    btn.disabled = false; btn.textContent = "Etkinleştir ve Başla";
+    apiHataGoster(e);
+  });
+});
+["sifre1", "sifre2"].forEach(function (id) {
+  document.getElementById(id).addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("btnKur").click();
+  });
+});
+</script>
+<script>document.querySelectorAll(".lk-marka").forEach(function (e) { e.innerHTML = ikonSvg("kalkan"); });</script>
+</body>
+</html>

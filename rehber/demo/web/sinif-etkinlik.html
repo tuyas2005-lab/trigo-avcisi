@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sınıf Etkinliği — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik" class="etkin">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Sınıf Etkinliği</h2>
+        <p>Önceden planlanan, tek bir öğrenciye değil doğrudan bir sınıfa yönelik grup çalışmaları (örn. rehberlik tanıtım dersi). Kaydettiğinizde Gündem ve Takvim'e otomatik işlenir.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/etkinlik.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="kart">
+      <h2>Yeni Sınıf Etkinliği Planla</h2>
+      <div class="icerik">
+        <div class="alanlar">
+          <div>
+            <label>Etkinlik Türü</label>
+            <select id="eTur"><option value="">Seçiniz…</option></select>
+          </div>
+          <div id="eYeniTurAlan" style="display:none">
+            <label>Yeni Etkinlik Türü Adı</label>
+            <div class="satir" style="gap:8px">
+              <input type="text" id="eYeniTurAd" placeholder="Örn. Rehberlik Tanıtım Dersi" style="flex:1">
+              <button class="birincil" id="eYeniTurEkleBtn" type="button">Oluştur</button>
+              <button id="eYeniTurVazgecBtn" type="button">Vazgeç</button>
+            </div>
+          </div>
+          <div>
+            <label>Sınıf / Şube</label>
+            <select id="eSinif"><option value="">Seçiniz…</option></select>
+          </div>
+          <div>
+            <label>Tarih</label>
+            <input type="text" id="eTarih" placeholder="gg.aa.yyyy">
+          </div>
+          <div>
+            <label>Saat</label>
+            <select id="eSaat"></select>
+          </div>
+          <div class="genis">
+            <label>Açıklama <span class="kucuk soluk">(opsiyonel)</span></label>
+            <input type="text" id="eAciklama" placeholder="Örn. 1-A sınıfında rehberlik tanıtım dersi yapılacaktır…">
+          </div>
+        </div>
+        <div class="satir yazdirma-gizle" style="margin-top:14px;justify-content:flex-end">
+          <button class="birincil" id="eKaydetBtn">Kaydet</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart yazdirma-gizle" id="cizelgeKart">
+      <h2>Çizelgeden Toplu Ekle <span class="kucuk soluk" style="font-weight:600;margin-left:6px">Word · PDF · Excel · Fotoğraf</span></h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Hazırladığınız "Rehberlik dersi" çizelgesini (tarih, ders saati, sınıf, sınıf öğretmeni) yükleyin; program satırları okuyup sınıf etkinliği olarak önerir, siz kontrol edip tek tuşla eklersiniz. Dosya bu bilgisayarda okunur, internete gönderilmez. Fotoğraflar Windows'un kendi yazı tanıma özelliğiyle okunur; fotoğrafta okunamayan yerleri önizlemede düzeltmeniz gerekebilir.</p>
+        <div class="birak-alani" id="cBirak">
+          <div class="birak-ikon" id="cIkon"></div>
+          <div class="birak-metin"><b>Çizelge dosyasını buraya sürükleyip bırakın</b><br><span class="kucuk soluk">veya</span></div>
+          <button type="button" class="birincil" id="cSecTus">Bilgisayardan Dosya Seç…</button>
+          <input type="file" id="cDosya" accept=".pdf,.docx,.xlsx,.csv,.jpg,.jpeg,.png" style="display:none">
+          <div class="kucuk soluk" style="margin-top:8px">Word (.docx), PDF, Excel (.xlsx), CSV veya <b>fotoğraf (JPG/PNG)</b> · <span id="cDosyaAd">Dosya seçilmedi</span></div>
+        </div>
+        <div id="cOnizleme" style="display:none;margin-top:18px"></div>
+      </div>
+    </div>
+
+    <div class="kart detay-kart">
+      <h2>Planlanan / Gerçekleşen Etkinlikler</h2>
+      <div class="icerik">
+        <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
+          <div>
+            <label class="kucuk" style="color:#3c5375">Sınıf</label>
+            <select id="fSinif" style="max-width:140px"><option value="">Tüm Sınıflar</option></select>
+          </div>
+          <div>
+            <label class="kucuk" style="color:#3c5375">Durum</label>
+            <select id="fDurum" style="max-width:160px">
+              <option value="">Tümü</option>
+              <option value="acik">Açıkta (yapılmadı)</option>
+              <option value="tamamlandi">Tamamlandı</option>
+            </select>
+          </div>
+        </div>
+        <div class="zamanlama-liste" id="etkinlikListe"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var ETKINLIK_TURLERI = [];
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  ETKINLIK_TURLERI = b.etkinlikTurleri || [];
+  turSeciminiDoldur();
+  saatSecenekleriDoldur(document.getElementById("eSaat"), true);
+  tarihMaskeUygula(document.getElementById("eTarih"));
+  return apiGet("/api/siniflar");
+}).then(function (siniflar) {
+  var adlar = Object.keys(siniflar).sort();
+  var eSinif = document.getElementById("eSinif");
+  var fSinif = document.getElementById("fSinif");
+  adlar.forEach(function (s) {
+    eSinif.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(s) + '">' + kacHTML(s) + '</option>');
+    fSinif.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(s) + '">' + kacHTML(s) + '</option>');
+  });
+  listeyiYukle();
+}).catch(apiHataGoster);
+
+function turSeciminiDoldur(seciliId) {
+  var sel = document.getElementById("eTur");
+  sel.innerHTML = '<option value="">Seçiniz…</option>' +
+    ETKINLIK_TURLERI.map(function (t) { return '<option value="' + t.id + '">' + kacHTML(t.ad) + '</option>'; }).join("") +
+    '<option value="__yeni__">+ Yeni Etkinlik Türü Ekle…</option>';
+  if (seciliId) sel.value = seciliId;
+}
+
+document.getElementById("eTur").addEventListener("change", function () {
+  var yeniAlan = document.getElementById("eYeniTurAlan");
+  if (this.value === "__yeni__") {
+    yeniAlan.style.display = "";
+    document.getElementById("eYeniTurAd").focus();
+  } else {
+    yeniAlan.style.display = "none";
+  }
+});
+document.getElementById("eYeniTurVazgecBtn").addEventListener("click", function () {
+  document.getElementById("eYeniTurAlan").style.display = "none";
+  document.getElementById("eYeniTurAd").value = "";
+  document.getElementById("eTur").value = "";
+});
+document.getElementById("eYeniTurEkleBtn").addEventListener("click", function () {
+  var ad = document.getElementById("eYeniTurAd").value.trim();
+  if (!ad) { bildirim("Etkinlik türü adı zorunludur.", true); return; }
+  apiPost("/api/etkinlik-turleri", { ad: ad }).then(function (turler) {
+    ETKINLIK_TURLERI = turler;
+    var yeni = turler.find(function (t) { return t.ad === ad; });
+    turSeciminiDoldur(yeni ? yeni.id : "");
+    document.getElementById("eYeniTurAlan").style.display = "none";
+    document.getElementById("eYeniTurAd").value = "";
+    bildirim("Etkinlik türü eklendi.");
+  }).catch(apiHataGoster);
+});
+
+document.getElementById("eKaydetBtn").addEventListener("click", function () {
+  var turId = document.getElementById("eTur").value;
+  var sinif = document.getElementById("eSinif").value;
+  var tarih = document.getElementById("eTarih").value.trim();
+  var saat = document.getElementById("eSaat").value;
+  var aciklama = document.getElementById("eAciklama").value.trim();
+  if (!turId || turId === "__yeni__") { bildirim("Etkinlik türü seçmelisiniz.", true); return; }
+  if (!sinif) { bildirim("Sınıf seçmelisiniz.", true); return; }
+  if (!tarih) { bildirim("Tarih zorunludur.", true); return; }
+  apiPost("/api/sinif-etkinlikleri", { etkinlikTuruId: turId, sinif: sinif, tarih: tarih, saat: saat, aciklama: aciklama })
+    .then(function () {
+      bildirim("Sınıf etkinliği kaydedildi — Gündem ve Takvim'e işlendi.");
+      document.getElementById("eTur").value = "";
+      document.getElementById("eSinif").value = "";
+      document.getElementById("eTarih").value = "";
+      document.getElementById("eSaat").value = "";
+      document.getElementById("eAciklama").value = "";
+      listeyiYukle();
+    }).catch(apiHataGoster);
+});
+
+document.getElementById("fSinif").addEventListener("change", listeyiYukle);
+document.getElementById("fDurum").addEventListener("change", listeyiYukle);
+
+function listeyiYukle() {
+  var p = new URLSearchParams();
+  var sinif = document.getElementById("fSinif").value;
+  var durum = document.getElementById("fDurum").value;
+  if (sinif) p.set("sinif", sinif);
+  if (durum) p.set("durum", durum);
+  apiGet("/api/sinif-etkinlikleri?" + p.toString()).then(function (v) { listeCiz(v.kayitlar); }).catch(apiHataGoster);
+}
+
+function listeCiz(kayitlar) {
+  var liste = document.getElementById("etkinlikListe");
+  if (!kayitlar.length) {
+    liste.innerHTML = bosDurumHtml("Henüz sınıf etkinliği planlanmadı", "Yukarıdaki formdan ilk kaydı oluşturabilirsiniz.", "takvim");
+    return;
+  }
+  var bug = new Date(); bug.setHours(0, 0, 0, 0);
+  var ayKisa = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  var satirHtml = function (se) {
+    var parcalar = (se.tarih || "").split(".");
+    var seTarih = parcalar.length === 3 ? new Date(parcalar[2], parcalar[1] - 1, parcalar[0]) : null;
+    var gecti = seTarih && seTarih < bug && !se.tamamlandi;
+    var gosterTarih = (seTarih ? (seTarih.getDate() + " " + ayKisa[seTarih.getMonth()]) : se.tarih) + (se.saat ? " · " + se.saat : "");
+    var durumEtiket = se.tamamlandi ? '<span class="etiket">Tamamlandı</span>' : (gecti ? '<span class="etiket kirmizi">Gecikti</span>' : '<span class="etiket turuncu">Yaklaşıyor</span>');
+    var metin = '<b>' + kacHTML(se.sinif) + '</b> — ' + kacHTML(se.etkinlikAdi) + (se.aciklama ? ' — ' + kacHTML(se.aciklama) : "");
+    return '<div class="zamanlama-satir' + (se.tamamlandi ? " gecti" : "") + '" data-se-satir="' + se.id + '">' +
+      tarihRozetiHtml(se.tarih, se.saat) +
+      '<div class="zamanlama-metin">' + metin + '</div>' +
+      '<div class="zamanlama-durum yazdirma-gizle" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + durumEtiket +
+      '<button style="padding:3px 9px;font-size:12.5px" data-se-tamamla="' + se.id + '">' + (se.tamamlandi ? "Geri Al" : "Tamamlandı İşaretle") + '</button>' +
+      '<button style="padding:3px 9px;font-size:12.5px" data-se-duzenle="' + se.id + '">Tarihi Değiştir</button>' +
+      '<button class="tehlike" style="padding:3px 9px;font-size:12.5px" data-se-sil="' + se.id + '">Sil</button></div></div>';
+  };
+  var acik = kayitlar.filter(function (x) { return !x.tamamlandi; })
+    .sort(function (a, b) { return tarihSayi(a.tarih) - tarihSayi(b.tarih); });
+  var tamam = kayitlar.filter(function (x) { return x.tamamlandi; })
+    .sort(function (a, b) { return tarihSayi(b.tarih) - tarihSayi(a.tarih); });
+  liste.innerHTML =
+    (acik.length ? '<div class="liste-grup-baslik">Planlanan <span class="sayac">' + acik.length + '</span></div>' + acik.map(satirHtml).join("") : "") +
+    (tamam.length ? '<details class="tamamlanan-grup"' + (acik.length ? "" : " open") + '><summary class="liste-grup-baslik">Tamamlanan <span class="sayac">' + tamam.length + '</span> <span class="kucuk soluk">(göstermek için tıklayın)</span></summary>' + tamam.map(satirHtml).join("") + '</details>' : "");
+
+
+  liste.querySelectorAll("[data-se-tamamla]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      apiPost("/api/sinif-etkinlikleri/" + b.getAttribute("data-se-tamamla") + "/tamamla", {})
+        .then(function () { bildirim("Durum güncellendi."); listeyiYukle(); }).catch(apiHataGoster);
+    });
+  });
+  liste.querySelectorAll("[data-se-sil]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var seid = b.getAttribute("data-se-sil");
+      onayModali({
+        baslik: "Sınıf Etkinliğini Sil",
+        mesaj: "Bu planlanan sınıf etkinliğini silmek istediğinize emin misiniz?",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/sinif-etkinlikleri/" + seid).then(function () { bildirim("Etkinlik silindi."); listeyiYukle(); }).catch(apiHataGoster);
+      });
+    });
+  });
+  liste.querySelectorAll("[data-se-duzenle]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var seid = b.getAttribute("data-se-duzenle");
+      var kayit = kayitlar.find(function (x) { return x.id === seid; });
+      if (!kayit) return;
+      duzenleModunuAc(seid, kayit);
+    });
+  });
+}
+
+function duzenleModunuAc(seid, kayit) {
+  var satir = document.querySelector('[data-se-satir="' + seid + '"]');
+  if (!satir) return;
+  satir.innerHTML =
+    '<div class="satir" style="gap:8px;flex-wrap:wrap;align-items:flex-end;padding:2px 0;width:100%">' +
+    '<div><label class="kucuk soluk">Tarih</label><input type="text" id="dzTarih" value="' + kacHTML(kayit.tarih) + '" style="max-width:120px"></div>' +
+    '<div><label class="kucuk soluk">Saat</label><select id="dzSaat" style="max-width:110px"></select></div>' +
+    '<div><label class="kucuk soluk">Sınıf</label><input type="text" id="dzSinif" value="' + kacHTML(kayit.sinif) + '" style="max-width:110px"></div>' +
+    '<button class="birincil" id="dzKaydetBtn" type="button">Kaydet</button>' +
+    '<button id="dzVazgecBtn" type="button">Vazgeç</button></div>';
+  saatSecenekleriDoldur(document.getElementById("dzSaat"), true);
+  document.getElementById("dzSaat").value = kayit.saat || "";
+  tarihMaskeUygula(document.getElementById("dzTarih"));
+  document.getElementById("dzVazgecBtn").addEventListener("click", listeyiYukle);
+  document.getElementById("dzKaydetBtn").addEventListener("click", function () {
+    var tarih = document.getElementById("dzTarih").value.trim();
+    var sinif = document.getElementById("dzSinif").value.trim();
+    if (!tarih || !sinif) { bildirim("Tarih ve sınıf zorunludur.", true); return; }
+    apiPut("/api/sinif-etkinlikleri/" + seid, { tarih: tarih, saat: document.getElementById("dzSaat").value, sinif: sinif })
+      .then(function () { bildirim("Tarih güncellendi."); listeyiYukle(); }).catch(apiHataGoster);
+  });
+}
+
+/* ---------------- çizelgeden toplu ekleme ---------------- */
+var CIZELGE = null;
+document.getElementById("cIkon").innerHTML = ikonSvg("yukle");
+document.getElementById("cSecTus").addEventListener("click", function () { document.getElementById("cDosya").click(); });
+document.getElementById("cDosya").addEventListener("change", function () { if (this.files[0]) cizelgeOku(this.files[0]); this.value = ""; });
+(function () {
+  var a = document.getElementById("cBirak");
+  ["dragenter", "dragover"].forEach(function (t) { a.addEventListener(t, function (e) { e.preventDefault(); a.classList.add("uzerinde"); }); });
+  ["dragleave", "drop"].forEach(function (t) { a.addEventListener(t, function (e) { e.preventDefault(); a.classList.remove("uzerinde"); }); });
+  a.addEventListener("drop", function (e) { var d = e.dataTransfer.files[0]; if (d) cizelgeOku(d); });
+})();
+
+/* Fotoğraflar yüklenmeden önce tarayıcıda küçültülür (Windows yazı tanıma ~2600 px sınırı),
+   telefonun döndürme bilgisi uygulanır ve gri tonlamayla kontrast artırılır. */
+function fotografHazirla(dosya) {
+  return new Promise(function (coz, red) {
+    var url = URL.createObjectURL(dosya), img = new Image();
+    img.onload = function () {
+      var oran = Math.min(1, 2400 / Math.max(img.naturalWidth, img.naturalHeight));
+      var c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * oran); c.height = Math.round(img.naturalHeight * oran);
+      var ctx = c.getContext("2d");
+      ctx.filter = "grayscale(1) contrast(1.35) brightness(1.05)";
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(function (b) { b ? coz(b) : red(new Error("Fotoğraf hazırlanamadı.")); }, "image/jpeg", 0.92);
+    };
+    img.onerror = function () { red(new Error("Fotoğraf açılamadı.")); };
+    img.src = url;
+  });
+}
+
+function cizelgeOku(dosya) {
+  var foto = /^image\//.test(dosya.type) || /\.(jpe?g|png)$/i.test(dosya.name);
+  document.getElementById("cDosyaAd").textContent = dosya.name + (foto ? " okunuyor (fotoğraf, birkaç saniye sürebilir)…" : " okunuyor…");
+  (foto ? fotografHazirla(dosya) : Promise.resolve(dosya)).then(function (yuk) {
+    var form = new FormData();
+    form.append("dosya", yuk, foto ? "cizelge-foto.jpg" : dosya.name);
+    return cizelgeGonder(form, dosya);
+  }).catch(function (e) { bildirim(e.message, true); document.getElementById("cDosyaAd").textContent = dosya.name; });
+}
+
+function cizelgeGonder(form, dosya) {
+  return fetch("/api/etkinlik-ice-aktar/onizle", { method: "POST", body: form })
+    .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.hata || "Dosya okunamadı"); return d; }); })
+    .then(function (v) {
+      CIZELGE = v;
+      var kontrol = v.satirlar.filter(function (r) { return r.kontrol; }).length;
+      document.getElementById("cDosyaAd").textContent = dosya.name + " · " + v.satirlar.length + " satır bulundu" +
+        (kontrol ? " · " + kontrol + " satırda sınıf okunamadı, kırmızı satırları düzeltin" : "");
+      document.getElementById("cBirak").classList.add("secildi");
+      cizelgeCiz();
+    })
+    .catch(function (e) {
+      document.getElementById("cDosyaAd").textContent = dosya.name;
+      document.getElementById("cOnizleme").style.display = "none";
+      bildirim(e.message, true);
+    });
+}
+
+function bugunTarih() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+function tarihNesne(t) { var p = (t || "").split("."); return p.length === 3 ? new Date(+p[2], +p[1] - 1, +p[0]) : null; }
+
+function cizelgeCiz() {
+  var v = CIZELGE, kullanilan = {};
+  v.satirlar.forEach(function (r) { if (r.dersSaati) kullanilan[r.dersSaati] = true; });
+  var dersler = Object.keys(kullanilan).sort(function (a, b) { return a - b; });
+  var h = '';
+  h += '<div class="alanlar"><div><label>Etkinlik Türü</label><select id="cTur">' +
+    '<option value="">➕ Yeni tür oluştur</option>' +
+    ETKINLIK_TURLERI.map(function (t) { return '<option value="' + t.id + '"' + (t.id === v.turId ? " selected" : "") + '>' + kacHTML(t.ad) + '</option>'; }).join("") +
+    '</select></div>' +
+    '<div id="cYeniTurAlan"><label>Yeni tür adı <span class="kucuk soluk">(çizelgenin başlığından)</span></label>' +
+    '<input type="text" id="cYeniTur" value="' + kacHTML(v.baslik) + '"></div></div>';
+  if (dersler.length) {
+    h += '<div style="margin-top:14px"><label>Ders saatlerinin başlama saatleri <span class="kucuk soluk">(okulunuza göre düzeltin; bir sonraki sefer için hatırlanır)</span></label>' +
+      '<div class="satir" style="gap:10px;flex-wrap:wrap;margin-top:6px">' + dersler.map(function (d) {
+        return '<div class="ders-saat-kutu"><span>' + d + '. ders</span><input type="text" data-ders="' + d + '" value="' + kacHTML(v.dersSaatleri[d] || "") + '" placeholder="ss:dd"></div>';
+      }).join("") + '</div></div>';
+  }
+  h += '<div class="tablo-sarma" style="margin-top:14px"><table class="cizelge-tablo"><thead><tr><th style="width:34px"><input type="checkbox" id="cHepsi" checked></th>' +
+    '<th>Tarih</th><th>Ders</th><th>Saat</th><th>Sınıf</th><th>Sınıf Öğretmeni</th><th>Durum</th></tr></thead><tbody>' +
+    v.satirlar.map(function (r, i) {
+      return '<tr data-i="' + i + '"' + (r.mevcut ? ' class="soluk-satir"' : (r.kontrol ? ' class="kontrol-satir"' : '')) + '>' +
+        '<td><input type="checkbox" class="cSec"' + (r.mevcut ? "" : " checked") + '></td>' +
+        '<td><input type="text" class="cTarih" value="' + kacHTML(r.tarih) + '" style="width:110px"></td>' +
+        '<td>' + (r.dersSaati ? kacHTML(r.dersSaati) + '.' : '—') + '</td>' +
+        '<td><input type="text" class="cSaat" value="' + kacHTML(r.saat) + '" style="width:72px" placeholder="ss:dd"></td>' +
+        '<td><input type="text" class="cSinif" value="' + kacHTML(r.sinif) + '" style="width:70px">' +
+        (r.sinifVar || !r.sinif ? '' : ' <span class="rozet-etiket turuncu" title="Programda bu sınıf henüz yok; eklenince oluşturulur">yeni sınıf</span>') + '</td>' +
+        '<td>' + kacHTML(r.ogretmen || "—") + '</td>' +
+        '<td>' + (r.mevcut ? '<span class="kucuk soluk">Zaten ekli</span>'
+          : r.kontrol ? '<span class="kucuk" style="color:#b42318;font-weight:700" title="Fotoğrafta okunan: ' + kacHTML(r.sinifHam || "?") + '">Sınıfı kontrol edin</span>'
+          : '<span class="kucuk" style="color:#1a6b45;font-weight:700">Eklenecek</span>') + '</td></tr>';
+    }).join("") + '</tbody></table></div>';
+  h += '<label class="cizelge-onay"><input type="checkbox" id="cGecmisTamam"> Tarihi geçmiş olanları "yapıldı" olarak işaretle</label>';
+  h += '<div class="satir" style="margin-top:14px;justify-content:flex-end;gap:10px"><button id="cVazgec">Vazgeç</button>' +
+    '<button class="birincil" id="cEkle"></button></div>';
+  var alan = document.getElementById("cOnizleme");
+  alan.innerHTML = h; alan.style.display = "";
+
+  function turGoster() { document.getElementById("cYeniTurAlan").style.display = document.getElementById("cTur").value ? "none" : ""; }
+  document.getElementById("cTur").addEventListener("change", turGoster); turGoster();
+  function sayac() {
+    var n = alan.querySelectorAll(".cSec:checked").length;
+    var b = document.getElementById("cEkle"); b.textContent = n + " sınıf etkinliğini ekle"; b.disabled = !n;
+  }
+  alan.querySelectorAll(".cSec").forEach(function (k) { k.addEventListener("change", sayac); });
+  document.getElementById("cHepsi").addEventListener("change", function () {
+    var c = this.checked; alan.querySelectorAll(".cSec").forEach(function (k) { k.checked = c; }); sayac();
+  });
+  alan.querySelectorAll("[data-ders]").forEach(function (inp) {
+    inp.addEventListener("input", function () {
+      var d = this.getAttribute("data-ders"), yeni = this.value.trim();
+      alan.querySelectorAll("tbody tr").forEach(function (tr) {
+        var r = CIZELGE.satirlar[+tr.getAttribute("data-i")];
+        if (r.dersSaati === d) tr.querySelector(".cSaat").value = yeni;
+      });
+    });
+  });
+  document.getElementById("cVazgec").addEventListener("click", cizelgeSifirla);
+  document.getElementById("cEkle").addEventListener("click", cizelgeEkle);
+  sayac();
+}
+
+function cizelgeSifirla() {
+  CIZELGE = null;
+  document.getElementById("cOnizleme").style.display = "none";
+  document.getElementById("cOnizleme").innerHTML = "";
+  document.getElementById("cBirak").classList.remove("secildi");
+  document.getElementById("cDosyaAd").textContent = "Dosya seçilmedi";
+}
+
+function cizelgeEkle() {
+  var alan = document.getElementById("cOnizleme");
+  var gecmisTamam = document.getElementById("cGecmisTamam").checked, bugun = bugunTarih();
+  var satirlar = [], eksik = false;
+  alan.querySelectorAll("tbody tr").forEach(function (tr) {
+    if (!tr.querySelector(".cSec").checked) return;
+    var r = CIZELGE.satirlar[+tr.getAttribute("data-i")];
+    var tarih = tr.querySelector(".cTarih").value.trim(), t = tarihNesne(tarih);
+    if (!tr.querySelector(".cSinif").value.trim()) { eksik = true; return; }
+    satirlar.push({ tarih: tarih, saat: tr.querySelector(".cSaat").value.trim(), sinif: tr.querySelector(".cSinif").value.trim(),
+      dersSaati: r.dersSaati, ogretmen: r.ogretmen, tamamlandi: !!(gecmisTamam && t && t < bugun) });
+  });
+  if (eksik) { bildirim("İşaretli satırlardan bazılarında sınıf boş. Kırmızı satırlara sınıfı yazın ya da işaretini kaldırın.", true); return; }
+  var dersSaatleri = {};
+  alan.querySelectorAll("[data-ders]").forEach(function (i) { dersSaatleri[i.getAttribute("data-ders")] = i.value.trim(); });
+  var turId = document.getElementById("cTur").value;
+  var yeniTur = turId ? "" : (document.getElementById("cYeniTur").value || "").trim();
+  if (!turId && !yeniTur) { bildirim("Etkinlik türü seçin ya da yeni tür adını yazın.", true); return; }
+  apiPost("/api/etkinlik-ice-aktar/uygula", { turId: turId, yeniTurAdi: yeniTur, satirlar: satirlar, dersSaatleri: dersSaatleri })
+    .then(function (s) {
+      bildirim(s.eklenen + " sınıf etkinliği eklendi" + (s.atlanan ? " (" + s.atlanan + " satır zaten vardı / eksikti, atlandı)" : "") + ".");
+      return apiGet("/api/etkinlik-turleri").then(function (turler) {
+        ETKINLIK_TURLERI = Array.isArray(turler) ? turler : (turler.turler || []);
+        turSeciminiDoldur();
+        cizelgeSifirla();
+        listeyiYukle();
+      });
+    }).catch(apiHataGoster);
+}
+</script>
+</body>
+</html>

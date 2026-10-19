@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Öğrenci Kayıt — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit" class="etkin">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Öğrenci Kayıt</h2>
+        <p>e-Okul sınıf listesini toplu yükleyin ya da tek tek öğrenci ekleyin. Mevcut dosyalar ve görüşmeler korunur.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/kayit.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="sekmeler sekme-cubugu yazdirma-gizle">
+      <button class="etkin" id="sekmeToplu">Toplu Liste Yükle</button>
+      <button id="sekmeTek">Tek Öğrenci Ekle</button>
+    </div>
+
+    <div class="kart" id="topluKart">
+      <h2>Toplu Öğrenci Listesi Yükle</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">e-Okul'dan aldığınız sınıf listesi dosyasını (PDF, Excel veya CSV) seçin. Her yıl yeni bir liste yükleyebilirsiniz; mevcut öğrenci dosyaları ve görüşme kayıtları korunur, sadece sınıf/şube bilgileri güncellenir (eşleştirme okul numarasına göre yapılır).</p>
+
+        <div class="adimlar">
+          <span class="adim etkin" id="adim1"><b>1</b> Dosyayı seçin</span>
+          <span class="adim" id="adim2"><b>2</b> Önizleyin</span>
+          <span class="adim" id="adim3"><b>3</b> İçe aktarın</span>
+        </div>
+        <div class="birak-alani" id="birakAlani">
+          <div class="birak-ikon">__YUKLE__</div>
+          <div class="birak-metin"><b>Dosyayı buraya sürükleyip bırakın</b><br><span class="kucuk soluk">veya</span></div>
+          <button type="button" id="dosyaSecTus" class="birincil">Bilgisayardan Dosya Seç…</button>
+          <input type="file" id="dosyaInput" accept=".pdf,.csv,.xlsx,.xlsm" style="display:none">
+          <div class="kucuk soluk" style="margin-top:8px">PDF, Excel (.xlsx) veya CSV · <span id="dosyaAdiGoster">Dosya seçilmedi</span></div>
+        </div>
+
+        <div style="text-align:center;margin-top:14px"><button class="birincil" id="onizleBtn" disabled>Listeyi Önizle →</button></div>
+
+        <div id="onizlemeAlan" style="margin-top:18px;display:none">
+          <h3 style="font-size:13.5px;margin:0 0 8px" id="onizlemeBaslik">Önizleme</h3>
+          <table>
+            <thead><tr><th>Sınıf</th><th>Öğrenci No</th><th>Adı Soyadı</th><th>Cinsiyet</th><th>Sınıf Öğretmeni</th><th>Durum</th></tr></thead>
+            <tbody id="onizlemeGovde"></tbody>
+          </table>
+          <p class="kucuk soluk" id="onizlemeOzet"></p>
+          <div class="satir yazdirma-gizle" style="justify-content:flex-end">
+            <button type="button" id="vazgecBtn">Vazgeç</button>
+            <button class="birincil" type="button" id="uygulaBtn">Listeyi İçe Aktar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart" style="display:none" id="tek-ekle-kart">
+      <h2>Tek Öğrenci Ekle</h2>
+      <div class="icerik">
+        <div class="alanlar">
+          <div><label>Adı Soyadı *</label><input type="text" id="tAdSoyad" placeholder="Öğrencinin adı ve soyadı"></div>
+          <div><label>Öğrenci No</label><input type="text" id="tOkulNo" placeholder="Okul numarası"></div>
+          <div><label>Sınıf / Şube</label><input type="text" id="tSinif" placeholder="Örn. 1/A"></div>
+          <div><label>Cinsiyet</label><select id="tCinsiyet"><option value="K">Kız</option><option value="E">Erkek</option></select></div>
+          <div><label>Doğum Tarihi</label><input type="text" id="tDogumTarihi" placeholder="gg.aa.yyyy"></div>
+          <div><label>Sınıf Rehber Öğretmeni</label><input type="text" id="tSinifOgretmeni" placeholder="Sınıf öğretmeninin adı soyadı"></div>
+          <div><label>Veli Adı Soyadı</label><input type="text" id="tVeliAdSoyad" placeholder="Velinin adı soyadı"></div>
+          <div><label>Veli Yakınlığı</label><input type="text" id="tVeliYakinlik" placeholder="Anne / Baba / Vasi"></div>
+          <div><label>Veli Telefon</label><input type="text" id="tVeliTelefon" placeholder="05xx xxx xx xx"></div>
+          <div class="genis"><label>Etiketler</label>
+            <div class="cop-dropdown" id="etiketEkle">
+              <button class="cop-dropdown-tus" type="button" id="etiketEkleTus">
+                Etiket Seç <span class="cop-sayi" id="etiketEkleSayi">0</span> <span class="cop-ok">▾</span>
+              </button>
+              <div class="cop-dropdown-panel" id="etiketEklePanel"></div>
+            </div>
+            <div class="secili-etiket-alani" id="tekSeciliEtiketAlani"></div>
+          </div>
+        </div>
+        <div class="satir yazdirma-gizle" style="margin-top:14px;justify-content:flex-end">
+          <button class="birincil" id="tekEkleBtn">Öğrenci Dosyasını Oluştur</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  var secililer = {};
+  document.getElementById("etiketEklePanel").innerHTML = b.etiketler.map(function (e) {
+    return '<label><input type="checkbox" data-eid="' + e.id + '"><span class="nokta" style="background:' +
+      renkKodu(e.renk) +
+      '"></span> ' + kacHTML(e.ad) + '</label>';
+  }).join("") + '<div class="cop-dropdown-alt"><a href="ayarlar.html">+ Yeni etiket tanımla</a></div>';
+
+  function seciliGuncelle() {
+    var secilenler = b.etiketler.filter(function (e) { return secililer[e.id]; });
+    document.getElementById("etiketEkleSayi").textContent = secilenler.length;
+    document.getElementById("tekSeciliEtiketAlani").innerHTML = secilenler.map(function (e) {
+      return '<span class="rozet-etiket ' + e.renk + '" data-kaldir-eid="' + e.id + '">' + kacHTML(e.ad) + ' <span class="sil">✕</span></span>';
+    }).join("");
+    document.querySelectorAll("[data-kaldir-eid]").forEach(function (el) {
+      el.querySelector(".sil").addEventListener("click", function () {
+        var eid = el.getAttribute("data-kaldir-eid");
+        secililer[eid] = false;
+        document.querySelector('#etiketEklePanel input[data-eid="' + eid + '"]').checked = false;
+        seciliGuncelle();
+      });
+    });
+  }
+  document.querySelectorAll("#etiketEklePanel input[data-eid]").forEach(function (kutu) {
+    kutu.addEventListener("change", function () {
+      secililer[this.getAttribute("data-eid")] = this.checked;
+      seciliGuncelle();
+    });
+  });
+  document.getElementById("etiketEkleTus").addEventListener("click", function () {
+    document.getElementById("etiketEkle").classList.toggle("acik");
+  });
+  document.addEventListener("click", function (e) {
+    var kutu = document.getElementById("etiketEkle");
+    if (kutu && kutu.classList.contains("acik") && !kutu.contains(e.target)) kutu.classList.remove("acik");
+  });
+
+  document.getElementById("tekEkleBtn").addEventListener("click", function () {
+    var adSoyad = document.getElementById("tAdSoyad").value.trim();
+    if (!adSoyad) { bildirim("Adı soyadı zorunludur.", true); return; }
+    apiPost("/api/ogrenci", {
+      adSoyad: adSoyad,
+      okulNo: document.getElementById("tOkulNo").value.trim(),
+      sinif: document.getElementById("tSinif").value.trim(),
+      cinsiyet: document.getElementById("tCinsiyet").value,
+      dogumTarihi: document.getElementById("tDogumTarihi").value.trim(),
+      sinifOgretmeni: document.getElementById("tSinifOgretmeni").value.trim(),
+      veliAdSoyad: document.getElementById("tVeliAdSoyad").value.trim(),
+      veliYakinlik: document.getElementById("tVeliYakinlik").value.trim(),
+      veliTelefon: document.getElementById("tVeliTelefon").value.trim(),
+      etiketler: Object.keys(secililer).filter(function (k) { return secililer[k]; }),
+    }).then(function (yeni) {
+      bildirim("Öğrenci dosyası oluşturuldu.");
+      setTimeout(function () { location.href = "dosya.html?id=" + encodeURIComponent(yeni.id); }, 500);
+    }).catch(apiHataGoster);
+  });
+}).catch(apiHataGoster);
+
+document.getElementById("sekmeToplu").addEventListener("click", function () { sekmeSec(0); });
+document.getElementById("sekmeTek").addEventListener("click", function () { sekmeSec(1); });
+function sekmeSec(i) {
+  document.getElementById("sekmeToplu").classList.toggle("etkin", i === 0);
+  document.getElementById("sekmeTek").classList.toggle("etkin", i === 1);
+  document.getElementById("topluKart").style.display = i === 0 ? "" : "none";
+  document.getElementById("tek-ekle-kart").style.display = i === 0 ? "none" : "";
+}
+
+var secilenDosya = null;
+var onizlemeSonucu = null;
+document.getElementById("dosyaSecTus").addEventListener("click", function () { document.getElementById("dosyaInput").click(); });
+document.getElementById("dosyaInput").addEventListener("change", function () {
+  secilenDosya = this.files[0] || null;
+  document.getElementById("dosyaAdiGoster").textContent = secilenDosya ? secilenDosya.name + " seçildi" : "Dosya seçilmedi";
+  document.getElementById("onizleBtn").disabled = !secilenDosya;
+  document.getElementById("onizlemeAlan").style.display = "none";
+  onizlemeSonucu = null;
+});
+
+document.getElementById("onizleBtn").addEventListener("click", function () {
+  if (!secilenDosya) return;
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = "Okunuyor…";
+  var form = new FormData();
+  form.append("dosya", secilenDosya);
+  fetch("/api/ice-aktar/onizle", { method: "POST", body: form })
+    .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.hata || "Yükleme başarısız"); return d; }); })
+    .then(function (v) {
+      onizlemeSonucu = v;
+      var satirlar = [];
+      v.subeler.forEach(function (sube) {
+        sube.ogrenciler.forEach(function (o) {
+          satirlar.push({ sinif: sube.sinif, ogretmen: sube.ogretmenAdi, okulNo: o.okulNo, adSoyad: o.adSoyad, cinsiyet: o.cinsiyet });
+        });
+      });
+      var gosterilen = satirlar.slice(0, 40);
+      document.getElementById("onizlemeBaslik").textContent =
+        "Önizleme — " + v.subeSayisi + " şube, " + v.ogrenciSayisi + " öğrenci (ilk " + gosterilen.length + " satır gösteriliyor)";
+      document.getElementById("onizlemeGovde").innerHTML = gosterilen.map(function (s) {
+        return "<tr><td>" + kacHTML(s.sinif) + "</td><td>" + kacHTML(s.okulNo) + "</td><td>" + kacHTML(s.adSoyad) +
+          "</td><td>" + kacHTML(s.cinsiyet) + "</td><td>" + kacHTML(s.ogretmen) + "</td>" +
+          "<td><span class=\"etiket yesil\">Yeni / Güncel</span></td></tr>";
+      }).join("");
+      document.getElementById("onizlemeOzet").textContent =
+        v.yeniSayisi + " yeni öğrenci eklenecek, " + v.guncellenecekSayisi + " mevcut kayıt sınıf/şube bilgisiyle güncellenecek.";
+      document.getElementById("onizlemeAlan").style.display = "";
+    })
+    .catch(function (e) { bildirim(e.message, true); })
+    .finally(function () { btn.disabled = false; btn.textContent = "Listeyi Önizle"; });
+});
+
+document.getElementById("vazgecBtn").addEventListener("click", function () {
+  onizlemeSonucu = null;
+  document.getElementById("onizlemeAlan").style.display = "none";
+});
+
+document.getElementById("uygulaBtn").addEventListener("click", function () {
+  if (!onizlemeSonucu) return;
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = "İçe aktarılıyor…";
+  apiPost("/api/ice-aktar/uygula", { subeler: onizlemeSonucu.subeler }).then(function (r) {
+    bildirim(r.yeniSayisi + " yeni öğrenci eklendi, " + r.guncellenenSayisi + " kayıt güncellendi.");
+    document.getElementById("onizlemeAlan").style.display = "none";
+    onizlemeSonucu = null;
+    secilenDosya = null;
+    document.getElementById("dosyaInput").value = "";
+    document.getElementById("dosyaAdiGoster").textContent = "Dosya seçilmedi";
+    document.getElementById("onizleBtn").disabled = true;
+  }).catch(apiHataGoster).finally(function () {
+    btn.disabled = false; btn.textContent = "Listeyi İçe Aktar";
+  });
+});
+
+/* ---- sürükle-bırak ve adım göstergesi (tasarım 2.0) ---- */
+(function () {
+  var alan = document.getElementById("birakAlani"), inp = document.getElementById("dosyaInput");
+  var ik = alan.querySelector(".birak-ikon"); ik.innerHTML = ikonSvg("yukle");
+  ["dragenter", "dragover"].forEach(function (ev) {
+    alan.addEventListener(ev, function (e) { e.preventDefault(); alan.classList.add("uzerinde"); });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    alan.addEventListener(ev, function (e) { e.preventDefault(); alan.classList.remove("uzerinde"); });
+  });
+  alan.addEventListener("drop", function (e) {
+    if (!e.dataTransfer || !e.dataTransfer.files.length) return;
+    try { inp.files = e.dataTransfer.files; } catch (x) { return; }
+    inp.dispatchEvent(new Event("change"));
+  });
+  function adim(n) {
+    for (var i = 1; i <= 3; i++) {
+      var el = document.getElementById("adim" + i);
+      el.classList.toggle("etkin", i === n); el.classList.toggle("tamam", i < n);
+    }
+  }
+  inp.addEventListener("change", function () { if (inp.files.length) { adim(2); alan.classList.add("secildi"); } });
+  var onizleme = document.getElementById("onizlemeAlan");
+  new MutationObserver(function () { adim(onizleme.style.display === "none" ? (inp.files.length ? 2 : 1) : 3); })
+    .observe(onizleme, { attributes: true, attributeFilter: ["style"] });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+/* OTOMATİK ÜRETİLDİ — elle düzenlemeyin. Kaynak: gelistirme/koyu_tema_uret.py + gelistirme/koyu-elle.css */
+@media screen{
+/* ---- stil.css ---- */
+html.koyu #yan{background:#2f5f9e}
+html.koyu #yan nav a.etkin{background:#171e29}
+html.koyu #yan nav a .rozet{background:#b93a2c}
+html.koyu .kart>h2{background:#1d212a}
+html.koyu button, html.koyu .dugme{background:#171e29}
+html.koyu button:hover, html.koyu .dugme:hover{background:#252a32}
+html.koyu button.birincil{background:#2f5f9e}
+html.koyu button.birincil:hover{background:#3a70b5}
+html.koyu button.tehlike{border-color:#704a45}
+html.koyu input, html.koyu select, html.koyu textarea{background:#171e29}
+html.koyu input:focus, html.koyu select:focus, html.koyu textarea:focus{outline:2px solid #4a5d78;border-color:#5c7596}
+html.koyu td{border-bottom:1px solid #344054}
+html.koyu tr:hover td{background:#1f252b}
+html.koyu .etiket{background:#252b34;color:#a7b8d2}
+html.koyu .etiket.kirmizi{background:#3a1e1d}
+html.koyu .etiket.turuncu{background:#41341e;color:#f5ca91}
+html.koyu .etiket.yesil{background:#293931}
+html.koyu .etiket.mavi{background:#202c3c}
+html.koyu .uyari-satir{border-bottom:1px solid #344054}
+html.koyu .gun-kutu{background:#252b34;color:#a7b8d2}
+html.koyu .gun-kutu.kirmizi{background:#3a1e1d}
+html.koyu .gun-kutu.turuncu{background:#41341e;color:#f5ca91}
+html.koyu .geri-buton{background:#202c3c;border:1px solid #41536a}
+html.koyu .geri-buton:hover{background:#243346}
+html.koyu .modal-kutu{background:#171e29}
+html.koyu #bildirim{background:#2f5f9e}
+html.koyu #bildirim.hata{background:#b93a2c}
+html.koyu .dosya-arama-karti{background:#192a3e;border:1px solid #536b87}
+html.koyu .dosya-arama-karti .icerik{background:#192a3e}
+html.koyu .dosya-arama-karti input, html.koyu .dosya-arama-karti select{background:#171e29}
+html.koyu .dosya-liste-karti{background:#171e29;border:1px solid #4d5a6b}
+html.koyu .dosya-liste-karti thead th{background:#3b372e;border-bottom:2px solid #837963}
+html.koyu .dosya-liste-karti tbody tr:nth-child(odd) td{background:#171e29}
+html.koyu .dosya-liste-karti tbody tr:nth-child(even) td{background:#273745}
+html.koyu .dosya-liste-karti tbody tr:hover td{background:#324658}
+html.koyu .dosya-liste-karti tbody td{border-bottom:1px solid #43586e}
+html.koyu .arama-vurgu{background:#6e642d}
+html.koyu .detay-kart{border-color:#475d73}
+html.koyu .detay-kart:nth-of-type(odd){background:#192a3d}
+html.koyu .detay-kart:nth-of-type(even){background:#252133}
+html.koyu .detay-kart:nth-of-type(odd)>h2{background:#1d3047}
+html.koyu .detay-kart:nth-of-type(even)>h2{background:#302c3e}
+html.koyu .detay-kart table{background:rgba(22,33,49,0.58)}
+html.koyu .kpi.dikkat{border-left:4px solid #b8aa8b}
+html.koyu .cubuk-satir:hover{background:#202730}
+html.koyu .lejant-satir{border-bottom:1px solid #344054}
+html.koyu .dosya-ozet-seridi{border:1px solid #4d647d;background:linear-gradient(90deg,#18283a,#272030)}
+html.koyu .dosya-ozet-seridi>div{border-right:1px solid #415369}
+@media (max-width:1050px){
+  html.koyu .dosya-ozet-seridi>div{border-bottom:1px solid #415369}
+}
+html.koyu .gorusme-baslik{background:#1d212a}
+html.koyu .gorusme-baslik:hover{background:#252a32}
+html.koyu .gorusme-akordeon.acik .gorusme-baslik{background:#202a36}
+html.koyu .gorusme-no{background:#2f5f9e}
+html.koyu .gorusme-govde{background:#171e29}
+html.koyu .gorusme-ozet-liste .etiket{background:#252b34;color:#a7b8d2}
+html.koyu .gorusme-not-metin{background:#1a202b}
+html.koyu .yorum{background:rgba(22,33,49,0.62)}
+html.koyu .ay-nav{background:#171e29}
+html.koyu .ay-nav button:hover{background:#252b34}
+html.koyu .takvim .basl{background:#252b34}
+html.koyu .takvim .hucre{background:#171e29}
+html.koyu .takvim .hucre:hover{border-color:#475d73}
+html.koyu .takvim .hucre.disari{background:#212127;border-color:#344054}
+html.koyu .takvim .hucre.bugun{background:linear-gradient(165deg,#18283a,#171e29 60%)}
+html.koyu .takvim .hucre.bugun .no{background:#2f5f9e}
+html.koyu .takvim .olay.ram{background:#202c3c;color:#a4c4eb}
+html.koyu .takvim .olay.aile{background:#41341e;color:#f5d2a7}
+html.koyu .takvim .olay.izleme{background:#293931;color:#b1e9cf}
+html.koyu .takvim .olay.gecmis{background:#3a1e1d;color:#e79a92}
+html.koyu .takvim .olay.etkinlik{background:#2b1e3a;color:#ab8bdb}
+html.koyu .takvim .olay.toplanti{background:#263d42;color:#97ddf0}
+html.koyu .takvim .olay.plan{background:#282c33;color:#bfcad9}
+html.koyu .gorunum-sekme{background:#171e29}
+html.koyu .gorunum-sekme button.etkin{background:#2f5f9e}
+html.koyu .gorunum-sekme button:hover:not(.etkin){background:#252b34}
+html.koyu .buton-bugun{background:#171e29}
+html.koyu .buton-bugun:hover{background:#252b34}
+html.koyu .hafta-gun-baslik{background:#252b34}
+html.koyu .hafta-gun-baslik.bugun{background:#2f5f9e}
+html.koyu .hafta-tumgun-hucre{background:#1d212a}
+html.koyu .hafta-tumgun-oge.ram{background:#202c3c;color:#a4c4eb}
+html.koyu .hafta-tumgun-oge.aile{background:#41341e;color:#f5d2a7}
+html.koyu .hafta-tumgun-oge.izleme{background:#293931;color:#b1e9cf}
+html.koyu .hafta-tumgun-oge.gecmis{background:#3a1e1d;color:#e79a92}
+html.koyu .hafta-tumgun-oge.etkinlik{background:#2b1e3a;color:#ab8bdb}
+html.koyu .hafta-tumgun-oge.toplanti{background:#263d42;color:#97ddf0}
+html.koyu .hafta-tumgun-oge.plan{background:#282c33;color:#bfcad9}
+html.koyu .hafta-gun-sutun{background:#171e29 repeating-linear-gradient(to bottom,
+  var(--cizgi) 0,var(--cizgi) 1px,transparent 1px,transparent 60px)}
+html.koyu .hafta-gun-sutun.bugun{background-color:#162535}
+html.koyu .hafta-olay.ram{background:#202c3c;color:#a4c4eb}
+html.koyu .hafta-olay.aile{background:#41341e;color:#f5d2a7}
+html.koyu .hafta-olay.izleme{background:#293931;color:#b1e9cf}
+html.koyu .hafta-olay.gecmis{background:#3a1e1d;color:#e79a92}
+html.koyu .hafta-olay.etkinlik{background:#2b1e3a;color:#ab8bdb}
+html.koyu .hafta-olay.toplanti{background:#263d42;color:#97ddf0}
+html.koyu .hafta-olay.plan{background:#282c33;color:#bfcad9}
+html.koyu .rozet-etiket.teal{background:#263d42;color:#97ddf0;border-color:#517a84}
+html.koyu .filtre-cip{background:#171e29}
+html.koyu .filtre-cip:hover{background:#202730}
+html.koyu .filtre-cip.secili{background:#2f5f9e}
+html.koyu .cop-dropdown-tus{background:#171e29}
+html.koyu .cop-dropdown-tus:hover{background:#252a32}
+html.koyu .cop-sayi{background:#2f5f9e}
+html.koyu .cop-dropdown-panel{background:#171e29}
+html.koyu .cop-dropdown-panel label:hover{background:#202730}
+html.koyu .gorusme-aksiyon.sil{border-color:#704a45}
+html.koyu .gorusme-aksiyon.sil:hover{background:#3a1e1d}
+html.koyu .zamanlama-satir{background:#1d212a}
+html.koyu .zamanlama-tarih{background:#252b34;color:#a7b8d2}
+html.koyu .ses-tusu{background:#171e29}
+html.koyu .ses-tusu:hover{background:#202a36}
+html.koyu .ses-tusu .nokta{background:#b93a2c}
+html.koyu .ses-tusu.kayitta{background:#b93a2c}
+html.koyu .ses-tusu.kayitta .nokta{background:#171e29}
+html.koyu .sayfalama button.sayfa-no.aktif{background:#2f5f9e}
+html.koyu .renk-palet button{border:2px solid #383838}
+/* ---- tasarim.css ---- */
+html.koyu #yan .marka{border-bottom:1px solid rgba(56,56,56,0.08)}
+html.koyu #yan .marka-ikon.logolu{background:#171e29}
+html.koyu #yan nav a:hover{background:rgba(22,33,49,0.07)}
+html.koyu #yan nav a.etkin{background:#171e29}
+html.koyu #yan .kullanici{border-top:1px solid rgba(56,56,56,0.08)}
+html.koyu .sayfa-bandi{border:1px solid #3c4e62}
+html.koyu .sayfa-bandi p{color:#adb6c3}
+@media screen{
+  html.koyu #ana .kpi::before{background:#3a70b5}
+  html.koyu #ana .kpi.dikkat::before{background:#c4720f}
+}
+html.koyu .kpi-degisim.artis{background:#293931;color:#b1e9cf}
+html.koyu .kpi-degisim.azalis{background:#3a1e1d;color:#e79a92}
+html.koyu .kpi-degisim.sabit{background:#282c33;color:#b2bbc8}
+html.koyu button.birincil{background:#2f5f9e}
+html.koyu button.birincil:hover{background:#3a70b5}
+html.koyu button.ikincil{background:#0e7490}
+html.koyu input, html.koyu select, html.koyu textarea{border-color:#425368}
+html.koyu th{color:#9aa2ad;background:#1f252b}
+html.koyu tr:hover td{background:#1e262e}
+html.koyu .tur-cip.izleme{background:#293931;color:#b1e9cf}
+html.koyu .tur-cip.aile{background:#41341e;color:#f5d2a7}
+html.koyu .tur-cip.ram{background:#202c3c;color:#a4c4eb}
+html.koyu .tur-cip.plan{background:#282c33;color:#bfcad9}
+html.koyu .tur-cip.etkinlik{background:#2b1e3a;color:#ab8bdb}
+html.koyu .tur-cip.toplanti{background:#263d42;color:#97ddf0}
+html.koyu .tur-cip.gecmis{background:#3a1e1d;color:#e79a92}
+html.koyu .sekme-cubugu{background:#171e29}
+html.koyu .sekme-cubugu button:hover{background:#232a31}
+html.koyu .sekme-cubugu button.etkin{background:#2f5f9e}
+html.koyu .sekme-cubugu button.etkin .sayac{background:rgba(22,33,49,0.22)}
+html.koyu .bant-arac .dugme{background:#171e29;border:1px solid #42556b}
+html.koyu .bant-arac .dugme:hover{background:#202930}
+html.koyu .bant-arac .birincil-dugme{background:#2f5f9e}
+html.koyu .bant-arac .birincil-dugme:hover{background:#3a70b5}
+html.koyu .kart>h2 .kart-ikon.uyari{background:#41341e}
+html.koyu .kart>h2 .kart-ikon.uyari svg{stroke:#f4b874}
+html.koyu .ajanda-oge:hover{background:#1e262e;border-color:#405569}
+html.koyu .takip-oge:hover{background:#1e262e}
+html.koyu .takip-sure{color:#f5ca91}
+html.koyu .takip-sure.hic{color:#e79a92}
+html.koyu .filtre-cip{background:#171e29}
+html.koyu .filtre-cip .sayac{background:#262c34}
+html.koyu .filtre-cip.etkin{background:#2f5f9e}
+html.koyu .filtre-cip.etkin .sayac{background:rgba(22,33,49,0.2)}
+html.koyu .gundem-tarih{background:#171e29}
+html.koyu .gundem-gun.bugun .gundem-tarih{background:#2f5f9e}
+html.koyu .gundem-gun.gecikmis .gundem-tarih{border-color:#6e4943}
+html.koyu .gundem-ogeler{background:#171e29}
+html.koyu .gundem-oge:hover{background:#1e262e}
+html.koyu .gundem-oge.yapildi{background:#1e2328}
+html.koyu .gundem-oge.yapildi .gundem-saat{color:#b1e9cf}
+html.koyu .sinif-rozet{background:#252b34}
+html.koyu .dosya-arama-karti{background:#171e29 !important}
+html.koyu .dosya-arama-karti label{color:#b2bbc8}
+html.koyu .adim{background:#232a31}
+html.koyu .adim b{background:#343b45;color:#b2bbc8}
+html.koyu .adim.etkin b{background:#0e7490}
+html.koyu .birak-alani{border:2px dashed #4b6179;background:#1f252b}
+html.koyu .birak-alani.secildi{border-color:#5b9486;background:#20322c}
+html.koyu .tarih-rozet{background:#171e29}
+html.koyu .zamanlama-satir{background:#171e29}
+html.koyu .zamanlama-satir.gecti{background:#202428}
+html.koyu .liste-grup-baslik{color:#99a3b2}
+html.koyu .liste-grup-baslik .sayac{background:#292f38}
+html.koyu .profil-bandi{border:1px solid #3c4e62}
+html.koyu .profil-alt{color:#adb6c3}
+html.koyu .profil-istatistik>div{background:rgba(22,33,49,0.85);border:1px solid #3c4d63}
+html.koyu .profil-eylem button{background:#171e29}
+html.koyu .profil-eylem button.birincil{background:#2f5f9e}
+html.koyu .profil-eylem button.ikincil{background:#0e7490}
+html.koyu .profil-eylem button.tehlike{background:#171e29}
+html.koyu .zaman-cizelgesi::before{background:#303841}
+html.koyu .zaman-cizelgesi .gorusme-akordeon{background:#171e29}
+html.koyu .zaman-cizelgesi .gorusme-akordeon::before{border:3px solid #383838}
+html.koyu .gorusme-akordeon.acik .gorusme-baslik{background:#1e262e}
+html.koyu .gorusme-aksiyon{background:#171e29}
+html.koyu .dosya-arama-karti{background:#192433 !important;border:1px solid #3e5065}
+html.koyu .dosya-liste-karti thead th{background:#1f252b}
+html.koyu .dosya-liste-karti tbody tr:nth-child(even) td{background:#1c252e}
+html.koyu .dosya-liste-karti tbody tr:hover td{background:#202e3a}
+html.koyu .detay-kart:nth-of-type(odd), html.koyu .detay-kart:nth-of-type(even){background:#171e29}
+html.koyu .lk-sarma{background:#171e29}
+html.koyu .lk-gorsel-metin{background:linear-gradient(0deg,rgba(22,33,49,0.97) 60%,rgba(22,33,49,0))}
+html.koyu .lk-gorsel-metin span{color:#adb6c3}
+html.koyu .lk-sarma .lk-aciklama{background:#192433;border-color:#3a4b5f}
+html.koyu .kapsama-cubuk{background:#282d34}
+html.koyu tr.toplam-satir td{background:#1f252b}
+html.koyu .surum-uyari{background:#41341e;color:#f9debd}
+html.koyu .surum-uyari b{color:#e79a92}
+html.koyu .menu-daralt-tusu{background:#171e29}
+html.koyu body.menu-dar #yan nav .menu-baslik{border-top:1px solid rgba(56,56,56,0.12)}
+html.koyu .detay-kart.bilgi-kutu{background:#1c2734 !important;border-color:#3f5267}
+html.koyu .detay-kart.bilgi-kutu>h2{background:#243043 !important;color:#bfd1e9;border-bottom-color:#3f5267}
+html.koyu .detay-kart.not-kutu{background:#3c3319 !important;border-color:#796e4a}
+html.koyu .detay-kart.not-kutu>h2{background:#594d27 !important;color:#f5e1b2;border-bottom-color:#796e4a}
+html.koyu .not-kutu textarea{background:#171e29}
+html.koyu .kart-baslik-tus{background:#171e29;color:#bfd1e9;border:1px solid #44566e}
+html.koyu .dosya-arama-karti.arama-bandi{border:1px solid #3c4e62}
+html.koyu .arama-bandi #aramaKutusu{background-color:#3b2b18 !important;border:2px solid #bfb096 !important;color:#eeb8a5}
+html.koyu .arama-bandi #aramaKutusu::placeholder{color:#dca57c}
+html.koyu .arama-bandi #aramaKutusu:focus{background-color:#171e29 !important}
+html.koyu .arama-bandi #aramaKutusu{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ee8b57' stroke-width='2.2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='M20 20l-3.5-3.5'/></svg>")}
+html.koyu .tema-secim button:hover{border-color:#5d7797}
+@media screen{
+  html.koyu body{background:radial-gradient(900px 560px at 18% 6%, rgba(58,97,142,0.3), transparent 60%),
+    radial-gradient(760px 540px at 96% 16%, rgba(56,189,216,.20), transparent 60%),
+    radial-gradient(860px 600px at 72% 98%, rgba(146,121,61,0.28), transparent 60%),
+    radial-gradient(700px 520px at 22% 94%, rgba(69,47,116,0.16), transparent 60%),
+    #232b35}
+  html.koyu .kart, html.koyu .sayfa-bandi, html.koyu .profil-bandi, html.koyu .sekme-cubugu, html.koyu #ana .kpi, html.koyu .lk-kart{background:linear-gradient(155deg,rgba(22,33,49,0.8),rgba(22,33,49,0.56)) !important;border:1px solid rgba(56,56,56,0.85) !important}
+  html.koyu .kart>h2{background:linear-gradient(180deg,rgba(22,33,49,0.55),rgba(22,33,49,0)) !important;border-bottom:1px solid rgba(79,101,128,0.45) !important}
+  html.koyu .detay-kart.bilgi-kutu{background:linear-gradient(160deg,rgba(22,33,49,0.84),rgba(22,33,49,0.56)) !important}
+  html.koyu .detay-kart.bilgi-kutu>h2{border-bottom-color:rgba(82,106,134,0.5) !important}
+  html.koyu .detay-kart.not-kutu{background:linear-gradient(160deg,rgba(22,33,49,0.86),rgba(22,33,49,0.56)) !important}
+  html.koyu .detay-kart.not-kutu>h2{border-bottom-color:rgba(156,140,96,0.55) !important}
+  html.koyu .not-kutu textarea{background:rgba(22,33,49,0.72) !important;border:1px solid rgba(156,140,96,0.6) !important}
+  html.koyu .dosya-arama-karti.arama-bandi{background:linear-gradient(155deg,rgba(22,33,49,0.8),rgba(22,33,49,0.58)) !important}
+  html.koyu .profil-istatistik>div{background:rgba(22,33,49,0.62) !important;border:1px solid rgba(56,56,56,0.9) !important}
+  html.koyu .kart-baslik-tus{background:rgba(22,33,49,0.78) !important;border-color:rgba(56,56,56,0.95) !important}
+  html.koyu #ana input:not([type=checkbox]):not([type=radio]), html.koyu #ana select, html.koyu #ana textarea{background-color:rgba(22,33,49,0.75)}
+  html.koyu .arama-bandi #aramaKutusu{background-color:rgba(22,33,49,0.92) !important}
+}
+html.koyu .ders-saat-kutu{background:rgba(22,33,49,0.6)}
+html.koyu .cizelge-tablo tr.kontrol-satir td{background:rgba(184,109,104,0.08)}
+html.koyu .cizelge-tablo tr.kontrol-satir .cSinif{border-color:#b18380;background:#351616}
+html.koyu .alarm-kart{background:linear-gradient(155deg,rgba(22,33,49,0.94),rgba(22,33,49,0.82));border:1px solid rgba(56,56,56,0.9)}
+html.koyu .alarm-durum{color:#abe4f3}
+html.koyu .alarm-kart.simdi .alarm-durum{background:#3d1d1d;color:#e8857d}
+html.koyu .alarm-ertele{background:rgba(22,33,49,0.8)}
+html.koyu .yedek-ozet>div{background:rgba(22,33,49,0.6)}
+html.koyu .yedek-tur{background:#202c3c;color:#a4c4eb}
+html.koyu .yedek-tur.elle{background:#293931;color:#b1e9cf}
+html.koyu .yedek-tur.geri-donus-oncesi{background:#41341e;color:#f5ca91}
+html.koyu .kpi-ayrim .vel i{background:#927aaf}
+html.koyu .kpi-cubuk.iki{background:#927aaf}
+html.koyu .kpi-cip.dikkat{background:#45361c;color:#f9ce91}
+html.koyu .kpi-cip.dikkat:hover{background:#5e4927}
+html.koyu .kpi-cip.iyi{background:#293931;color:#b1e9cf}
+html.koyu .kpi-cubuk{background:#282c33}
+html.koyu .kpi-cubuk i{background:linear-gradient(90deg,#b59063,#e07a1f)}
+html.koyu .okul-adimlar>div:nth-child(2) b{background:linear-gradient(135deg,#b59063,#e07a1f)}
+html.koyu .okul-adimlar>div:nth-child(3) b{background:linear-gradient(135deg,#6f5098,#6d28d9)}
+html.koyu .okul-birak{border:2px dashed #516781;background:#1c252e}
+html.koyu .okul-birak:hover, html.koyu .okul-birak.ustunde{background:#18263a;border-color:#93a3bd}
+html.koyu .okul-birak-ikon svg{stroke:#608fda}
+html.koyu .okul-uyari{background:#41331a;color:#fadaa8}
+html.koyu .okul-uyari svg{stroke:#f6c475}
+html.koyu .okul-duzey{background:#202c3c;color:#a4c4eb}
+html.koyu .kosul-pencere{background:var(--kart,#171e29)}
+html.koyu .kosul-pencere iframe{background:#171e29}
+html.koyu .hakkinda-uyari{background:#40341a;border:1px solid #8a7854}
+/* ---- lisans-kur.html ---- */
+html.koyu .lk-aciklama{background:#18243a;border:1px solid #3e4e65}
+/* ---- lisans-kilit.html ---- */
+html.koyu .lk-aciklama{background:#3a1e1d;border:1px solid #6e4943}
+/* ---- etiket renkleri (ortak.js) ---- */
+html.koyu .rozet-etiket.mavi{background:#202c3c!important;color:#a4c4eb!important;border-color:#41536a!important}
+html.koyu .rozet-etiket.turkuaz{background:#263d42!important;color:#97ddf0!important;border-color:#4b727b!important}
+html.koyu .rozet-etiket.yesil{background:#293931!important;color:#b1e9cf!important;border-color:#4a795f!important}
+html.koyu .rozet-etiket.acikyesil{background:#384027!important;color:#d0f0a6!important;border-color:#6c7e4e!important}
+html.koyu .rozet-etiket.hardal{background:#484124!important;color:#fae49d!important;border-color:#877d53!important}
+html.koyu .rozet-etiket.turuncu{background:#41341e!important;color:#f5ca91!important;border-color:#827150!important}
+html.koyu .rozet-etiket.mercan{background:#41291e!important;color:#f09874!important;border-color:#765748!important}
+html.koyu .rozet-etiket.kirmizi{background:#3a1e1d!important;color:#e79a92!important;border-color:#6e4943!important}
+html.koyu .rozet-etiket.pembe{background:#3c202f!important;color:#df88b8!important;border-color:#6f445c!important}
+html.koyu .rozet-etiket.mor{background:#2b1e3a!important;color:#ab8bdb!important;border-color:#54416a!important}
+html.koyu .rozet-etiket.kahverengi{background:#3d342b!important;color:#e3c8b0!important;border-color:#7e664d!important}
+html.koyu .rozet-etiket.gri{background:#282c33!important;color:#b2bbc8!important;border-color:#475569!important}
+/* ---- elle ince ayarlar ---- */
+/* Koyu tema — elle ince ayarlar (otomatik dönüşümün üstüne) */
+html.koyu{color-scheme:dark;
+  --lacivert:#9cc0ef; --lacivert-acik:#b7d0f2; --lacivert-koyu:#0b1626;
+  --teal:#38bdd8; --teal-acik:#123a45; --vurgu:#f0a43a;
+  --zemin:#0d1520; --bant:#152233; --kart:#162131;
+  --cizgi:#26364b; --cizgi-acik:#1d2b3d; --metin:#e3eaf3; --soluk:#94a3b8;
+  --kirmizi:#f07a6c; --turuncu:#f0a43a; --yesil:#4fc489; --mavi:#7fb0f0;
+  --golge:0 1px 2px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+  --golge-buyuk:0 6px 22px rgba(0,0,0,.45)}
+html.koyu body{background:#0d1520;color:#e3eaf3}
+/* sol menü zaten koyu: biraz daha derin */
+html.koyu #yan{background:linear-gradient(180deg,#0f1c2e 0%,#0b1626 100%)!important;border-right:1px solid #1d2b3d}
+html.koyu #yan nav a.etkin{background:#1f3350!important;color:#fff!important;box-shadow:inset 3px 0 0 #38bdd8}
+html.koyu #yan nav a.etkin svg{stroke:#38bdd8}
+/* lacivert dolgu düğmeler: lacivert değişkeni açıldığı için sabit renk ver */
+html.koyu button.birincil, html.koyu .birincil{background:#2f5f9e!important;color:#fff!important;border-color:#2f5f9e!important}
+html.koyu button.birincil:hover{background:#3a70b5!important}
+html.koyu .sekme-cubugu button.etkin, html.koyu .sekmeler button.etkin{background:#2f5f9e!important;color:#fff!important}
+html.koyu .profil-eylem button.birincil{background:#2f5f9e!important}
+/* form alanları */
+html.koyu input, html.koyu select, html.koyu textarea{background-color:#0f1a28;color:#e3eaf3;border-color:#2b3d55}
+html.koyu input::placeholder, html.koyu textarea::placeholder{color:#6b7c93}
+html.koyu select option{background:#162131;color:#e3eaf3}
+/* illüstrasyonlar: açık zeminli çizimler koyu banda uysun */
+html.koyu .bant-gorsel, html.koyu .lk-gorsel img{filter:invert(1) hue-rotate(180deg) saturate(1.2) brightness(.8);opacity:.9}
+/* sayfa içi sabit koyu yazılar */
+html.koyu [style*="color:#3c5375"]{color:#a9bcd6!important}
+/* Öğrenciler: turuncu arama kutusu */
+html.koyu .arama-bandi #aramaKutusu{background-color:#2a1a0c!important;border-color:#f59e0b!important;color:#fde7c8}
+html.koyu .arama-bandi #aramaKutusu::placeholder{color:#d79a5c}
+/* Bilgiler ve Not kutuları */
+html.koyu .detay-kart.bilgi-kutu{background:#132338!important;border-color:#24405f}
+html.koyu .detay-kart.bilgi-kutu>h2{background:#1a3150!important;color:#cfe0f7;border-bottom-color:#24405f}
+html.koyu .detay-kart.not-kutu{background:#241d0e!important;border-color:#4a3a14}
+html.koyu .detay-kart.not-kutu>h2{background:#33290f!important;color:#f3d98b;border-bottom-color:#4a3a14}
+html.koyu .not-kutu textarea{background:#1a1509}
+/* okul logosu kendi beyaz zemini üzerinde kalsın */
+html.koyu .logo-onizleme{background:#fff}
+/* sürüm uyarısı ve bildirim okunur kalsın */
+html.koyu #bildirim{box-shadow:0 8px 24px rgba(0,0,0,.5)}
+/* resmi MEB formu: kağıt gibi açık kalır, çevresi koyu */
+html.koyu .rf-sayfa{background:#132a2a}
+html.koyu .rf-kart textarea.rf-not-kutu{background:#fffef9!important;color:#233533!important;border-color:#8fb6b2!important}
+html.koyu .rf-kart .rf-tarih-ust input{background:transparent!important;color:#233533!important;border:0!important}
+html.koyu .rf-kart .rf-tablo input[type=text], html.koyu .rf-kart .rf-tablo input[type=date]{background:transparent!important;color:#233533!important}
+html.koyu .rf-kart .rf-tablo input[readonly]{background:#fbfdfd!important}
+html.koyu .rf-kart .rf-ses-tusu, html.koyu .rf-kart .rf-duzenle-tusu{background:#fff!important;color:#2e625f!important}
+html.koyu .rf-kart .rf-ses-tusu.kayitta{background:#eb1c2e!important;color:#fff!important}
+html.koyu .rf-kart button, html.koyu .rf-kart select{background-color:#fff;color:#233533}
+html.koyu [style*="color:#96271b"]{color:#f08a7c!important}
+/* resmi form kağıdının içinde açık temanın değişkenleri geçerli */
+html.koyu .rf-kart{color-scheme:light;color:#233533;
+  --lacivert:#1c3557; --teal:#0e7490; --zemin:#f2f5f9; --bant:#ecf0f3; --kart:#ffffff;
+  --cizgi:#e0e6ee; --metin:#1a2433; --soluk:#5d6a7c; --kirmizi:#c0392b; --mavi:#1f5fa8}
+html.koyu .rf-kart label, html.koyu .rf-kart .rf-secenek{color:#233533}
+html.koyu .rf-kart .soluk, html.koyu .rf-kart .kucuk{color:#5c7573}
+/* illüstrasyonun ters çevrilmiş koyu zemini bant rengine karışsın */
+html.koyu .bant-gorsel, html.koyu .lk-gorsel img{mix-blend-mode:screen}
+/* koyu cam: koyu lacivert zemin üzerinde renkli ışıltılar, buzlu koyu kartlar */
+html.koyu body{background:
+  radial-gradient(900px 560px at 18% 6%, rgba(56,110,200,.22), transparent 60%),
+  radial-gradient(760px 540px at 96% 16%, rgba(14,140,170,.16), transparent 60%),
+  radial-gradient(860px 600px at 72% 98%, rgba(180,130,30,.14), transparent 60%),
+  radial-gradient(700px 520px at 22% 94%, rgba(120,90,200,.12), transparent 60%),
+  #0b1220!important;background-attachment:fixed!important}
+html.koyu .kart, html.koyu .sayfa-bandi, html.koyu .profil-bandi, html.koyu .sekme-cubugu, html.koyu #ana .kpi, html.koyu .lk-kart{
+  background:linear-gradient(155deg,rgba(30,44,64,.78),rgba(18,28,42,.62))!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 2px rgba(0,0,0,.3),0 10px 24px rgba(0,0,0,.28),0 28px 54px -18px rgba(0,0,0,.55)!important}
+html.koyu .kart>h2{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0))!important;border-bottom-color:rgba(255,255,255,.07)!important}
+html.koyu .detay-kart.bilgi-kutu{background:linear-gradient(160deg,rgba(30,56,92,.80),rgba(18,34,58,.62))!important}
+html.koyu .detay-kart.not-kutu{background:linear-gradient(160deg,rgba(64,50,18,.80),rgba(38,30,10,.62))!important}
+html.koyu .not-kutu textarea{background:rgba(20,16,6,.7)!important;border-color:rgba(160,130,50,.5)!important}
+html.koyu .dosya-arama-karti.arama-bandi{background:linear-gradient(155deg,rgba(30,44,64,.80),rgba(18,28,42,.62))!important}
+html.koyu .profil-istatistik>div, html.koyu .kart-baslik-tus{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.10)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 12px -4px rgba(0,0,0,.5)!important}
+html.koyu #ana input:not([type=checkbox]):not([type=radio]), html.koyu #ana select, html.koyu #ana textarea{background-color:rgba(8,14,24,.65)}
+html.koyu .arama-bandi #aramaKutusu{background-color:rgba(42,26,12,.85)!important}
+html.koyu .rozet-etiket{box-shadow:none}
+html.koyu .alarm-kart{background:linear-gradient(155deg,rgba(30,44,64,.95),rgba(18,28,42,.9))!important;border-color:rgba(255,255,255,.1)!important;
+  border-left:5px solid var(--alarm-renk)!important;box-shadow:0 10px 24px rgba(0,0,0,.45),0 28px 56px -18px rgba(0,0,0,.7)!important}
+html.koyu .alarm-durum{background:rgba(56,189,216,.15);color:#7dd8ea}
+html.koyu .alarm-kart.simdi .alarm-durum{background:rgba(240,68,56,.18);color:#ff9b91}
+html.koyu .alarm-ertele{background:rgba(255,255,255,.08)!important}
+html.koyu .alarm-tamam{background:#1f7a4d!important}
+
+/* Panel 4'lü KPI: renkli şeritler koyu temada da ayırt edilsin (2.7) */
+html.koyu #ana .kpi.kpi-toplam::before{background:#4f8ff0}
+html.koyu #ana .kpi.kpi-kapsama::before{background:#f0943a}
+html.koyu .kpi-ayrim .ogr i, html.koyu .kpi-cubuk.iki i{background:#4f8ff0}
+html.koyu .kpi-ayrim .vel i, html.koyu .kpi-cubuk.iki{background:#a774ea}
+
+}
