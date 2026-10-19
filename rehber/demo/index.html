@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("rg-tema")==="koyu")document.documentElement.dataset.theme="dark";}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Canlı Örnek · Öğrenci Rehberlik Takip Sistemi</title>
@@ -14,8 +15,8 @@
   --fg:#1B2A41; --muted:#5D6B80; --accent:#1B2A41; --accent2:#E3E9F2; --warm:#E8833A; --warm2:#FCEBDD; --bad:#C2413A;
   --body:'Nunito Sans','Segoe UI',Roboto,sans-serif; color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0F1724; --panel:#172234; --panel2:#1F2C42; --line:#2B3A52; --fg:#E8EEF7; --muted:#9FB0C8; --accent:#7FB2FF; --accent2:#1F2C42; --warm:#F2A361; --warm2:#3A2A1D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1724; --panel:#172234; --panel2:#1F2C42; --line:#2B3A52; --fg:#E8EEF7; --muted:#9FB0C8; --accent:#7FB2FF; --accent2:#1F2C42; --warm:#F2A361; --warm2:#3A2A1D; color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex;flex-direction:column;overflow:hidden}
