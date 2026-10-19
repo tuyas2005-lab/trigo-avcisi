@@ -28,6 +28,15 @@ KLASOR_ADI = "Ogrenci-Rehberlik-Takip"
 DISLA = re.compile(r"(^|/)(gelistirme|veri|__pycache__)(/|$)|(^|/)hata[^/]*\.(log|tmp)$|\.DS_Store$|(^|/)Thumbs\.db$")
 
 
+MENU_DUZELTME = """
+/* ---- canlı örnek (araclar/rehber-guncelle.py ekler): kısa ekranda sol menü kendi içinde kaydırılır ---- */
+#yan nav{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+#yan nav::-webkit-scrollbar{width:6px}
+#yan nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:6px}
+#yan .kullanici{flex:none}
+"""
+
+
 def oku(zip_yolu):
     with zipfile.ZipFile(zip_yolu) as z:
         dosyalar = {}
@@ -82,6 +91,11 @@ def canli_ornek(dosyalar):
             veri = metin.encode("utf-8")
         with open(hedef, "wb") as f:
             f.write(veri)
+    # Kısa ekranlarda sol menü kesilmesin: menü kendi içinde kaydırılsın (programın kendisinde de önerilen düzeltme).
+    tasarim = os.path.join(web, "tasarim.css")
+    if os.path.exists(tasarim):
+        with open(tasarim, "a", encoding="utf-8") as f:
+            f.write(MENU_DUZELTME)
     # Tarayıcıda çalışacak Python dosyaları (web klasörü statik olarak sunulduğu için dahil değil).
     with zipfile.ZipFile(os.path.join(demo, "program.zip"), "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for dosya_adi, (bilgi, veri) in sorted(dosyalar.items()):
