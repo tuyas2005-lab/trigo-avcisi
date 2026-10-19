@@ -24,14 +24,14 @@ Programın **Ayarlar → Hakkında** bölümüne `rehberliktakip.com` ve sürüm
 
 ## 2. Yeni sürüm yayımlama
 
-1. Programın yayın zip'ini hazırlayın (KULLANIM-KOSULLARI.txt içinde olsun).
+1. Programın Mac ve Windows yayın zip'lerini hazırlayın (KULLANIM-KOSULLARI.txt içinde olsun; Windows paketinde `python/` klasörü).
 2. Depoda şu komutu çalıştırın:
    ```
-   python3 araclar/rehber-guncelle.py Ogrenci-Rehberlik-Takip-Yayin.zip
+   python3 araclar/rehber-guncelle.py Rehberlik-Takip-Mac.zip --windows Rehberlik-Takip-Windows.zip
    ```
-   Bu komut:
-   - `indir/Ogrenci-Rehberlik-Takip-<sürüm>.zip` dosyasını üretir (tek klasörlü; `gelistirme/`, `veri/`, `hata*.log` gibi dosyalar ayıklanır; eski sürüm dosyası silinir),
-   - `indir/surum.js` dosyasına sürüm numarasını ve dosya boyutunu yazar,
+   (Tek zip verilirse ve içinde `python/` varsa Windows paketi hepsini, Mac paketi `python/` hariç kalanını alır.) Bu komut:
+   - `indir/Ogrenci-Rehberlik-Takip-<sürüm>-Windows.zip` ve `-Mac.zip` dosyalarını üretir (tek klasörlü; `gelistirme/`, `veri/`, `hata*.log` gibi dosyalar ayıklanır; eski sürüm dosyaları silinir),
+   - `indir/surum.js` dosyasına sürüm numarasını ve dosya boyutlarını yazar (İndir sayfasındaki düğmeler buradan beslenir),
    - canlı örneği (`demo/web/`, `demo/program.zip`) yeni sürümden yeniden üretir,
    - KULLANIM-KOSULLARI.txt metnini **kelimesi kelimesine** `kosullar.html` ve `indir.html` içine yerleştirir.
 3. `surumler.js` dosyasının **en üstüne** yeni sürümü ekleyin: sürüm, tarih (`YYYY-AA-GG`), başlık, maddeler. Önemli bir hata düzeltmesiyse `onemli:true` yazın; sitede kırmızı **ÖNEMLİ GÜNCELLEME** etiketi çıkar.
@@ -48,7 +48,7 @@ Programın **Ayarlar → Hakkında** bölümüne `rehberliktakip.com` ve sürüm
 
 Supabase **SQL Editor**'de `supabase/rehber-site.sql` dosyasını çalıştırın.
 
-- **İndirme sayacı:** İndir düğmesine her basılışta o sürümün sayısı bir artar. IP, tarayıcı, tarih gibi hiçbir bilgi kaydedilmez. Görmek için: `select * from public.rs_indirme order by surum desc;`
+- **İndirme sayacı:** İndir düğmesine her basılışta o sürüm ve sistemin sayısı bir artar (örn. `3.6-windows`, `3.6-mac`). IP, tarayıcı, tarih gibi hiçbir bilgi kaydedilmez. Görmek için: `select * from public.rs_indirme order by surum desc;`
 - **E-posta listesi:** Yalnızca gönüllü bırakılan adresler ve onaylanan aydınlatma metninin sürümü. Liste: `select eposta, kayit from public.rs_abone order by kayit;`. Ziyaretçi `rehberliktakip.com/iletisim#cik` adresinden kendisi çıkabilir. Duyuru e-postalarının altına bu bağlantıyı koyun. Birini elle silmek için: `delete from public.rs_abone where eposta = '...';`
 
 Site çerez kullanmaz. İndirenlerin listesi tutulmaz.

@@ -2,6 +2,14 @@
    Yeni sürümde EN ÜSTE ekleyin. tarih: 'YYYY-AA-GG' (bilinmiyorsa ''). onemli: true ise kırmızı "ÖNEMLİ GÜNCELLEME" etiketi çıkar.
    Her madde düz metindir; **kalın** yazmak için iki yıldız kullanabilirsiniz. */
 window.RG_SURUMLER=[
+ {surum:'3.6',tarih:'2026-10-20',onemli:false,baslik:'Kurulumsuz Windows paketi',maddeler:[
+  'Windows paketinin içinde Python hazır gelir (Python 3.12 resmî taşınabilir sürümü). Python kurmanıza gerek yoktur; zip\'i çıkartıp **Baslat.bat**\'a çift tıklamanız yeterlidir.',
+  'Mac için ayrı paket vardır; Mac\'te Python bir kez kurulur.',
+  '**Baslat.bat** artık Python kurulu olmayan Windows\'taki "Microsoft Store kısayolunu" gerçek Python sanmaz; bulduğu Python\'un gerçekten çalıştığını dener.']},
+ {surum:'3.5',tarih:'2026-10-20',onemli:false,baslik:'Web sitesi ve güncelleme hatırlatması',maddeler:[
+  'Programın web sitesi: **rehberliktakip.com**. Yeni sürümler, hata düzeltmeleri ve duyurular yalnızca bu adreste yayımlanır; adres **Ayarlar → Hakkında** bölümünde yazar.',
+  'Program internete bağlanmaz. Kullandığınız sürüm 6 aydan eskiyse Panel\'in üstünde "yeni sürüm için web sitesini ziyaret edin" notu çıkar. Not kapatılabilir; 30 gün sonra yeniden hatırlatılır.',
+  'Kullanım koşulları **1.1** sürümüne güncellendi (güncellemeleri takip etmenin kullanıcının sorumluluğunda olduğu eklendi); program açılışta bir kez yeniden onay ister.']},
  {surum:'3.4',tarih:'2026-10-19',onemli:false,baslik:'Hakkında ve Kullanım Koşulları',maddeler:[
   'Program ücretsiz olarak yayımlandı. Kullanım koşulları program klasöründeki **KULLANIM-KOSULLARI.txt** dosyasında ve **Ayarlar → Hakkında** sekmesinde.',
   'İlk kurulumda koşulların kabul edilmesi zorunlu. Daha önce kurulmuş programlarda ilk açılışta koşullar bir kez sorulur; koşullar değişirse yeniden sorulur.',
