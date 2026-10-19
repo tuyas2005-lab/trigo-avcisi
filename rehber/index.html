@@ -3,510 +3,211 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F6F3EC">
-<meta name="description" content="Rehber öğretmenler, veliler ve öğrenciler için rehberlik yazıları ve rehber öğretmen öğrenci takip uygulaması. KVKK gereği öğrenci kayıtları yalnızca sizin cihazınızda saklanır.">
-<title>Rehber Takip</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231F6F5C'/%3E%3Cpath d='M18 44V20h16a8 8 0 0 1 0 16H18m16 0 10 8' fill='none' stroke='%23F6F3EC' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B2A41">
+<meta name="description" content="Rehber öğretmenler için ücretsiz görüşme kaydı, resmî görüşme formu çıktısı, takvim ve rapor programı. Windows ve Mac'te internetsiz çalışır; verileriniz yalnızca sizin bilgisayarınızda kalır.">
+<title>Öğrenci Rehberlik Takip Sistemi · Ücretsiz rehberlik programı</title>
+<link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Rehber Takip">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="site.css">
 <script defer src="/_vercel/insights/script.js"></script>
 <style>
-/* Sakin, kâğıt tonlu bir eğitim sitesi. Avcı oyunlarıyla aynı yazı aileleri, ama açık zemin ve tek vurgu rengi (yeşil). */
-:root{
-  --bg:#F6F3EC; --panel:#FFFFFF; --panel2:#EFEAE0; --line:#E2DBCD;
-  --fg:#1E2A2A; --muted:#5E6B69; --accent:#1F6F5C; --accent2:#E7F1EC; --warm:#E8833A; --warm2:#FCEBDD; --bad:#C2413A;
-  --shadow:0 1px 2px rgba(30,42,42,.06),0 8px 24px rgba(30,42,42,.07);
-  --display:'Bricolage Grotesque','Trebuchet MS',sans-serif;
-  --body:'Nunito Sans','Segoe UI',Roboto,sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#141B1A; --panel:#1C2524; --panel2:#24302E; --line:#2F3C3A;
-  --fg:#EEF2EF; --muted:#A3B1AE; --accent:#5FC3A5; --accent2:#1F3A33; --warm:#F2A361; --warm2:#3A2A1D; --bad:#F07C74;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:72px}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0 0 .4em;letter-spacing:-.01em}
-h1{font-size:clamp(34px,6vw,58px);font-weight:800}
-h2{font-size:clamp(26px,4vw,38px);font-weight:800}
-h3{font-size:20px;font-weight:700}
-p{margin:0 0 1em}
-a{color:var(--accent)}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-section{padding:72px 0}
-.kicker{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-.lead{font-size:19px;color:var(--muted);max-width:640px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 20px;font:800 16px var(--body);cursor:pointer;text-decoration:none;transition:transform .15s,background .15s}
-.btn:active{transform:scale(.98)}
-.btn.primary{background:var(--accent);color:#fff}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#0E1716}}
-.btn.ghost{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 2px var(--line)}
-.btn.ghost:hover{box-shadow:inset 0 0 0 2px var(--accent)}
-.btn.warm{background:var(--warm);color:#fff}
-.btn.small{padding:9px 14px;font-size:14px;border-radius:10px}
-.btn[disabled]{opacity:.55;cursor:default}
-/* üst menü */
-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-header .wrap{display:flex;align-items:center;gap:16px;height:64px}
-.logo{display:flex;align-items:center;gap:10px;font:800 20px var(--display);color:var(--fg);text-decoration:none}
-.logo i{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:var(--bg);font-style:normal;font-size:18px}
-nav{display:flex;gap:4px;margin-left:auto}
-nav a{color:var(--fg);text-decoration:none;font-weight:700;font-size:15px;padding:8px 12px;border-radius:10px}
-nav a:hover{background:var(--panel2)}
-#menuBtn{display:none;margin-left:auto;background:none;border:0;color:var(--fg);font-size:26px;cursor:pointer;padding:6px}
-@media (max-width:860px){
-  nav{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 20px 16px}
-  nav.open{display:flex}
-  #menuBtn{display:block}
-  header .acct{margin-left:0}
-}
-/* giriş bölümü */
-.hero{padding:64px 0 56px}
-.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 18px}
-.hero small{color:var(--muted);font-weight:600}
-.shield{display:flex;gap:12px;align-items:flex-start;margin-top:22px;background:var(--accent2);border-radius:16px;padding:14px 16px;font-size:15px;max-width:600px}
-.shield>span:first-child{font-size:22px;line-height:1.2}
-.shield b{color:var(--accent)}
-.badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent2);color:var(--accent);font-weight:800;font-size:14px;padding:6px 12px;border-radius:99px;margin-bottom:18px}
-@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:36px}}
-/* örnek ekran kartı */
-.mock{background:var(--panel);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:18px;position:relative}
-.mock .bar{display:flex;gap:6px;margin-bottom:14px}.mock .bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
-.stu{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;background:var(--bg);margin-bottom:8px}
-.stu b{display:block;font-size:15px}.stu span{font-size:13px;color:var(--muted)}
-.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
-.tag{margin-left:auto;font-size:12px;font-weight:800;padding:4px 9px;border-radius:99px;white-space:nowrap}
-.tag.g{background:var(--accent2);color:var(--accent)}.tag.o{background:var(--warm2);color:var(--warm)}
-.meter{margin-top:14px;font-size:13px;font-weight:700;color:var(--muted)}
-.meter div{height:8px;border-radius:99px;background:var(--panel2);margin-top:6px;overflow:hidden}
-.meter div i{display:block;height:100%;width:var(--w,40%);background:var(--accent);border-radius:99px}
-/* kartlar */
-.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:32px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
-.card .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent2);font-size:22px;margin-bottom:14px}
-.card p{color:var(--muted);margin:0}
-.art{cursor:pointer;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
-.art:hover{transform:translateY(-2px);border-color:var(--accent)}
-.art .who{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);margin-bottom:8px}
-.art .more{margin-top:auto;padding-top:14px;font-weight:800;color:var(--accent);font-size:15px}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.filters button{border:0;background:var(--panel2);color:var(--fg);font:700 14px var(--body);padding:8px 14px;border-radius:99px;cursor:pointer}
-.filters button.on{background:var(--fg);color:var(--bg)}
-.alt{background:var(--panel2)}
-/* video */
-.video{margin-top:30px;border-radius:20px;overflow:hidden;background:#0E1716;aspect-ratio:16/9;position:relative;box-shadow:var(--shadow)}
-.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.video .poster{position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;cursor:pointer;background:#0E1716 center/cover}
-.video .poster span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:var(--warm);display:grid;place-items:center;box-shadow:0 8px 30px rgba(0,0,0,.4)}
-.video .poster span::after{content:'';border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px}
-/* video yokken: adım adım canlı tanıtım */
-.tour{display:grid;grid-template-columns:260px 1fr;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:30px;box-shadow:var(--shadow)}
-.tour ol{list-style:none;margin:0;padding:12px;background:var(--panel2);display:flex;flex-direction:column;gap:4px}
-.tour li button{width:100%;text-align:left;border:0;background:none;color:var(--fg);font:700 15px var(--body);padding:12px;border-radius:12px;cursor:pointer;display:flex;gap:10px;align-items:center;position:relative;overflow:hidden}
-.tour li button b{width:26px;height:26px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:13px;flex:none}
-.tour li button.on{background:var(--panel)}
-.tour li button.on b{background:var(--accent);color:#fff}
-.tour li button.on::after{content:'';position:absolute;left:0;bottom:0;height:3px;background:var(--accent);animation:prog 5s linear forwards}
-.tour.paused li button.on::after{animation:none;width:100%}
-@keyframes prog{from{width:0}to{width:100%}}
-.stage{padding:28px;min-height:340px;display:grid;place-items:center;position:relative}
-.scene{width:100%;max-width:440px;animation:fade .45s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.scene .cap{text-align:center;color:var(--muted);font-weight:600;margin-top:16px;font-size:15px}
-.fake{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px}
-.fake label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:8px 0 4px}
-.fake .in{height:38px;border-radius:9px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;padding:0 12px;font-size:14px;overflow:hidden;white-space:nowrap}
-.type{display:inline-block;overflow:hidden;white-space:nowrap;border-right:2px solid var(--accent);animation:type 1.6s steps(22) .3s both,blink .8s step-end infinite}
-@keyframes type{from{width:0}to{width:var(--n,14ch)}}
-@keyframes blink{50%{border-color:transparent}}
-.fake .go{margin-top:12px;height:38px;border-radius:9px;background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:14px;animation:press .4s 2.2s both}
-@keyframes press{50%{transform:scale(.96)}}
-.pop{animation:popin .4s cubic-bezier(.3,1.6,.6,1) both}
-@keyframes popin{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
-.vnote{display:flex;gap:10px;align-items:center;margin-top:14px;color:var(--muted);font-size:14px;font-weight:600}
-@media (max-width:760px){.tour{grid-template-columns:1fr}.tour ol{flex-direction:row;overflow-x:auto}.tour li{flex:none}.tour li button span{display:none}.stage{padding:18px;min-height:300px}}
-/* üyelik */
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:32px;max-width:820px}
-.plan{background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column}
-.plan.best{border-color:var(--accent);position:relative}
-.plan.best::before{content:'Sınırsız';position:absolute;top:-13px;left:24px;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:3px 12px;border-radius:99px}
-.plan .price{font:800 34px var(--display);margin:6px 0 2px}
-.plan .price small{font:700 15px var(--body);color:var(--muted)}
-.plan ul{list-style:none;padding:0;margin:18px 0 24px;display:flex;flex-direction:column;gap:9px}
-.plan li{padding-left:28px;position:relative}
-.plan li::before{content:'✓';position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:var(--accent);font-weight:800;font-size:12px;display:grid;place-items:center;margin-top:3px}
-.plan li.no{color:var(--muted)}.plan li.no::before{content:'–';background:var(--panel2);color:var(--muted)}
-.plan .btn{margin-top:auto}
+.hero{padding:56px 0 60px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:32px}}
+.rozet{display:inline-flex;gap:8px;align-items:center;background:var(--teal2);color:var(--teal);font-weight:800;font-size:14px;padding:6px 12px;border-radius:99px;margin-bottom:16px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 14px}
+.hero .bilgi{color:var(--muted);font-weight:700;font-size:14px}
+.hero .not{margin-top:20px;max-width:560px}
+.cerceve{border-radius:14px;overflow:hidden;box-shadow:0 30px 60px rgba(27,42,65,.22),0 0 0 1px var(--line);background:var(--panel)}
+.cerceve .cubuk{display:flex;gap:6px;padding:9px 12px;background:var(--panel2)}
+.cerceve .cubuk i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.cerceve img{display:block;width:100%;height:auto}
+.hero .cerceve{transform:perspective(1600px) rotateY(-6deg) rotateX(2deg)}
+@media (max-width:900px){.hero .cerceve{transform:none}}
+/* ekran görüntüleri */
+.galeri{display:grid;grid-template-columns:250px 1fr;gap:22px;margin-top:30px;align-items:start}
+.galeri ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.galeri li button{width:100%;text-align:left;border:0;background:transparent;color:var(--fg);font:800 15px var(--body);padding:12px 14px;border-radius:12px;cursor:pointer}
+.galeri li button span{display:block;font:600 13px var(--body);color:var(--muted)}
+.galeri li button[aria-selected="true"]{background:var(--panel);box-shadow:var(--shadow)}
+.galeri .cerceve{cursor:zoom-in}
+@media (max-width:820px){.galeri{grid-template-columns:1fr}.galeri ol{flex-direction:row;overflow-x:auto;padding-bottom:4px}.galeri li{flex:none}.galeri li button span{display:none}}
+/* canlı örnek */
+.demo{margin-top:28px;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--panel)}
+.demo iframe{display:block;width:100%;height:min(820px,86vh);border:0}
+/* adımlar */
+.adimlar{counter-reset:a;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:28px}
+.adimlar .kart{position:relative;padding-top:52px}
+.adimlar .kart::before{counter-increment:a;content:counter(a);position:absolute;top:18px;left:22px;width:28px;height:28px;border-radius:50%;background:var(--warm);color:#fff;font-weight:900;display:grid;place-items:center}
+.video{margin-top:28px;border-radius:18px;overflow:hidden;background:#000;aspect-ratio:16/9;position:relative;box-shadow:var(--shadow)}
+.video iframe,.video button{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video button{cursor:pointer;background:#000 center/cover}
+.video button span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:var(--warm);display:grid;place-items:center}
+.video button span::after{content:'';border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px}
+/* yazılar */
+.suzgec{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.suzgec button{border:0;background:var(--panel);color:var(--fg);font:700 14px var(--body);padding:8px 14px;border-radius:99px;cursor:pointer}
+.suzgec button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.yazi{cursor:pointer;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.yazi:hover{transform:translateY(-2px);border-color:var(--teal)}
+.yazi .kim{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);margin-bottom:8px}
+.yazi .devam{margin-top:auto;padding-top:14px;font-weight:800;color:var(--teal);font-size:15px}
 /* sss */
-details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:10px;max-width:820px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:10px}
 summary{font-weight:800;cursor:pointer;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
-summary::after{content:'+';font-size:22px;line-height:1;color:var(--accent)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';font-size:22px;line-height:1;color:var(--teal)}
 details[open] summary::after{content:'–'}
-details p{color:var(--muted)}
-footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
-footer a{color:var(--fg);font-weight:700;text-decoration:none;margin-right:16px}
-/* pencereler */
-dialog{border:0;border-radius:22px;padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 32px);background:var(--panel);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.3)}
-dialog::backdrop{background:rgba(20,27,26,.55);backdrop-filter:blur(3px)}
-dialog.wide{width:min(720px,calc(100vw - 24px))}
-.dlg{padding:26px 26px 28px;position:relative}
-.x{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:var(--panel2);color:var(--fg);font-size:18px;cursor:pointer}
-.tabs{display:flex;background:var(--panel2);border-radius:12px;padding:4px;margin:4px 40px 20px 0}
-.tabs button{flex:1;border:0;background:none;font:800 15px var(--body);color:var(--muted);padding:10px;border-radius:9px;cursor:pointer}
-.tabs button.on{background:var(--panel);color:var(--fg);box-shadow:var(--shadow)}
-form label{display:block;font-weight:800;font-size:14px;margin:12px 0 6px}
-input,select,textarea{width:100%;font:16px var(--body);color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:11px;padding:12px 14px}
-input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent)}
-textarea{min-height:84px;resize:vertical}
-.msg{min-height:22px;margin:12px 0 0;font-weight:700;font-size:14px;color:var(--bad)}
-.msg.ok{color:var(--accent)}
-.hint{font-size:13px;color:var(--muted);margin-top:6px}
-.acct-box{background:var(--bg);border-radius:14px;padding:16px;margin:16px 0}
-.pay{background:var(--warm2);border-radius:14px;padding:14px 16px;margin:14px 0;font-size:15px}
-.pay code{font:700 15px ui-monospace,monospace;user-select:all;word-break:break-all}
-.reader h2{font-size:28px;margin-right:40px}
-.reader h3{margin-top:22px;font-size:18px}
-.reader ul{padding-left:22px}.reader li{margin-bottom:6px}
-[hidden]{display:none!important}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:700;z-index:50;box-shadow:var(--shadow);max-width:calc(100vw - 32px)}
-:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+details p,details li{color:var(--muted)}
+/* pencere */
+dialog{border:0;border-radius:20px;padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 32px);background:var(--panel);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.genis{width:min(1280px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(15,23,36,.65);backdrop-filter:blur(3px)}
+.pencere{padding:26px;position:relative}
+dialog.genis .pencere{padding:0}
+dialog.genis img{display:block;width:100%;height:auto}
+.kapat{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:var(--panel2);color:var(--fg);font-size:18px;cursor:pointer;z-index:2}
+.okuma h2{font-size:28px;margin-right:40px}
+.okuma h3{margin-top:22px;font-size:18px}
+.okuma ul{padding-left:22px}.okuma li{margin-bottom:6px}
 </style>
 </head>
-<body>
-<header>
-  <div class="wrap">
-    <a class="logo" href="#"><i>R</i>Rehber Takip</a>
-    <button id="menuBtn" type="button" aria-label="Menü" aria-expanded="false">☰</button>
-    <nav id="nav">
-      <a href="#kose">Rehberlik Köşesi</a>
-      <a href="#uygulama">Uygulama</a>
-      <a href="#video">Nasıl kullanılır?</a>
-      <a href="#uyelik" class="uy">Üyelik</a>
-      <a href="#sss">SSS</a>
-      <button class="btn primary small acct" type="button" data-act="account" id="acctBtn">Giriş yap</button>
-    </nav>
-  </div>
-</header>
-
+<body data-sayfa="ana">
 <main>
 <section class="hero">
   <div class="wrap">
     <div>
-      <span class="badge">🌱 Rehber öğretmenler için</span>
-      <h1>Rehberlik servisinizin dijital not defteri</h1>
-      <p class="lead">Öğrencilerinizi, görüşmelerinizi ve takip etmeniz gerekenleri tek yerde tutun. Kayıtlar yalnızca sizin bilgisayarınızda kalır. Yanında öğretmenlere, velilere ve öğrencilere yönelik rehberlik yazıları.</p>
+      <span class="rozet">🌱 Rehber öğretmenler için · Ücretsiz</span>
+      <h1>Görüşmeleriniz, formlarınız ve raporlarınız tek programda</h1>
+      <p class="lead">Öğrenci ve veli görüşmelerini kaydedin, resmî görüşme formu düzeninde yazdırın; takvim, gündem ve dönem sonu faaliyet raporu kendiliğinden hazır olsun.</p>
       <div class="cta">
-        <button class="btn primary" type="button" data-act="start">Ücretsiz başla</button>
-        <button class="btn ghost" type="button" data-act="install">📲 Uygulamayı indir</button>
-        <a class="btn ghost" href="#video">▶ Nasıl kullanılır?</a>
+        <a class="btn ana" href="indir.html">⬇ Ücretsiz indir</a>
+        <a class="btn cizgi" href="#canli">▶ Canlı örneği dene</a>
       </div>
-      <small id="heroNote">30 öğrenciye kadar ücretsiz · Kredi kartı gerekmez</small>
-      <div class="shield"><span>🔒</span><span><b>KVKK kapsamında, kendi bilgisayarınızda.</b> Öğrenci bilgileri hassas veridir. Bu yüzden uygulamayı kişisel bilgisayarınızda kullanmanız için tasarladık: kayıtlar sunucumuza gönderilmez, yalnızca sizin cihazınızda saklanır.</span></div>
+      <div class="bilgi" id="surumBilgi">Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez</div>
+      <div class="not"><span>🔒</span><span><b>Verileriniz yalnızca sizin bilgisayarınızda kalır.</b> Program bir sunucuya bağlanmaz; öğrenci ve görüşme bilgileri geliştiriciye ya da başka birine gönderilmez.</span></div>
     </div>
-    <div class="mock" aria-hidden="true">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <div class="stu"><span class="av" style="background:#1F6F5C">AK</span><span><b>Ayşe K.</b><span>8-B · Sınav kaygısı</span></span><span class="tag o">Görüşme Perşembe</span></div>
-      <div class="stu"><span class="av" style="background:#E8833A">MY</span><span><b>Mert Y.</b><span>7-A · Devamsızlık</span></span><span class="tag o">Veli aranacak</span></div>
-      <div class="stu"><span class="av" style="background:#6A5ACD">ZD</span><span><b>Zeynep D.</b><span>8-A · Meslek seçimi</span></span><span class="tag g">Tamamlandı</span></div>
-      <div class="stu"><span class="av" style="background:#2E86AB">EB</span><span><b>Emir B.</b><span>6-C · Uyum</span></span><span class="tag g">İzleniyor</span></div>
-      <div class="meter" id="mockMeter">12 / 30 öğrenci (ücretsiz)<div><i style="--w:40%"></i></div></div>
+    <div class="cerceve" aria-hidden="true"><div class="cubuk"><i></i><i></i><i></i></div><img src="img/panel-k.webp" srcset="img/panel-k.webp 720w, img/panel.webp 1440w" sizes="(max-width:900px) 100vw, 560px" width="720" height="450" alt=""></div>
+  </div>
+</section>
+
+<section id="ekranlar" class="alt">
+  <div class="wrap">
+    <p class="ust">Ekran görüntüleri</p>
+    <h2>Programa yakından bakın</h2>
+    <p class="lead">Görüntülerdeki öğrenciler ve okul uydurmadır.</p>
+    <div class="galeri">
+      <ol role="tablist" aria-label="Ekranlar" id="galeriListe"></ol>
+      <div class="cerceve" id="galeriBuyuk" role="tabpanel"><div class="cubuk"><i></i><i></i><i></i></div><img id="galeriResim" alt="" width="1440" height="900"></div>
     </div>
+  </div>
+</section>
+
+<section id="ozellikler">
+  <div class="wrap">
+    <p class="ust">Neler yapar?</p>
+    <h2>Rehberlik servisinin günlük işleri için</h2>
+    <div class="izgara">
+      <div class="kart"><div class="ikon">📝</div><h3>Resmî form düzeninde görüşmeler</h3><p>Öğrenci ve veli görüşme formlarının bütün alanları. Notu yazın ya da mikrofonla söyleyin; form düzeninde yazdırın.</p></div>
+      <div class="kart"><div class="ikon">📥</div><h3>e-Okul sınıf listesi</h3><p>Sınıf Listesi dosyasını (PDF, Excel, CSV) yükleyin; öğrencileri tek tek girmeyin. Görüşme geçmişi korunur.</p></div>
+      <div class="kart"><div class="ikon">📅</div><h3>Gündem, takvim, bildirim</h3><p>Takip randevuları, sınıf etkinlikleri ve toplantılar; vakti gelince bildirim ve zil.</p></div>
+      <div class="kart"><div class="ikon">📊</div><h3>Raporlar ve faaliyet raporu</h3><p>Tarih, sınıf ve konuya göre istatistikler, sınıf kapsaması, takip uyarıları. Dönem sonu faaliyet raporu tek tıkla.</p></div>
+      <div class="kart"><div class="ikon">🏫</div><h3>Okul raporu</h3><p>Birden çok rehber öğretmen, öğrenci adı içermeyen özet paketleriyle okul geneli faaliyet raporunu birlikte hazırlar.</p></div>
+      <div class="kart"><div class="ikon">💾</div><h3>Otomatik yedek</h3><p>Her gün kendiliğinden yedek; istenirse USB belleğe ek yedek, istenen tarihe geri dönüş.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="canli" class="alt">
+  <div class="wrap">
+    <p class="ust">Canlı örnek</p>
+    <h2>İndirmeden önce deneyin</h2>
+    <p class="lead">Aşağıda gerçek program çalışıyor. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir, isterseniz <b>Eğitimi geç</b> diyebilirsiniz. Kendiniz de en fazla 20 deneme kaydı yapabilirsiniz. Deneme kayıtları yalnızca bu tarayıcıda durur, hiçbir yere gönderilmez.</p>
+    <div class="demo"><iframe src="demo/" title="Öğrenci Rehberlik Takip Sistemi canlı örnek" loading="lazy"></iframe></div>
+    <p class="ipucu" style="margin-top:12px"><a href="demo/" target="_blank" rel="noopener">Tam ekran aç ↗</a> · Canlı örnek bilgisayarda en iyi görünür.</p>
+  </div>
+</section>
+
+<section id="kurulum">
+  <div class="wrap">
+    <p class="ust">Nasıl kullanılır?</p>
+    <h2>Dört adımda başlayın</h2>
+    <div id="videoAlan"></div>
+    <div class="adimlar">
+      <div class="kart"><h3>İndirin</h3><p>Kullanım koşullarını okuyup zip dosyasını indirin. Kayıt gerekmez.</p></div>
+      <div class="kart"><h3>Klasöre çıkarın</h3><p>Zip'e sağ tıklayıp <b>Tümünü ayıkla</b> deyin. Klasörü OneDrive dışında, örneğin <code>C:\</code> altında bir yere koyun.</p></div>
+      <div class="kart"><h3>Başlatın</h3><p>Windows'ta <b>Baslat.bat</b>, Mac'te <b>Baslat.command</b> dosyasına çift tıklayın. Program tarayıcınızda açılır.</p></div>
+      <div class="kart"><h3>Etkinleştirin</h3><p>İlk açılışta koşulları onaylayıp bir <b>kopyalamaya karşı şifre</b> belirleyin. Bu bir giriş şifresi değildir.</p></div>
+    </div>
+    <p style="margin-top:20px"><a href="indir.html#kurulum">Ayrıntılı kurulum adımları →</a></p>
   </div>
 </section>
 
 <section id="kose" class="alt">
   <div class="wrap">
-    <p class="kicker">Rehberlik Köşesi</p>
+    <p class="ust">Rehberlik Köşesi</p>
     <h2>Okuyun, paylaşın, kullanın</h2>
-    <p class="lead">Kısa ve uygulanabilir rehberlik yazıları. Veli toplantısında, sınıf rehberlik saatinde ya da bir öğrenciyle görüşmeden önce açıp kullanabilirsiniz.</p>
-    <div class="filters" id="filters" role="group" aria-label="Okuyucuya göre süz">
-      <button type="button" class="on" data-f="">Tümü</button>
-      <button type="button" data-f="Öğretmen">Öğretmen</button>
-      <button type="button" data-f="Veli">Veli</button>
-      <button type="button" data-f="Öğrenci">Öğrenci</button>
+    <p class="lead">Veli toplantısında, sınıf rehberlik saatinde ya da bir görüşmeden önce açıp kullanabileceğiniz kısa yazılar.</p>
+    <div class="suzgec" id="suzgec" role="group" aria-label="Okuyucuya göre süz">
+      <button type="button" aria-pressed="true" data-k="">Tümü</button><button type="button" aria-pressed="false" data-k="Öğretmen">Öğretmen</button><button type="button" aria-pressed="false" data-k="Veli">Veli</button><button type="button" aria-pressed="false" data-k="Öğrenci">Öğrenci</button>
     </div>
-    <div class="grid" id="articles"></div>
+    <div class="izgara" id="yazilar"></div>
   </div>
 </section>
 
-<section id="uygulama">
-  <div class="wrap">
-    <p class="kicker">Uygulama</p>
-    <h2>Rehber öğretmen öğrenci takip uygulaması</h2>
-    <p class="lead">Bilgisayar, tablet ve telefonda çalışır; bilgisayarınıza ya da telefonunuza indirip uygulama gibi kullanabilirsiniz. KVKK kapsamında öğrenci kayıtları yalnızca sizin cihazınızda saklanır.</p>
-    <div class="grid">
-      <div class="card"><div class="ico">🗂️</div><h3>Öğrenci kartları</h3><p>Her öğrenci için sınıf, konu ve durum bilgisini tek kartta tutun.</p></div>
-      <div class="card"><div class="ico">📝</div><h3>Görüşme notları</h3><p>Öğrenci, veli ve öğretmen görüşmelerini tarihleriyle kaydedin.</p></div>
-      <div class="card"><div class="ico">⏰</div><h3>Takip listesi</h3><p>Aranacak veli, yapılacak görüşme gibi işleri unutmayın.</p></div>
-      <div class="card"><div class="ico">🔒</div><h3>KVKK: veriler sizde</h3><p>Öğrenci bilgileri sunucuya gönderilmez, yalnızca kişisel bilgisayarınızda saklanır.</p></div>
-      <div class="card"><div class="ico">💾</div><h3>Yedekleme</h3><p>Tek dokunuşla yedek dosyası alın, yeni bilgisayarınıza geri yükleyin.</p></div>
-    </div>
-    <div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
-      <button class="btn primary" type="button" data-act="open-app">Uygulamayı aç</button>
-      <button class="btn ghost" type="button" data-act="install">📲 Telefona / bilgisayara indir</button>
-    </div>
-  </div>
-</section>
-
-<span id="indir"></span>
-<section id="video" class="alt">
-  <div class="wrap">
-    <p class="kicker">Nasıl kullanılır?</p>
-    <h2>Dört adımda başlayın</h2>
-    <p class="lead">İndirmekten ilk görüşme notuna kadar her şey birkaç dakika sürer.</p>
-    <div id="videoBox"></div>
-  </div>
-</section>
-
-<section id="uyelik" class="uy">
-  <div class="wrap">
-    <p class="kicker">Üyelik</p>
-    <h2>30 öğrenciye kadar ücretsiz</h2>
-    <p class="lead">Ücretsiz hesapla uygulamanın tamamını kullanırsınız. Okulunuzda daha çok öğrenciyi takip etmeniz gerekiyorsa üye olun.</p>
-    <div class="plans">
-      <div class="plan">
-        <h3>Ücretsiz</h3>
-        <div class="price">0 ₺</div>
-        <ul>
-          <li>30 öğrenciye kadar</li>
-          <li>Uygulamanın tüm özellikleri</li>
-          <li>Kayıtlar yalnızca sizin cihazınızda</li>
-          <li class="no">30'dan fazla öğrenci</li>
-        </ul>
-        <button class="btn ghost" type="button" data-act="start">Ücretsiz başla</button>
-      </div>
-      <div class="plan best">
-        <h3>Üyelik</h3>
-        <div class="price" id="priceBox">Sınırsız</div>
-        <ul>
-          <li>Sınırsız öğrenci</li>
-          <li>Uygulamanın tüm özellikleri</li>
-          <li>Kayıtlar yalnızca sizin cihazınızda</li>
-          <li>Öncelikli destek</li>
-        </ul>
-        <button class="btn primary" type="button" data-act="member">Üye ol</button>
-      </div>
-    </div>
-    <p class="hint" style="margin-top:16px;max-width:820px">Üyelik başvurusundan sonra ödeme havale/EFT ile yapılır; ödemeniz görüldüğünde üyeliğiniz açılır. 30 sınırına geldiğinizde mevcut kayıtlarınız silinmez, yalnızca yeni öğrenci eklenemez.</p>
-  </div>
-</section>
-
-<section id="sss" class="alt">
-  <div class="wrap">
-    <p class="kicker">Sıkça sorulanlar</p>
+<section id="sss">
+  <div class="wrap dar">
+    <p class="ust">Sıkça sorulanlar</p>
     <h2>Merak edilenler</h2>
-    <div style="margin-top:26px">
-      <details class="uy"><summary>Ücretsiz hesapla neler yapabilirim?</summary><p>Uygulamanın tüm özelliklerini 30 öğrenciye kadar kullanabilirsiniz. Süre sınırı yoktur.</p></details>
-      <details class="uy"><summary>30 öğrenciyi doldurursam ne olur?</summary><p>Kayıtlarınız olduğu gibi kalır; görüntüleyebilir ve düzenleyebilirsiniz. Yalnızca yeni öğrenci ekleyemezsiniz. Bir öğrenciyi silerseniz yer açılır ya da üye olarak sınırı kaldırırsınız.</p></details>
-      <details class="uy"><summary>Üyelik nasıl açılıyor?</summary><p>Giriş yaptıktan sonra "Üye ol" bölümünden aylık ya da yıllık üyeliği seçip başvurursunuz. Havale/EFT açıklamasına hesabınızdaki e-posta adresini yazmanız yeterli. Ödeme görüldüğünde üyeliğiniz açılır ve hesabınızda bitiş tarihi görünür.</p></details>
-      <details open><summary>Öğrenci bilgileri nerede saklanıyor? (KVKK)</summary><p>Rehberlik kayıtları hassas kişisel veridir. Bu yüzden uygulamayı kişisel bilgisayarınızda kullanmanız için tasarladık: öğrenci adları, görüşme notları ve takip bilgileri <b>sunucumuza hiç gönderilmez</b>, yalnızca kullandığınız cihazın tarayıcısında saklanır. Sunucuda yalnızca üyelik için açtığınız hesabın bilgileri (ad, e-posta, okul) bulunur. Yine de öğrencinin adını ve soyadının baş harfini yazmanızı, gerekmeyen ayrıntıları kaydetmemenizi ve bilgisayarınızı şifreyle korumanızı öneririz.</p></details>
-      <details><summary>Bilgisayarımı değiştirirsem kayıtlarım ne olur?</summary><p>Kayıtlar cihazınızda olduğu için başka bir bilgisayarda kendiliğinden görünmez. Uygulamadaki <b>Yedek al</b> ile bir dosya indirin, yeni bilgisayarda <b>Yedekten yükle</b> ile geri yükleyin. Tarayıcı verilerini silmeden önce mutlaka yedek alın. Yedek dosyası öğrenci bilgisi içerir; güvenli bir yerde saklayın.</p></details>
-      <details class="free" hidden><summary>Uygulama ücretli mi?</summary><p>Şimdilik tamamen ücretsiz ve öğrenci sınırı yok. İleride ücretli üyelik gelirse önceden duyurulur; kayıtlarınız silinmez.</p></details>
-      <details><summary>Uygulamayı nasıl indiririm?</summary><p>"Uygulamayı indir" düğmesine dokunun. Android telefonda ve bilgisayarda Chrome/Edge kurulum penceresi açar. iPhone ve iPad'de Safari'de Paylaş düğmesine (□↑), ardından "Ana Ekrana Ekle"ye dokunun. Uygulama ana ekranınıza simgesiyle eklenir ve ayrı bir pencerede açılır; mağazadan indirmeniz gerekmez.</p></details>
-      <details><summary>Şifremi unuttum.</summary><p>İletişim adresinden hesabınızdaki e-postayla yazın; hesabınız doğrulandıktan sonra yardımcı olunur.</p></details>
+    <div style="margin-top:24px">
+      <details open><summary>Program gerçekten ücretsiz mi?</summary><p>Evet. Program ücretsizdir; kurulum kılavuzu ve hata düzeltmeleri de ücretsizdir. Yalnızca yeni özellik ya da okulunuza özel uyarlama talepleri ücretlidir (<a href="iletisim.html">Geliştirme talebi</a>).</p></details>
+      <details><summary>Verilerim nerede tutuluyor? (KVKK)</summary><p>Bütün öğrenci, veli ve görüşme bilgileri yalnızca programın kurulu olduğu bilgisayarda, program klasöründeki <code>veri</code> klasöründe tutulur. Program bu bilgileri geliştiriciye ya da başka birine göndermez. Tek istisna isteğe bağlı <b>sesli yazım</b> özelliğidir: Chrome/Edge'in ses tanıma servisini kullandığı için söylediğiniz metin o servise gider ve internet gerektirir; istemezseniz notları elle yazabilirsiniz. Verilerin hukuka uygun işlenmesi ve korunması kullanıcının ve kurumunun sorumluluğundadır (<a href="kosullar.html">Kullanım Koşulları</a>, madde 4).</p></details>
+      <details><summary>Python kurmam gerekiyor mu?</summary><p>Program Python 3 ile çalışır. Mac'lerde ve birçok Windows bilgisayarda zaten kuruludur. Kurulu değilse <code>Baslat.bat</code> size ne yapacağınızı söyler: <a href="https://www.python.org/downloads/" rel="noopener">python.org</a>'dan indirip kurarken <b>Add python.exe to PATH</b> kutusunu işaretleyin.</p></details>
+      <details><summary>Zip'e çift tıkladım, program açılmadı.</summary><p>Programı zip'in içinden çalıştırmayın. Önce zip'e sağ tıklayıp <b>Tümünü ayıkla</b> deyin, sonra çıkan klasördeki <b>Baslat.bat</b>'a çift tıklayın.</p></details>
+      <details><summary>Kopyalamaya karşı şifre nedir?</summary><p>İlk açılışta belirlediğiniz bir şifredir; her açılışta sorulmaz. Program klasörü izinsiz olarak başka bir bilgisayara kopyalanırsa program orada kilitlenir ve şifre girilmeden öğrenci verisi görüntülenemez. Kendi bilgisayarınızı değiştirdiğinizde bu şifreyle açarsınız; şifreyi bir yere not edin.</p></details>
+      <details><summary>Güncellemeleri nasıl takip ederim?</summary><p>Güncellemeler ve hata düzeltmeleri yalnızca <a href="surumler.html">Sürüm Notları</a> sayfasında duyurulur. Kendi sürümünüzü programda <b>Ayarlar → Hakkında</b> bölümünde görüp oradaki sürümle karşılaştırın. İsterseniz <a href="iletisim.html#abone">e-posta listesine</a> gönüllü olarak katılabilirsiniz.</p></details>
+      <details><summary>MEB'in programı mı?</summary><p>Hayır. Bu program Millî Eğitim Bakanlığı'nın ya da herhangi bir kamu kurumunun resmî yazılımı değildir, bu kurumlarla bağlantısı yoktur ve onlar tarafından onaylanmamıştır. Form düzenleri kullanım kolaylığı için hazırlanmıştır; resmî kayıtların ilgili resmî sistemlere girilmesi kullanıcının sorumluluğundadır.</p></details>
+      <details><summary>Klasörü OneDrive'a koyabilir miyim?</summary><p>Koymayın. OneDrive'ın eşitlediği bir klasörde program dosyaları kilitlenebilir. Klasörü tamamen yerel bir yere, örneğin <code>C:\OgrenciRehberlikTakip</code> içine koyun.</p></details>
     </div>
   </div>
 </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <div><strong style="color:var(--fg)">Rehber Takip</strong><br>Rehber öğretmenler için eğitim sitesi ve öğrenci takip uygulaması.<br><span id="contactLine"></span></div>
-    <div><a href="/">Trigo Avcısı</a><a href="/sosyal/">Sosyal Avcısı</a><a href="uygulama/">Uygulama</a></div>
-  </div>
-</footer>
-
-<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+<dialog id="pencere"><div class="pencere" id="pencereIc"></div></dialog>
 
 <script src="config.js"></script>
-<script src="rg.js"></script>
+<script src="indir/surum.js"></script>
+<script src="yazilar.js"></script>
+<script src="site.js"></script>
 <script>
-/* ---------- Rehberlik Köşesi yazıları ---------- */
-const ARTICLES=[
- {id:'kaygi',who:'Öğrenci',ico:'🧘',t:'Sınav kaygısıyla baş etmek',s:'Biraz heyecan iyidir; fazlası performansı düşürür. Kaygıyı yönetmenin beş yolu.',b:`<p>Sınav öncesi kalp çarpıntısı, mide ağrısı ya da "her şeyi unuttum" hissi çok yaygındır. Biraz kaygı dikkatini toplar; fazlası ise bildiğini yazmana engel olur.</p>
-<h3>Ne yapabilirsin?</h3><ul><li><b>Nefes:</b> 4 saniye burnundan al, 4 saniye tut, 6 saniye ağzından ver. Üç tur yeterli.</li><li><b>Düşünceni yakala:</b> "Kesin kötü geçecek" yerine "Çalıştığım konular var, onlardan başlayacağım" de.</li><li><b>Hazırlığını parçala:</b> Tek gecede her şey yerine her gün kısa tekrarlar yap.</li><li><b>Uyku ve kahvaltı:</b> Sınavdan önceki gece geç saate kadar çalışmak, kazandırdığından çok kaybettirir.</li><li><b>Sınavda:</b> Önce bildiğin soruları çöz; takıldığın soruyu işaretle ve geç.</li></ul>
-<h3>Ne zaman yardım istemeli?</h3><p>Kaygı uykunu, iştahını ya da okula gelmeni etkiliyorsa okulunun rehber öğretmeniyle konuş. Bu çok normal ve sık yapılan bir şey.</p>`},
- {id:'calisma',who:'Öğrenci',ico:'📚',t:'Verimli ders çalışmanın kuralları',s:'Uzun süre masada oturmak değil, doğru yöntem kazandırır.',b:`<p>Araştırmalar, en çok işe yarayan yöntemlerin aslında en basitleri olduğunu gösteriyor.</p>
-<h3>İşe yarayan yöntemler</h3><ul><li><b>Kendini sına:</b> Okuduktan sonra kitabı kapat ve hatırladıklarını yaz ya da anlat.</li><li><b>Aralıklı tekrar:</b> Bir konuyu aynı gün, 2 gün sonra ve 1 hafta sonra kısa kısa tekrar et.</li><li><b>25+5:</b> 25 dakika telefonsuz çalış, 5 dakika mola ver. Dört turdan sonra uzun mola.</li><li><b>Karışık çalış:</b> Aynı türden 30 soru yerine farklı konulardan karışık sorular çöz.</li></ul>
-<h3>İşe yaramayanlar</h3><ul><li>Sadece altını çizmek ya da tekrar tekrar okumak.</li><li>Telefon yanındayken çalışmak: bildirim gelmese bile dikkati böler.</li></ul>`},
- {id:'veli-gorusme',who:'Öğretmen',ico:'🤝',t:'Veli görüşmesinde etkili iletişim',s:'Zor konuları konuşurken veliyi karşınıza değil yanınıza almak için ipuçları.',b:`<p>Veli görüşmesinin amacı suçlu bulmak değil, çocuk için ortak bir plan yapmaktır.</p>
-<h3>Görüşmeden önce</h3><ul><li>Somut gözlemlerinizi tarihleriyle not edin ("3 haftadır ödevlerini getirmiyor" gibi).</li><li>Görüşmenin tek bir ana konusu olsun.</li></ul>
-<h3>Görüşme sırasında</h3><ul><li><b>Olumlu başlayın:</b> Öğrencinin güçlü bir yönüyle açın.</li><li><b>Gözlem, yorum değil:</b> "Tembel" yerine "derste sık sık uyuyor" deyin.</li><li><b>Dinleyin:</b> Evde gördüklerini sorun; çoğu zaman sorunun anahtarı oradadır.</li><li><b>Birlikte karar verin:</b> Okulda ve evde yapılacak birer küçük adım belirleyin.</li></ul>
-<h3>Sonrasında</h3><p>Ne konuşulduğunu ve kararlaştırılan adımları kısaca kaydedin; iki hafta sonra veliyle tekrar iletişime geçin.</p>`},
- {id:'zorbalik',who:'Öğretmen',ico:'🛡️',t:'Akran zorbalığını fark etmek',s:'Zorbalık çoğu zaman yetişkinlerin göremediği yerlerde olur. Uyarı işaretleri ve ilk adımlar.',b:`<p>Zorbalık; bir öğrencinin tekrar tekrar ve kasıtlı olarak, kendini savunmakta zorlanan bir akranına zarar vermesidir. Fiziksel olduğu kadar sözel, dışlayıcı ya da çevrim içi de olabilir.</p>
-<h3>Uyarı işaretleri</h3><ul><li>Teneffüste yalnız kalma, öğretmenlerin yanından ayrılmama</li><li>Eşyalarının sık sık kaybolması ya da zarar görmesi</li><li>Okula gelmek istememe, sık baş ve karın ağrısı şikâyeti</li><li>Ani not düşüşü, içe kapanma</li></ul>
-<h3>İlk adımlar</h3><ul><li>Öğrenciyle yalnız ve sakin bir ortamda konuşun; anlattığı için teşekkür edin.</li><li>"Görmezden gel" demeyin; güvenliğini sağlamak için ne yapacağınızı söyleyin.</li><li>Olayı tarih, yer ve tanıklarla kaydedin; okul yönetimi ve rehberlik servisiyle paylaşın.</li><li>Zorbalık yapan öğrenciyle de ayrıca görüşün; davranışın nedenini anlamaya çalışın.</li></ul>`},
- {id:'ekran',who:'Veli',ico:'📱',t:'Ekran süresi: yasak değil denge',s:'Ekranı tamamen yasaklamak yerine birlikte kurallar koymak daha iyi sonuç verir.',b:`<p>Çocuklar için ekranı tamamen yasaklamak çoğu zaman gizli kullanıma ve tartışmalara yol açar. Hedef, ekranın uyku, ders, hareket ve aile zamanının önüne geçmemesidir.</p>
-<h3>Evde uygulanabilecek kurallar</h3><ul><li><b>Ekransız alanlar:</b> Yemek masası ve yatak odası.</li><li><b>Ekransız saat:</b> Uykudan en az 1 saat önce telefonlar şarja, oturma odasına.</li><li><b>Önce görevler:</b> Ödev ve ev işleri bittikten sonra ekran zamanı.</li><li><b>Birlikte izleyin:</b> Ne izlediğini ve oynadığını merak edin, sorun.</li></ul>
-<h3>Örnek olun</h3><p>Çocuklar kurallardan çok bizi taklit eder. Sizin de ekransız zamanlarınız olsun.</p>`},
- {id:'meslek',who:'Öğrenci',ico:'🧭',t:'Meslek seçerken kendine sorman gerekenler',s:'Hangi meslek "iyi" değil, hangi meslek sana uygun? Dört soru.',b:`<p>Meslek seçimi bir kerelik bir karar değil, kendini tanıdıkça netleşen bir süreçtir.</p>
-<h3>Kendine sor</h3><ul><li><b>Neyi yaparken zamanın nasıl geçtiğini anlamıyorsun?</b> İlgi alanların ipucu verir.</li><li><b>Hangi derslerde kolay ilerliyorsun?</b> Yeteneklerin de önemlidir.</li><li><b>Nasıl bir ortamda çalışmak istersin?</b> İnsanlarla mı, tek başına mı; masa başında mı, sahada mı?</li><li><b>Senin için neler önemli?</b> Para, güvence, insanlara yardım, üretmek, özgürlük…</li></ul>
-<h3>Araştır</h3><p>Merak ettiğin meslekte çalışan biriyle konuş, bir gününün nasıl geçtiğini sor. Rehber öğretmenin ilgi ve yetenek envanterleri konusunda sana yardımcı olabilir.</p>`},
- {id:'ergen',who:'Veli',ico:'💬',t:'Ergen çocukla konuşmak',s:'"Okul nasıldı?" sorusuna "iyi" dışında cevap almak için.',b:`<p>Ergenlik döneminde çocuklar bağımsızlık ister; bu, aileye ihtiyaçlarının bittiği anlamına gelmez.</p>
-<h3>Konuşmayı kolaylaştıranlar</h3><ul><li><b>Yan yana konuşun:</b> Arabada, yürürken, yemek hazırlarken açılmak göz göze oturmaktan kolaydır.</li><li><b>Açık uçlu sorular:</b> "Bugün seni en çok ne güldürdü?" "Teneffüste kimlerleyken iyi vakit geçirdin?"</li><li><b>Hemen çözüm sunmayın:</b> Bazen sadece dinlenmek ister. "Anlıyorum, zor olmalı" çoğu zaman yeter.</li><li><b>Sözünü dinleyin, sonra konuşun:</b> Nasihat ne kadar kısa olursa o kadar akılda kalır.</li></ul>`},
- {id:'uyum',who:'Öğretmen',ico:'🌱',t:'Okula uyum sürecinde rehberlik',s:'Yeni gelen ya da kademe değiştiren öğrencilerin ilk haftaları için kontrol listesi.',b:`<p>Okula yeni başlayan, nakil gelen ya da kademe değiştiren öğrenciler için ilk haftalar kritik önemdedir.</p>
-<h3>Kontrol listesi</h3><ul><li>İlk hafta içinde kısa bir tanışma görüşmesi yapın.</li><li>Sınıfta bir "arkadaş öğrenci" belirleyin.</li><li>Sınıf öğretmeninden iki hafta sonra kısa bir gözlem isteyin.</li><li>Veliyle ilk ay içinde bir kez iletişime geçin.</li><li>Uyum güçlüğü sürüyorsa takip listenize ekleyin ve görüşme sıklığını artırın.</li></ul>`}
-];
-let filter='';
-function renderArticles(){
-  document.getElementById('articles').innerHTML=ARTICLES.filter(a=>!filter||a.who===filter).map(a=>'<button class="card art" type="button" data-art="'+a.id+'"><div class="ico">'+a.ico+'</div><div class="who">'+a.who+' için</div><h3>'+a.t+'</h3><p>'+a.s+'</p><span class="more">Oku →</span></button>').join('');}
-renderArticles();
-document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;filter=b.dataset.f;document.querySelectorAll('#filters button').forEach(x=>x.classList.toggle('on',x===b));renderArticles();});
+const CFG=window.RG_CONFIG||{},pencere=document.getElementById('pencere'),pencereIc=document.getElementById('pencereIc');
+function ac(html,genis){pencereIc.innerHTML='<button class="kapat" type="button" data-kapat aria-label="Kapat">✕</button>'+html;pencere.classList.toggle('genis',!!genis);if(!pencere.open)pencere.showModal();}
+pencere.addEventListener('click',e=>{if(e.target===pencere||e.target.closest('[data-kapat]'))pencere.close();});
+if(window.RG_DOSYA)document.getElementById('surumBilgi').textContent='Sürüm '+RG_DOSYA.surum+' · Windows ve Mac · İnternetsiz çalışır · Kayıt gerektirmez';
 
-/* ---------- yardımcılar ---------- */
-const CFG=RG.cfg,dlg=document.getElementById('dlg'),body=document.getElementById('dlgBody');
-const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function openDlg(html,wide){body.innerHTML='<button class="x" type="button" data-act="close" aria-label="Kapat">✕</button>'+html;dlg.classList.toggle('wide',!!wide);if(!dlg.open)dlg.showModal();}
-function closeDlg(){dlg.close();}
-dlg.addEventListener('click',e=>{if(e.target===dlg)closeDlg();});
-function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200);}
-function fmtDate(d){return d?new Date(d+'T12:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'}):'';}
+/* ekran görüntüleri */
+const EKRAN=[['panel','Panel','Günün özeti, ajanda ve grafikler'],['dosya','Öğrenci dosyası','Görüşmeler, hatırlatmalar, etiketler'],['form','Görüşme formu','Resmî form düzeninde, sesle yazım'],['raporlar','Raporlar','Kapsama, takip uyarıları, faaliyet raporu'],['takvim','Takvim','Görüşmeler ve etkinlikler'],['ogrenciler','Öğrenciler','Arama ve süzme']];
+const liste=document.getElementById('galeriListe'),resim=document.getElementById('galeriResim');
+liste.innerHTML=EKRAN.map((e,i)=>'<li><button type="button" role="tab" data-i="'+i+'">'+e[1]+'<span>'+e[2]+'</span></button></li>').join('');
+function ekranSec(i){liste.querySelectorAll('button').forEach((b,k)=>b.setAttribute('aria-selected',k===i));resim.src='img/'+EKRAN[i][0]+'.webp';resim.alt=EKRAN[i][1]+' ekranı: '+EKRAN[i][2];}
+liste.addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)ekranSec(+b.dataset.i);});
+document.getElementById('galeriBuyuk').addEventListener('click',()=>ac('<img src="'+resim.src+'" alt="'+resim.alt+'">',true));
+ekranSec(0);
 
-/* ---------- fiyat ve iletişim ---------- */
-(function(){
-  const p=document.getElementById('priceBox');
-  if(CFG.fiyatAylik||CFG.fiyatYillik)p.innerHTML=esc(CFG.fiyatAylik||CFG.fiyatYillik)+(CFG.fiyatAylik&&CFG.fiyatYillik?'<br><small>ya da '+esc(CFG.fiyatYillik)+'</small>':'');
-  if(CFG.iletisim)document.getElementById('contactLine').textContent='İletişim: '+CFG.iletisim;
-})();
-
-/* ---------- video ya da adım adım tanıtım ---------- */
+/* video (config.js'de verilirse) */
 function ytId(v){if(!v)return '';const m=String(v).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(v)?v:'');}
-const STEPS=[
- {t:'İndirin',c:'Uygulamayı bilgisayarınıza ya da telefonunuza indirin. Kayıtlarınız o cihazda kalır.',h:'<div class="fake" style="display:grid;place-items:center;padding:24px;text-align:center"><img class="pop" src="icon-192.png" alt="" width="84" height="84" style="border-radius:20px;box-shadow:var(--shadow)"><b style="margin-top:10px">Rehber Takip</b><div class="go" style="width:100%">📲 Uygulamayı indir</div></div>'},
- {t:'Öğrenci ekleyin',c:'Öğrencinin adını, sınıfını ve takip konusunu yazın.',h:'<div class="fake"><label>Öğrenci</label><div class="in"><span class="type" style="--n:9ch">Ayşe K.</span></div><label>Sınıf · Konu</label><div class="in">8-B · Sınav kaygısı</div><div class="go">Kaydet</div></div>'},
- {t:'Görüşmeleri kaydedin',c:'Her görüşmeyi tarihiyle not edin, sonraki adımı belirleyin.',h:'<div class="fake"><div class="stu pop"><span class="av" style="background:#1F6F5C">AK</span><span><b>Ayşe K.</b><span>8-B · Sınav kaygısı</span></span></div><label>14 Ekim · Öğrenci görüşmesi</label><div class="in"><span class="type" style="--n:28ch">Nefes egzersizi çalışıldı.</span></div><div class="go">Notu kaydet</div></div>'},
- {t:'Sınırı kaldırın',c:'30 öğrenciye kadar ücretsiz. Daha fazlası için üye olun.',h:'<div class="fake"><div class="meter" style="margin:0">30 / 30 öğrenci (ücretsiz)<div><i style="--w:100%;background:var(--warm)"></i></div></div><div class="stu pop" style="margin-top:14px;animation-delay:.6s"><span class="av" style="background:var(--accent)">★</span><span><b>Üyelik açıldı</b><span>Sınırsız öğrenci</span></span><span class="tag g">Aktif</span></div></div>'}
-];
-let step=0,tourTimer=null,tourPaused=false;
-function renderVideo(){
-  const box=document.getElementById('videoBox'),id=ytId(CFG.video);
-  if(id){
-    box.innerHTML='<div class="video"><button class="poster" type="button" data-act="play" aria-label="Videoyu oynat" style="background-image:url(https://i.ytimg.com/vi/'+id+'/hqdefault.jpg)"><span></span></button></div>';
-    return;}
-  box.innerHTML='<div class="tour" id="tour"><ol>'+STEPS.map((s,i)=>'<li><button type="button" data-step="'+i+'"><b>'+(i+1)+'</b><span>'+s.t+'</span></button></li>').join('')+'</ol><div class="stage" id="stage"></div></div><p class="vnote">🎬 Anlatımlı video yakında burada olacak.</p>';
-  showStep(0);}
-function showStep(i){
-  step=i;const s=STEPS[i];
-  document.querySelectorAll('#tour [data-step]').forEach((b,k)=>{b.classList.toggle('on',k===i);if(k===i){b.style.animation='none';b.offsetWidth;b.style.animation='';}});
-  document.getElementById('stage').innerHTML='<div class="scene"><h3 style="text-align:center">'+(i+1)+'. '+s.t+'</h3>'+s.h+'<p class="cap">'+s.c+'</p></div>';
-  clearTimeout(tourTimer);if(!tourPaused)tourTimer=setTimeout(()=>showStep((step+1)%STEPS.length),5000);}
-renderVideo();
-document.getElementById('videoBox').addEventListener('click',e=>{
-  const b=e.target.closest('[data-step]');
-  if(b){tourPaused=true;document.getElementById('tour').classList.add('paused');showStep(+b.dataset.step);}
-  if(e.target.closest('[data-act="play"]')){const id=ytId(CFG.video);document.querySelector('#videoBox .video').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" title="Rehber Takip nasıl kullanılır?" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';}
-});
+const vid=ytId(CFG.video);
+if(vid){const a=document.getElementById('videoAlan');a.innerHTML='<div class="video"><button type="button" aria-label="Videoyu oynat" style="background-image:url(https://i.ytimg.com/vi/'+vid+'/hqdefault.jpg)"><span></span></button></div>';
+  a.querySelector('button').addEventListener('click',()=>{a.firstChild.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+vid+'?autoplay=1&rel=0" title="Nasıl kullanılır?" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';});}
 
-/* ---------- hesap ---------- */
-let ME=null;
-async function refreshMe(){
-  if(!RG.session()){ME=null;updateAcctBtn();return null;}
-  try{ME=await RG.me();}catch(e){ME=null;}
-  updateAcctBtn();return ME;}
-function updateAcctBtn(){document.getElementById('acctBtn').textContent=ME?'Hesabım':'Giriş yap';}
-function authForm(tab){
-  const reg=tab==='kayit';
-  openDlg('<div class="tabs"><button type="button" data-act="tab-giris" class="'+(reg?'':'on')+'">Giriş yap</button><button type="button" data-act="tab-kayit" class="'+(reg?'on':'')+'">Hesap aç</button></div>'+
-  '<form id="authForm" data-mode="'+(reg?'kayit':'giris')+'">'+
-  (reg?'<label for="fName">Ad soyad</label><input id="fName" autocomplete="name" required maxlength="60"><label for="fSchool">Okul <span style="font-weight:600;color:var(--muted)">(isteğe bağlı)</span></label><input id="fSchool" autocomplete="organization" maxlength="100">':'')+
-  '<label for="fEmail">E-posta</label><input id="fEmail" type="email" autocomplete="email" required>'+
-  '<label for="fPass">Şifre</label><input id="fPass" type="password" autocomplete="'+(reg?'new-password':'current-password')+'" required minlength="'+(reg?8:1)+'">'+
-  (reg?'<p class="hint">En az 8 karakter. Hesap yalnızca üyelik içindir; öğrenci kayıtlarınız hesaba değil, kendi cihazınıza kaydedilir.</p>':'')+
-  '<button class="btn primary" type="submit" style="width:100%;margin-top:18px">'+(reg?'Ücretsiz hesap aç':'Giriş yap')+'</button><p class="msg" id="fMsg" role="alert"></p></form>');
-  setTimeout(()=>document.getElementById(reg?'fName':'fEmail').focus(),50);}
-/* Öğrenci kayıtları sunucuda değil bu cihazda; sayı uygulamanın yerel kaydından okunur. */
-function localCount(){try{return (JSON.parse(localStorage.getItem('rg-ogrenciler'))||[]).length;}catch(e){return 0;}}
-function accountView(){
-  const m=ME,lim=m.limit,n=localCount(),pct=lim?Math.min(100,Math.round(n/lim*100)):100;
-  const req=m.request&&m.request.status==='bekliyor';
-  openDlg('<h2 style="margin-right:40px">Merhaba, '+esc(m.name.split(' ')[0])+'</h2><p style="color:var(--muted);margin:0">'+esc(m.email)+(m.school?' · '+esc(m.school):'')+'</p>'+
-  '<div class="acct-box"><b>'+(m.member?'Üyelik aktif':lim==null?'Ücretsiz dönem':'Ücretsiz hesap')+'</b>'+(m.member?'<span style="color:var(--muted)"> · '+fmtDate(m.member_until)+' tarihine kadar</span>':'')+
-  '<div class="meter">Bu cihazda '+n+(lim?' / '+lim:'')+' öğrenci'+(lim?'':' (sınırsız)')+'<div><i style="--w:'+pct+'%'+(lim&&n>=lim?';background:var(--warm)':'')+'"></i></div></div></div>'+
-  '<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn primary" href="uygulama/">Uygulamayı aç</a>'+(m.member||lim==null?'':'<button class="btn warm" type="button" data-act="member">'+(req?'Başvurum':'Üye ol')+'</button>')+'<button class="btn ghost" type="button" data-act="logout">Çıkış</button></div>');}
-function memberView(){
-  const m=ME,req=m.request&&m.request.status==='bekliyor';
-  if(m.member){openDlg('<h2>Üyeliğiniz aktif</h2><p>'+fmtDate(m.member_until)+' tarihine kadar sınırsız öğrenci ekleyebilirsiniz. Uzatmak için iletişime geçin'+(CFG.iletisim?': <b>'+esc(CFG.iletisim)+'</b>':'')+'.</p>');return;}
-  const pay=(CFG.iban?'<div class="pay"><b>Havale / EFT bilgileri</b><br>'+(CFG.aliciAd?'Alıcı: '+esc(CFG.aliciAd)+'<br>':'')+'IBAN: <code>'+esc(CFG.iban)+'</code><br>Açıklama: <code>'+esc(m.email)+'</code></div>':'<div class="pay">Ödeme bilgileri başvurunuzdan sonra e-posta adresinize iletilecek.</div>');
-  if(req){openDlg('<h2>Başvurunuz alındı</h2><p>'+(m.request.plan==='yillik'?'Yıllık':'Aylık')+' üyelik başvurunuz inceleniyor. Ödemeniz görüldüğünde üyeliğiniz açılır.</p>'+pay+(CFG.iletisim?'<p class="hint">Soru ve dekont için: <b>'+esc(CFG.iletisim)+'</b></p>':''));return;}
-  openDlg('<h2>Üye olun</h2><p style="color:var(--muted)">Sınırsız öğrenci kaydı. Bu cihazda şu an '+localCount()+' / '+m.limit+' öğrenci kayıtlı.</p>'+
-  '<form id="memberForm"><label for="mPlan">Üyelik</label><select id="mPlan"><option value="aylik">Aylık'+(CFG.fiyatAylik?' · '+esc(CFG.fiyatAylik):'')+'</option><option value="yillik">Yıllık'+(CFG.fiyatYillik?' · '+esc(CFG.fiyatYillik):'')+'</option></select>'+
-  '<label for="mNote">Not <span style="font-weight:600;color:var(--muted)">(isteğe bağlı)</span></label><textarea id="mNote" maxlength="500" placeholder="Örn. ödemeyi yapan kişinin adı, okul sayısı…"></textarea>'+pay+
-  '<button class="btn primary" type="submit" style="width:100%">Başvuruyu gönder</button><p class="msg" id="mMsg" role="alert"></p></form>');}
-async function needLogin(then){
-  if(!RG.online){toast(RG.errText(new Error('not_configured')));return;}
-  if(ME){then();return;}
-  if(RG.session()&&await refreshMe()){then();return;}
-  afterLogin=then;authForm('kayit');}
-let afterLogin=null;
-
-document.addEventListener('click',async e=>{
-  const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
-  if(a==='close')closeDlg();
-  else if(a==='account'){document.getElementById('nav').classList.remove('open');if(ME)accountView();else if(RG.session()&&await refreshMe())accountView();else{afterLogin=null;authForm('giris');}}
-  else if(a==='start')location.href='uygulama/';
-  else if(a==='member')needLogin(memberView);
-  else if(a==='open-app')location.href='uygulama/';
-  else if(a==='install')installApp();
-  else if(a==='tab-giris')authForm('giris');
-  else if(a==='tab-kayit')authForm('kayit');
-  else if(a==='logout'){RG.logout();ME=null;updateAcctBtn();closeDlg();toast('Çıkış yapıldı.');}
-});
-document.addEventListener('click',e=>{const b=e.target.closest('[data-art]');if(!b)return;const a=ARTICLES.find(x=>x.id===b.dataset.art);openDlg('<article class="reader"><div class="kicker">'+a.who+' için</div><h2>'+a.t+'</h2>'+a.b+'</article>',true);});
-document.addEventListener('submit',async e=>{
-  e.preventDefault();const f=e.target;
-  if(f.id==='authForm'){
-    const m=document.getElementById('fMsg'),btn=f.querySelector('button[type=submit]'),email=document.getElementById('fEmail').value,pw=document.getElementById('fPass').value;
-    m.className='msg';m.textContent='Bekleyin…';btn.disabled=true;
-    try{
-      if(f.dataset.mode==='kayit')await RG.register(email,pw,document.getElementById('fName').value,document.getElementById('fSchool').value);
-      else await RG.login(email,pw);
-      await refreshMe();
-      if(!ME)throw new Error('bad_token');
-      const then=afterLogin||accountView;afterLogin=null;then();
-      toast(f.dataset.mode==='kayit'?'Hesabınız açıldı. Hoş geldiniz!':'Giriş yapıldı.');
-    }catch(err){m.textContent=RG.errText(err);btn.disabled=false;}
-  }
-  else if(f.id==='memberForm'){
-    const m=document.getElementById('mMsg'),btn=f.querySelector('button[type=submit]');
-    m.className='msg';m.textContent='Gönderiliyor…';btn.disabled=true;
-    try{await RG.requestMembership(document.getElementById('mPlan').value,document.getElementById('mNote').value);await refreshMe();memberView();toast('Başvurunuz alındı.');}
-    catch(err){m.textContent=RG.errText(err);btn.disabled=false;}
-  }
-});
-const mb=document.getElementById('menuBtn'),nav=document.getElementById('nav');
-mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o);});
-nav.addEventListener('click',e=>{if(e.target.tagName==='A')nav.classList.remove('open');});
-/* ---------- indir ---------- */
-async function installApp(){
-  if(RG.installed()){toast('Uygulama zaten yüklü.');return;}
-  if(await RG.install()){toast('Uygulama yükleniyor…');return;}
-  const ios=RG.isIOS();
-  openDlg('<h2>Uygulamayı indirin</h2><p style="color:var(--muted)">Mağazaya gerek yok: Rehber Takip ana ekranınıza simgesiyle eklenir ve uygulama gibi açılır.</p>'+
-  (ios?'<ol style="padding-left:20px"><li>Bu sayfayı <b>Safari</b> ile açın.</li><li>Alttaki <b>Paylaş</b> düğmesine (□↑) dokunun.</li><li><b>Ana Ekrana Ekle</b>yi seçip <b>Ekle</b> deyin.</li></ol>'
-      :'<h3>Android</h3><ol style="padding-left:20px"><li>Sayfayı <b>Chrome</b> ile açın.</li><li>Sağ üstteki <b>⋮</b> menüsüne dokunun.</li><li><b>Uygulamayı yükle</b> ya da <b>Ana ekrana ekle</b>yi seçin.</li></ol><h3>Bilgisayar</h3><p>Chrome ya da Edge\'de adres çubuğunun sağındaki <b>yükle</b> simgesine (⊕) tıklayın.</p><h3>iPhone / iPad</h3><p>Safari\'de Paylaş (□↑) → <b>Ana Ekrana Ekle</b>.</p>'));}
-
-/* ---------- ücretsiz dönem: sunucuda sınır kapalıysa üyelik bölümleri gizlenir ---------- */
-if(RG.online)RG.info().then(i=>{if(!i||i.free_limit!=null)return;
-  document.querySelectorAll('.uy').forEach(el=>el.hidden=true);
-  document.querySelectorAll('.free').forEach(el=>el.hidden=false);
-  document.getElementById('heroNote').textContent='Şimdilik tamamen ücretsiz · Öğrenci sınırı yok';
-  document.getElementById('mockMeter').firstChild.textContent='12 öğrenci';
-  document.querySelector('#mockMeter i').style.setProperty('--w','100%');
-  STEPS[3]={t:'Yedek alın',c:'Kayıtlar sizin cihazınızda. Ara sıra yedek alın, yeni bilgisayara taşıyın.',h:'<div class="fake"><div class="stu pop"><span class="av" style="background:var(--accent)">💾</span><span><b>rehber-takip-yedek.json</b><span>12 öğrenci · indirildi</span></span><span class="tag g">Tamam</span></div></div>'};
-  if(!ytId(CFG.video))renderVideo();
-}).catch(()=>{});
-if(location.hash==='#uye-ol')needLogin(memberView);
-else if(location.hash==='#indir')installApp();
-refreshMe();
+/* Rehberlik Köşesi */
+const YAZI=window.RG_YAZILAR||[];let kim='';
+function yazilar(){document.getElementById('yazilar').innerHTML=YAZI.filter(a=>!kim||a.who===kim).map(a=>'<button class="kart yazi" type="button" data-yazi="'+a.id+'"><div class="ikon">'+a.ico+'</div><div class="kim">'+a.who+' için</div><h3>'+a.t+'</h3><p>'+a.s+'</p><span class="devam">Oku →</span></button>').join('');}
+yazilar();
+document.getElementById('suzgec').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;kim=b.dataset.k;document.querySelectorAll('#suzgec button').forEach(x=>x.setAttribute('aria-pressed',x===b));yazilar();});
+document.getElementById('yazilar').addEventListener('click',e=>{const b=e.target.closest('[data-yazi]');if(!b)return;const a=YAZI.find(x=>x.id===b.dataset.yazi);ac('<article class="okuma"><div class="ust">'+a.who+' için</div><h2>'+a.t+'</h2>'+a.b+'</article>');});
 </script>
 </body>
 </html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toplantılar — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti" class="etkin">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Toplantılar</h2>
+        <p>Rehber öğretmenin katıldığı toplantılar (RAM toplantısı, kurul toplantısı vb.) — önceden planlanır, süresi başlangıç/bitiş saatiyle belirtilir. Kaydettiğinizde Gündem ve Takvim'e otomatik işlenir.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/toplanti.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="kart">
+      <h2>Yeni Toplantı Planla</h2>
+      <div class="icerik">
+        <div class="alanlar">
+          <div>
+            <label>Toplantı Türü</label>
+            <select id="tTur"><option value="">Seçiniz…</option></select>
+          </div>
+          <div id="tYeniTurAlan" style="display:none">
+            <label>Yeni Toplantı Türü Adı</label>
+            <div class="satir" style="gap:8px">
+              <input type="text" id="tYeniTurAd" placeholder="Örn. RAM Toplantısı" style="flex:1">
+              <button class="birincil" id="tYeniTurEkleBtn" type="button">Oluştur</button>
+              <button id="tYeniTurVazgecBtn" type="button">Vazgeç</button>
+            </div>
+          </div>
+          <div>
+            <label>Tarih</label>
+            <input type="text" id="tTarih" placeholder="gg.aa.yyyy">
+          </div>
+          <div>
+            <label>Başlangıç Saati</label>
+            <select id="tBaslangicSaat"></select>
+          </div>
+          <div>
+            <label>Bitiş Saati</label>
+            <select id="tBitisSaat"></select>
+          </div>
+          <div class="genis">
+            <label>Açıklama <span class="kucuk soluk">(opsiyonel)</span></label>
+            <input type="text" id="tAciklama" placeholder="Örn. Şube rehber öğretmenleri değerlendirme toplantısı…">
+          </div>
+        </div>
+        <div class="satir yazdirma-gizle" style="margin-top:14px;justify-content:flex-end">
+          <button class="birincil" id="tKaydetBtn">Kaydet</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart detay-kart">
+      <h2>Planlanan / Gerçekleşen Toplantılar</h2>
+      <div class="icerik">
+        <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
+          <div>
+            <label class="kucuk" style="color:#3c5375">Durum</label>
+            <select id="fDurum" style="max-width:160px">
+              <option value="">Tümü</option>
+              <option value="acik">Açıkta (yapılmadı)</option>
+              <option value="tamamlandi">Tamamlandı</option>
+            </select>
+          </div>
+        </div>
+        <div class="zamanlama-liste" id="toplantiListe"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var TOPLANTI_TURLERI = [];
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  TOPLANTI_TURLERI = b.toplantiTurleri || [];
+  turSeciminiDoldur();
+  saatSecenekleriDoldur(document.getElementById("tBaslangicSaat"), true);
+  saatSecenekleriDoldur(document.getElementById("tBitisSaat"), true);
+  tarihMaskeUygula(document.getElementById("tTarih"));
+  listeyiYukle();
+}).catch(apiHataGoster);
+
+function turSeciminiDoldur(seciliId) {
+  var sel = document.getElementById("tTur");
+  sel.innerHTML = '<option value="">Seçiniz…</option>' +
+    TOPLANTI_TURLERI.map(function (t) { return '<option value="' + t.id + '">' + kacHTML(t.ad) + '</option>'; }).join("") +
+    '<option value="__yeni__">+ Yeni Toplantı Türü Ekle…</option>';
+  if (seciliId) sel.value = seciliId;
+}
+
+document.getElementById("tTur").addEventListener("change", function () {
+  var yeniAlan = document.getElementById("tYeniTurAlan");
+  if (this.value === "__yeni__") {
+    yeniAlan.style.display = "";
+    document.getElementById("tYeniTurAd").focus();
+  } else {
+    yeniAlan.style.display = "none";
+  }
+});
+document.getElementById("tYeniTurVazgecBtn").addEventListener("click", function () {
+  document.getElementById("tYeniTurAlan").style.display = "none";
+  document.getElementById("tYeniTurAd").value = "";
+  document.getElementById("tTur").value = "";
+});
+document.getElementById("tYeniTurEkleBtn").addEventListener("click", function () {
+  var ad = document.getElementById("tYeniTurAd").value.trim();
+  if (!ad) { bildirim("Toplantı türü adı zorunludur.", true); return; }
+  apiPost("/api/toplanti-turleri", { ad: ad }).then(function (turler) {
+    TOPLANTI_TURLERI = turler;
+    var yeni = turler.find(function (t) { return t.ad === ad; });
+    turSeciminiDoldur(yeni ? yeni.id : "");
+    document.getElementById("tYeniTurAlan").style.display = "none";
+    document.getElementById("tYeniTurAd").value = "";
+    bildirim("Toplantı türü eklendi.");
+  }).catch(apiHataGoster);
+});
+
+document.getElementById("tKaydetBtn").addEventListener("click", function () {
+  var turId = document.getElementById("tTur").value;
+  var tarih = document.getElementById("tTarih").value.trim();
+  var basSaat = document.getElementById("tBaslangicSaat").value;
+  var bitSaat = document.getElementById("tBitisSaat").value;
+  var aciklama = document.getElementById("tAciklama").value.trim();
+  if (!turId || turId === "__yeni__") { bildirim("Toplantı türü seçmelisiniz.", true); return; }
+  if (!tarih) { bildirim("Tarih zorunludur.", true); return; }
+  if (basSaat && bitSaat && bitSaat <= basSaat) { bildirim("Bitiş saati başlangıçtan sonra olmalıdır.", true); return; }
+  apiPost("/api/toplantilar", {
+    toplantiTuruId: turId, tarih: tarih,
+    baslangicSaati: basSaat, bitisSaati: bitSaat, aciklama: aciklama,
+  }).then(function () {
+    bildirim("Toplantı kaydedildi — Gündem ve Takvim'e işlendi.");
+    document.getElementById("tTur").value = "";
+    document.getElementById("tTarih").value = "";
+    document.getElementById("tBaslangicSaat").value = "";
+    document.getElementById("tBitisSaat").value = "";
+    document.getElementById("tAciklama").value = "";
+    listeyiYukle();
+  }).catch(apiHataGoster);
+});
+
+document.getElementById("fDurum").addEventListener("change", listeyiYukle);
+
+function listeyiYukle() {
+  var p = new URLSearchParams();
+  var durum = document.getElementById("fDurum").value;
+  if (durum) p.set("durum", durum);
+  apiGet("/api/toplantilar?" + p.toString()).then(function (v) { listeCiz(v.kayitlar); }).catch(apiHataGoster);
+}
+
+function saatAraligiMetni(tp) {
+  if (tp.baslangicSaati && tp.bitisSaati) return tp.baslangicSaati + "–" + tp.bitisSaati;
+  return tp.baslangicSaati || tp.bitisSaati || "";
+}
+
+function listeCiz(kayitlar) {
+  var liste = document.getElementById("toplantiListe");
+  if (!kayitlar.length) {
+    liste.innerHTML = bosDurumHtml("Henüz toplantı planlanmadı", "Yukarıdaki formdan ilk kaydı oluşturabilirsiniz.", "takvim");
+    return;
+  }
+  var bug = new Date(); bug.setHours(0, 0, 0, 0);
+  var ayKisa = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  var satirHtml = function (tp) {
+    var parcalar = (tp.tarih || "").split(".");
+    var tpTarih = parcalar.length === 3 ? new Date(parcalar[2], parcalar[1] - 1, parcalar[0]) : null;
+    var gecti = tpTarih && tpTarih < bug && !tp.tamamlandi;
+    var saatMetni = saatAraligiMetni(tp);
+    var gosterTarih = (tpTarih ? (tpTarih.getDate() + " " + ayKisa[tpTarih.getMonth()]) : tp.tarih) + (saatMetni ? " · " + saatMetni : "");
+    var durumEtiket = tp.tamamlandi ? '<span class="etiket">Tamamlandı</span>' : (gecti ? '<span class="etiket kirmizi">Gecikti</span>' : '<span class="etiket turuncu">Yaklaşıyor</span>');
+    var metin = '<b>' + kacHTML(tp.toplantiAdi) + '</b>' + (tp.aciklama ? ' — ' + kacHTML(tp.aciklama) : "");
+    return '<div class="zamanlama-satir' + (tp.tamamlandi ? " gecti" : "") + '" data-tp-satir="' + tp.id + '">' +
+      tarihRozetiHtml(tp.tarih, saatMetni) +
+      '<div class="zamanlama-metin">' + metin + '</div>' +
+      '<div class="zamanlama-durum yazdirma-gizle" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + durumEtiket +
+      '<button style="padding:3px 9px;font-size:12.5px" data-tp-tamamla="' + tp.id + '">' + (tp.tamamlandi ? "Geri Al" : "Tamamlandı İşaretle") + '</button>' +
+      '<button style="padding:3px 9px;font-size:12.5px" data-tp-duzenle="' + tp.id + '">Tarihi Değiştir</button>' +
+      '<button class="tehlike" style="padding:3px 9px;font-size:12.5px" data-tp-sil="' + tp.id + '">Sil</button></div></div>';
+  };
+  var acik = kayitlar.filter(function (x) { return !x.tamamlandi; })
+    .sort(function (a, b) { return tarihSayi(a.tarih) - tarihSayi(b.tarih); });
+  var tamam = kayitlar.filter(function (x) { return x.tamamlandi; })
+    .sort(function (a, b) { return tarihSayi(b.tarih) - tarihSayi(a.tarih); });
+  liste.innerHTML =
+    (acik.length ? '<div class="liste-grup-baslik">Planlanan <span class="sayac">' + acik.length + '</span></div>' + acik.map(satirHtml).join("") : "") +
+    (tamam.length ? '<details class="tamamlanan-grup"' + (acik.length ? "" : " open") + '><summary class="liste-grup-baslik">Tamamlanan <span class="sayac">' + tamam.length + '</span> <span class="kucuk soluk">(göstermek için tıklayın)</span></summary>' + tamam.map(satirHtml).join("") + '</details>' : "");
+
+
+  liste.querySelectorAll("[data-tp-tamamla]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      apiPost("/api/toplantilar/" + b.getAttribute("data-tp-tamamla") + "/tamamla", {})
+        .then(function () { bildirim("Durum güncellendi."); listeyiYukle(); }).catch(apiHataGoster);
+    });
+  });
+  liste.querySelectorAll("[data-tp-sil]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var tpid = b.getAttribute("data-tp-sil");
+      onayModali({
+        baslik: "Toplantıyı Sil",
+        mesaj: "Bu planlanan toplantıyı silmek istediğinize emin misiniz?",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/toplantilar/" + tpid).then(function () { bildirim("Toplantı silindi."); listeyiYukle(); }).catch(apiHataGoster);
+      });
+    });
+  });
+  liste.querySelectorAll("[data-tp-duzenle]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var tpid = b.getAttribute("data-tp-duzenle");
+      var kayit = kayitlar.find(function (x) { return x.id === tpid; });
+      if (!kayit) return;
+      duzenleModunuAc(tpid, kayit);
+    });
+  });
+}
+
+function duzenleModunuAc(tpid, kayit) {
+  var satir = document.querySelector('[data-tp-satir="' + tpid + '"]');
+  if (!satir) return;
+  satir.innerHTML =
+    '<div class="satir" style="gap:8px;flex-wrap:wrap;align-items:flex-end;padding:2px 0;width:100%">' +
+    '<div><label class="kucuk soluk">Tarih</label><input type="text" id="dzTarih" value="' + kacHTML(kayit.tarih) + '" style="max-width:120px"></div>' +
+    '<div><label class="kucuk soluk">Başlangıç</label><select id="dzBasSaat" style="max-width:110px"></select></div>' +
+    '<div><label class="kucuk soluk">Bitiş</label><select id="dzBitSaat" style="max-width:110px"></select></div>' +
+    '<button class="birincil" id="dzKaydetBtn" type="button">Kaydet</button>' +
+    '<button id="dzVazgecBtn" type="button">Vazgeç</button></div>';
+  saatSecenekleriDoldur(document.getElementById("dzBasSaat"), true);
+  saatSecenekleriDoldur(document.getElementById("dzBitSaat"), true);
+  document.getElementById("dzBasSaat").value = kayit.baslangicSaati || "";
+  document.getElementById("dzBitSaat").value = kayit.bitisSaati || "";
+  tarihMaskeUygula(document.getElementById("dzTarih"));
+  document.getElementById("dzVazgecBtn").addEventListener("click", listeyiYukle);
+  document.getElementById("dzKaydetBtn").addEventListener("click", function () {
+    var tarih = document.getElementById("dzTarih").value.trim();
+    var basSaat = document.getElementById("dzBasSaat").value;
+    var bitSaat = document.getElementById("dzBitSaat").value;
+    if (!tarih) { bildirim("Tarih zorunludur.", true); return; }
+    if (basSaat && bitSaat && bitSaat <= basSaat) { bildirim("Bitiş saati başlangıçtan sonra olmalıdır.", true); return; }
+    apiPut("/api/toplantilar/" + tpid, { tarih: tarih, baslangicSaati: basSaat, bitisSaati: bitSaat })
+      .then(function () { bildirim("Tarih güncellendi."); listeyiYukle(); }).catch(apiHataGoster);
+  });
+}
+</script>
+</body>
+</html>

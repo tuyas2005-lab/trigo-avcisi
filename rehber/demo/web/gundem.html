@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gündem — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem" class="etkin">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Gündem</h2>
+        <p>Bugün yapılan görüşmeler ile önümüzdeki günlerin hatırlatmaları, sınıf etkinlikleri ve toplantıları — gün gün.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/gundem.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="filtre-ciplari" id="gundemFiltre"></div>
+    <div id="gundemKart"><div class="yukleniyor">Yükleniyor…</div></div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+}).catch(function () {});
+
+var GUNDEM = [], SECILI_TUR = "hepsi";
+var FILTRELER = [
+  { kod: "hepsi", ad: "Tümü" },
+  { kod: "gorusme", ad: "Görüşmeler", siniflar: ["izleme", "aile"] },
+  { kod: "plan", ad: "Hatırlatmalar", siniflar: ["plan"] },
+  { kod: "etkinlik", ad: "Sınıf Etkinlikleri", siniflar: ["etkinlik"] },
+  { kod: "toplanti", ad: "Toplantılar", siniflar: ["toplanti"] }
+];
+function filtreUyar(o, kod) {
+  if (kod === "hepsi") return true;
+  var f = FILTRELER.filter(function (x) { return x.kod === kod; })[0];
+  return f.siniflar.indexOf(gundemOgeTuru(o).sinif) >= 0;
+}
+function filtreleriCiz() {
+  var tum = [];
+  GUNDEM.forEach(function (g) { tum = tum.concat(g.ogeler); });
+  document.getElementById("gundemFiltre").innerHTML = FILTRELER.map(function (f) {
+    var n = tum.filter(function (o) { return filtreUyar(o, f.kod); }).length;
+    return '<button type="button" class="filtre-cip' + (f.kod === SECILI_TUR ? " etkin" : "") + '" data-kod="' + f.kod + '">' +
+      kacHTML(f.ad) + ' <span class="sayac">' + n + '</span></button>';
+  }).join("");
+  document.querySelectorAll("#gundemFiltre .filtre-cip").forEach(function (b) {
+    b.addEventListener("click", function () { SECILI_TUR = this.getAttribute("data-kod"); filtreleriCiz(); gundemCiz(); });
+  });
+}
+function gundemCiz() {
+  var kap = document.getElementById("gundemKart");
+  var gunler = GUNDEM.map(function (g) {
+    return { g: g, ogeler: g.ogeler.filter(function (o) { return filtreUyar(o, SECILI_TUR); })
+      .sort(function (a, b) { return (a.saat || "99:99") < (b.saat || "99:99") ? -1 : 1; }) };
+  }).filter(function (x) { return x.ogeler.length; });
+  if (!gunler.length) {
+    kap.innerHTML = '<div class="kart"><div class="icerik">' + bosDurumHtml("Bu türde yaklaşan bir iş yok",
+      "Öğrenci dosyasından hatırlatma ekleyebilir, sınıf etkinliği veya toplantı planlayabilirsiniz.", "gundem") + '</div></div>';
+    return;
+  }
+  kap.innerHTML = gunler.map(function (x) {
+    var g = x.g;
+    var parca = g.baslik.split("·");
+    var gunAdi = (parca.length > 1 ? parca[1] : parca[0]).trim().split(" ").slice(-1)[0];
+    return '<div class="gundem-gun' + (g.bugunMu ? " bugun" : "") + (g.gecikmis ? " gecikmis" : "") + '">' +
+      '<div class="gundem-tarih"><b>' + kacHTML(g.gunKisa) + '</b><span>' + kacHTML((g.ayKisa || "").split(" ")[0]) + '</span>' +
+      '<em>' + (g.bugunMu ? "Bugün" : kacHTML(gunAdi)) + '</em></div>' +
+      '<div class="gundem-ogeler">' + x.ogeler.map(function (o) {
+        var tur = gundemOgeTuru(o);
+        var yapildi = o.kaynak === "Görüşme Geçmişi";
+        var kim = o.adSoyad ? avatarHtml(o.adSoyad) + '<span><b>' + kacHTML(o.adSoyad) + '</b> <span class="soluk">' + kacHTML(o.sinif || "") + '</span></span>'
+          : '<span><b>' + (o.toplantiId ? "Toplantı" : kacHTML(o.sinif || "") + " sınıfı") + '</b></span>';
+        var metin = (o.metin || "").replace(/^\d{1,2}:\d{2}(–\d{1,2}:\d{2})?\s*—\s*/, "")
+          .replace(/^(Öğrenci|Veli) görüşmesi yapıldı\s*(—\s*)?/i, "");
+        return '<a class="gundem-oge' + (yapildi ? " yapildi" : "") + '" href="' + gundemOgeUrl(o) + '">' +
+          '<span class="gundem-saat">' + kacHTML(o.saat || (yapildi ? "✓" : "—")) + '</span>' +
+          '<span class="gundem-kim">' + kim + '</span>' +
+          '<span class="gundem-metin">' + turCipHtml(tur) + (yapildi ? ' <span class="kucuk soluk">yapıldı</span>' : "") +
+          '<span>' + kacHTML(metin) + '</span></span></a>';
+      }).join("") + '</div></div>';
+  }).join("");
+}
+apiGet("/api/gundem").then(function (v) {
+  GUNDEM = v.gunler || [];
+  filtreleriCiz();
+  gundemCiz();
+}).catch(function (e) {
+  document.getElementById("gundemKart").innerHTML = '<div class="bos">Gündem yüklenemedi.</div>';
+  apiHataGoster(e);
+});
+</script>
+</body>
+</html>

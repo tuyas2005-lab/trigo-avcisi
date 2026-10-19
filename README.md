@@ -10,8 +10,8 @@ Canlı adres: https://trigo-avcisi.vercel.app
 
 Canlı adres: https://trigo-avcisi.vercel.app/sosyal/ · Kurulum: [sosyal/KURULUM.md](sosyal/KURULUM.md)
 
-## Rehber Takip (rehber öğretmenler)
+## Öğrenci Rehberlik Takip Sistemi sitesi (rehberliktakip.com)
 
-`rehber/` klasöründe: rehberlik yazıları olan eğitim sitesi, rehber öğretmen öğrenci takip uygulaması (indirilebilir, KVKK gereği kayıtlar yalnızca öğretmenin cihazında), 30 öğrenci ücretsiz sınırı, manuel üyelik başvurusu ve yönetim sayfası.
+`rehber/` klasöründe: rehber öğretmenler için ücretsiz masaüstü programının tanıtım ve indirme sitesi. Ana sayfa (ekran görüntüleri, tarayıcıda çalışan canlı örnek ve yönlendirmeli eğitim, Rehberlik Köşesi), indirme, sürüm notları, kullanım koşulları, geliştirme talebi / iletişim.
 
-Canlı adres: https://trigo-avcisi.vercel.app/rehber/ · Kurulum: [rehber/KURULUM.md](rehber/KURULUM.md)
+Yeni sürüm: `python3 araclar/rehber-guncelle.py <yayın-zip>` · Kurulum ve ayrıntılar: [rehber/KURULUM.md](rehber/KURULUM.md)

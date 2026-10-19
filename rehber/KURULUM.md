@@ -1,64 +1,66 @@
-# Rehber Takip: kurulum
+# rehberliktakip.com: site kurulumu ve güncelleme
 
-Site `https://trigo-avcisi.vercel.app/rehber/` adresinde çalışır.
+Öğrenci Rehberlik Takip Sistemi'nin tanıtım ve indirme sitesi. `rehber/` klasörünün tamamı sitedir.
 
-| Sayfa | Adres |
-|---|---|
-| Eğitim sitesi (rehberlik yazıları, tanıtım, üyelik, SSS) | `/rehber/` |
-| Uygulama | `/rehber/uygulama/` |
-| Yönetim (üyelik onayı, yalnızca siz) | `/rehber/yonetim.html` |
+| Sayfa | Kalıcı adres | Dosya |
+|---|---|---|
+| Ana sayfa (ekran görüntüleri, canlı örnek, Rehberlik Köşesi, SSS) | `rehberliktakip.com/` | `index.html` |
+| İndirme (sürüm, tarih, koşul onayı, kurulum) | `rehberliktakip.com/indir` | `indir.html` |
+| Sürüm notları | `rehberliktakip.com/surumler` | `surumler.html` + `surumler.js` |
+| Kullanım koşulları | `rehberliktakip.com/kosullar` | `kosullar.html` |
+| Geliştirme talebi / iletişim / e-posta listesi | `rehberliktakip.com/iletisim` | `iletisim.html` |
+| Canlı örnek | `rehberliktakip.com/demo/` | `demo/` |
 
-## KVKK: veriler nerede?
+Programın **Ayarlar → Hakkında** bölümüne `rehberliktakip.com` ve sürüm notları için `rehberliktakip.com/surumler` yazılabilir. Bu adresler değişmez.
 
-- **Öğrenci kayıtları sunucuya hiç gönderilmez.** Öğretmenin kendi cihazındaki tarayıcıda (localStorage) saklanır. Uygulamadaki **Yedek al / Yedekten yükle** ile başka bilgisayara taşınır.
-- Sunucuda (Supabase) yalnızca üyelik için açılan öğretmen hesabı (ad, e-posta, okul, şifrenin özeti, üyelik bitiş tarihi) ve üyelik başvuruları tutulur.
-- Uygulama hesap açmadan da kullanılabilir. Hesap yalnızca üye olmak için gerekir.
+## 1. Alan adını bağlama (bir kez)
 
-## Veritabanı (bir kez yapılır)
+1. Vercel'de `rehberliktakip.com` alan adını satın alın (ya da başka yerden alıp Vercel'e yönlendirin).
+2. Vercel'de **Add New → Project** ile aynı GitHub deposunu (`trigo-avcisi`) yeniden içe aktarın. **Root Directory** olarak `rehber` seçin; Framework: **Other**.
+3. Projenin **Settings → Domains** sayfasında `rehberliktakip.com` ve `www.rehberliktakip.com` ekleyin.
+4. İsterseniz **Analytics** sekmesinden Web Analytics'i açın. Çerez kullanmaz, kişisel veri toplamaz; bu yüzden çerez bildirimi gerekmez.
 
-1. Supabase'de Sosyal Avcısı ile aynı projeyi açın > **SQL Editor**.
-2. `supabase/rehber-takip.sql` dosyasının tamamını yapıştırıp **Run** deyin. Tablolar `rg_` ile başlar, Sosyal Avcısı'na dokunmaz.
-3. Yönetici PIN'inizi belirleyin (en az 8 karakter):
-   ```sql
-   select public.rg_set_admin_pin('kendi-pininiz');
+`rehber/vercel.json` kısa adresleri (`/indir`, `/surumler` …) ve önbellek ayarlarını yapar. Site eski adreste (`trigo-avcisi.vercel.app/rehber/`) de çalışmaya devam eder.
+
+## 2. Yeni sürüm yayımlama
+
+1. Programın yayın zip'ini hazırlayın (KULLANIM-KOSULLARI.txt içinde olsun).
+2. Depoda şu komutu çalıştırın:
    ```
+   python3 araclar/rehber-guncelle.py Ogrenci-Rehberlik-Takip-Yayin.zip
+   ```
+   Bu komut:
+   - `indir/Ogrenci-Rehberlik-Takip-<sürüm>.zip` dosyasını üretir (tek klasörlü; `gelistirme/`, `veri/`, `hata*.log` gibi dosyalar ayıklanır; eski sürüm dosyası silinir),
+   - `indir/surum.js` dosyasına sürüm numarasını ve dosya boyutunu yazar,
+   - canlı örneği (`demo/web/`, `demo/program.zip`) yeni sürümden yeniden üretir,
+   - KULLANIM-KOSULLARI.txt metnini **kelimesi kelimesine** `kosullar.html` ve `indir.html` içine yerleştirir.
+3. `surumler.js` dosyasının **en üstüne** yeni sürümü ekleyin: sürüm, tarih (`YYYY-AA-GG`), başlık, maddeler. Önemli bir hata düzeltmesiyse `onemli:true` yazın; sitede kırmızı **ÖNEMLİ GÜNCELLEME** etiketi çıkar.
+4. Commit edip gönderin; Vercel siteyi kendiliğinden günceller.
 
-## Ücretsiz dönem ve 30 öğrenci sınırı
+## 3. Ayarlar (`config.js`)
 
-Sınır sunucudaki tek bir ayardır; site ve uygulama kendiliğinden uyum sağlar.
+- `eposta`: geliştirme talepleri ve iletişim adresi. Boşsa iletişim formu "adres henüz eklenmedi" der.
+- `whatsapp`: isteğe bağlı, ülke koduyla (örn. `905xxxxxxxxx`).
+- `video`: YouTube "nasıl kullanılır" videosunun bağlantısı. Boşsa ana sayfada yalnızca 4 adımlık kurulum kartları görünür.
+- `supabaseUrl`, `supabaseKey`: indirme sayacı ve e-posta listesi (aşağıda).
 
-```sql
--- Şimdilik herkese ücretsiz, sınır yok (üyelik bölümleri sitede gizlenir):
-update public.rg_settings set free_limit = null;
+## 4. İndirme sayacı ve e-posta listesi (Supabase, bir kez)
 
--- 30 öğrenci sınırını ve üyelik sistemini açmak:
-update public.rg_settings set free_limit = 30;
-```
+Supabase **SQL Editor**'de `supabase/rehber-site.sql` dosyasını çalıştırın.
 
-Not: Kayıtlar öğretmenin cihazında durduğu için sınır da cihazda uygulanır. Bilgili biri tarayıcı verisini değiştirerek aşabilir; bu, verinin sunucuya hiç gitmemesinin bedelidir.
+- **İndirme sayacı:** İndir düğmesine her basılışta o sürümün sayısı bir artar. IP, tarayıcı, tarih gibi hiçbir bilgi kaydedilmez. Görmek için: `select * from public.rs_indirme order by surum desc;`
+- **E-posta listesi:** Yalnızca gönüllü bırakılan adresler ve onaylanan aydınlatma metninin sürümü. Liste: `select eposta, kayit from public.rs_abone order by kayit;`. Ziyaretçi `rehberliktakip.com/iletisim#cik` adresinden kendisi çıkabilir. Duyuru e-postalarının altına bu bağlantıyı koyun. Birini elle silmek için: `delete from public.rs_abone where eposta = '...';`
 
-## Üyelik (manuel ödeme)
+Site çerez kullanmaz. İndirenlerin listesi tutulmaz.
 
-1. `rehber/config.js` içine fiyatları, IBAN'ı, alıcı adını ve iletişim adresini yazın. Boş alanlar sitede görünmez.
-2. Öğretmen sitede hesap açar, **Üye ol** ile aylık/yıllık başvurur ve havale açıklamasına e-postasını yazar.
-3. Siz `/rehber/yonetim.html` sayfasında PIN'le girersiniz. Ödeme gelince **Ödeme alındı · 1 ay/1 yıl aç** dersiniz. Bitiş tarihini öğretmen satırından elle de değiştirebilirsiniz.
+## 5. Canlı örnek nasıl çalışır?
 
-## Uygulamayı indirme
+`demo/` sayfası programın **gerçek** `sunucu.py` dosyasını ziyaretçinin tarayıcısında çalıştırır (Pyodide, cdn.jsdelivr.net'ten yüklenir, yaklaşık 14 MB). Program sayfalarının `/api/...` istekleri `demo/sw.js` üzerinden `demo/kopru.py`'ye gider. Bu yüzden canlı örnek, programın her yeni sürümünde kendiliğinden aynı kalır.
 
-Site, "ana ekrana eklenebilen" bir web uygulamasıdır (PWA). **Uygulamayı indir** düğmesi Android'de ve bilgisayarda Chrome/Edge'in kurulum penceresini açar. iPhone'da kullanıcıya Safari > Paylaş > Ana Ekrana Ekle adımları gösterilir. Mağazaya yüklemek gerekmez.
+- Bir **ÖRNEK ÖĞRENCİ** kaydıyla başlar. En fazla **20 öğrenci** eklenebilir. Kayıtlar yalnızca ziyaretçinin tarayıcısında (IndexedDB) durur.
+- İlk açılışta **yönlendirmeli eğitim** başlar: ekranın ilgili yeri vurgulanır, "buraya basın" denir. **Eğitimi geç** ile atlanabilir, üst şeritteki **❔ Eğitim** ile yeniden açılır. Adımlar `demo/index.html` içindeki `ADIMLAR` listesindedir; programda bir düğmenin kimliği (`id`) değişirse buradaki seçici de güncellenmelidir.
+- Canlı örnekte lisans kilidi kapalıdır, koşullar önceden onaylanmıştır, kullanıcı adı "Rehber Öğretmen"dir. Dosyadan okuma gerektiren bazı özellikler (fotoğraftan çizelge okuma gibi) tarayıcıda çalışmaz.
 
-## "Nasıl kullanılır?" videosu
+## 6. Ekran görüntüleri
 
-Video yokken sayfada 4 adımlı canlı tanıtım döner. Videoyu YouTube'a yükledikten sonra bağlantısını `rehber/config.js` içindeki `video:` alanına yazın; sayfada video oynatıcı görünür.
-
-Önerilen çekim (ekran kaydı, 2-3 dakika, telefon dikey değil yatay):
-
-1. **(0:00) Giriş:** "Rehber Takip, rehber öğretmenler için öğrenci takip uygulaması. KVKK kapsamında öğrenci bilgileri yalnızca sizin bilgisayarınızda saklanıyor."
-2. **(0:15) İndirme:** Siteyi açın, **Uygulamayı indir**'e basın, kurulum penceresini gösterin. Masaüstünde açılan simgeyi gösterin.
-3. **(0:40) Öğrenci ekleme:** **+ Öğrenci ekle** > ad (örn. "Ayşe K."), sınıf, takip konusu > Kaydet. Adın yalnızca baş harfle yazılmasını önerin.
-4. **(1:10) Görüşme notu:** Öğrenciye dokunun, yeni görüşme notu yazın, durumu "İzleniyor" yapın.
-5. **(1:40) Arama:** Arama kutusuna sınıf ya da konu yazarak süzün.
-6. **(2:00) Yedek:** **Yedek al** ile dosyayı indirin; yeni bilgisayarda **Yedekten yükle**.
-7. **(2:20) Kapanış:** Rehberlik Köşesi yazılarını gösterip siteye davet edin.
-
-Videoda gerçek öğrenci adı kullanmayın; örnek adlarla çekin.
+`img/` klasöründeki görüntüler gerçek programdan, **uydurma** örnek verilerle alındı. Yenilemek için programı kendi bilgisayarınızda örnek verilerle açıp 1440×900 ekran görüntüsü alın; aynı adla `img/*.webp` olarak kaydedin (`-k` ekli olanlar 720×450 küçük kopyalardır).

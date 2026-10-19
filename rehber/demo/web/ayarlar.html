@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayarlar — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar" class="etkin">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Ayarlar</h2>
+        <p>Okul ve öğretmen bilgileri, etiketler, etkinlik ve toplantı türleri, sınıf öğretmenleri ve güvenlik.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/ayarlar.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="sekme-cubugu" id="ayarSekmeler">
+      <button type="button" class="etkin" data-sekme="okul">Okul ve Öğretmen</button>
+      <button type="button" data-sekme="turler">Etiketler ve Türler</button>
+      <button type="button" data-sekme="siniflar">Sınıflar</button>
+      <button type="button" data-sekme="toplu">Toplu Çıktı</button>
+      <button type="button" data-sekme="yedek">Yedekler</button>
+      <button type="button" data-sekme="gorunum">Görünüm ve Bildirim</button>
+      <button type="button" data-sekme="guvenlik">Güvenlik</button>
+      <button type="button" data-sekme="hakkinda">Hakkında</button>
+    </div>
+    <div class="sekme-paneli" data-panel="okul">
+    <div class="kart">
+      <h2>Okul ve Rehber Öğretmen Bilgileri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Bu bilgiler görüşme formlarında otomatik olarak yer alır — imza yerine adınız, "Okulu" alanına okul adınız yazılır.</p>
+        <div class="alanlar">
+          <div><label>Okul Adı</label><input type="text" id="aOkulAdi"></div>
+          <div><label>İlçe / İl</label><input type="text" id="aIlceIl"></div>
+          <div><label>Rehber Öğretmen Adı Soyadı</label><input type="text" id="aRehberAdSoyad"></div>
+          <div><label>Unvan</label><input type="text" id="aUnvan"></div>
+        </div>
+        <div class="satir yazdirma-gizle" style="margin-top:14px;justify-content:flex-end">
+          <button class="birincil" id="ayarlarKaydetBtn">Kaydet</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Okul Logosu</h2>
+      <div class="icerik">
+        <div class="logo-ayar">
+          <div class="logo-onizleme" id="logoOnizleme"><span class="kucuk soluk">Logo yok</span></div>
+          <div class="logo-ayar-metin">
+            <p class="kucuk soluk" style="margin-top:0">Logo; görüşme formlarının başlığında, dönem sonu faaliyet raporunun kapağında, rapor çıktılarında ve sol menünün üstünde görünür. Bu bilgisayarda <b>veri</b> klasöründe saklanır, internete gönderilmez; program güncellemelerinde silinmez.</p>
+            <p class="kucuk soluk">PNG, JPG veya WEBP. En iyi sonuç için kare ve arka planı şeffaf (PNG) bir görsel kullanın.</p>
+            <div class="satir" style="gap:10px;flex-wrap:wrap">
+              <button type="button" class="birincil" id="logoSecBtn">Logo Seç…</button>
+              <input type="file" id="logoDosya" accept="image/png,image/jpeg,image/webp" hidden>
+              <button id="logoKaldirBtn" hidden>Logoyu Kaldır</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div class="sekme-paneli" data-panel="toplu" hidden>
+    <div class="kart">
+      <h2>Görüşme Formlarını Toplu Yazdır</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Seçtiğiniz tarihler arasındaki bütün görüşmelerin resmi formları tek seferde hazırlanır; her form ayrı bir A4 sayfasına basılır. Yazdır penceresinde yazıcı yerine "PDF olarak kaydet" seçerek tek bir PDF dosyası da alabilirsiniz.</p>
+        <div class="satir" style="gap:12px;flex-wrap:wrap;align-items:flex-end">
+          <div><label class="kucuk">Başlangıç Tarihi</label><input type="text" id="tBas" placeholder="gg.aa.yyyy" style="max-width:130px"></div>
+          <div><label class="kucuk">Bitiş Tarihi</label><input type="text" id="tBit" placeholder="gg.aa.yyyy" style="max-width:130px"></div>
+          <div><label class="kucuk">Görüşme Türü</label><select id="tTur" style="max-width:190px"><option value="">Öğrenci + Veli</option><option value="ogrenci">Yalnızca öğrenci</option><option value="veli">Yalnızca veli</option></select></div>
+          <div><label class="kucuk">Sınıf</label><select id="tSinif" style="max-width:140px"><option value="">Tüm sınıflar</option></select></div>
+          <div><label class="kucuk">Görüşme Konusu</label><select id="tKonu" style="max-width:220px"><option value="">Tüm konular</option></select></div>
+        </div>
+        <div class="satir" style="margin-top:16px;gap:12px;align-items:center;flex-wrap:wrap">
+          <button class="birincil" id="tHazirlaBtn">Çıktıyı Hazırla</button>
+          <span class="kucuk soluk" id="tSayi"></span>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="sekme-paneli" data-panel="yedek" hidden>
+    <div class="kart">
+      <h2>Veri Yedekleme</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Program açık olduğu her gün bütün verileriniz (öğrenciler, görüşmeler, etkinlikler, toplantılar, ayarlar, logo) otomatik olarak yedeklenir. Aşağıdaki listeden istediğiniz tarihe geri dönebilirsiniz. Geri dönmeden önce o anki durumunuz da ayrıca yedeklenir; yani geri dönüş de geri alınabilir.</p>
+        <div class="yedek-ozet">
+          <div><span class="kucuk soluk">Son yedek</span><b id="ySon">—</b></div>
+          <div><span class="kucuk soluk">Yedek sayısı</span><b id="ySayi">—</b></div>
+          <button class="birincil" id="yAlBtn">Şimdi Yedekle</button>
+        </div>
+        <div class="alanlar" style="margin-top:16px">
+          <div><label>Otomatik yedekler kaç gün saklansın?</label>
+            <select id="yGun"><option value="7">7 gün</option><option value="14">14 gün</option><option value="30">30 gün</option><option value="60">60 gün</option><option value="90">90 gün</option><option value="365">1 yıl</option></select></div>
+          <div class="genis"><label>Ek yedek klasörü <span class="kucuk soluk">(isteğe bağlı — ör. USB bellek veya başka disk: <code>E:\RehberlikYedek</code>)</span></label>
+            <div class="satir" style="gap:8px"><input type="text" id="yEk" placeholder="Boş bırakılırsa yalnızca program klasörüne yedeklenir" style="flex:1"><button id="yAyarKaydet">Kaydet</button></div></div>
+        </div>
+        <p class="kucuk soluk" id="yKlasor" style="margin-bottom:0"></p>
+      </div>
+    </div>
+    <div class="kart">
+      <h2>Yedekler</h2>
+      <div class="icerik" style="padding-top:6px">
+        <div class="tablo-sarma"><table class="yedek-tablo"><thead><tr><th>Tarih</th><th>Tür</th><th class="s">Öğrenci</th><th class="s">Görüşme</th><th class="s">Boyut</th><th></th></tr></thead>
+        <tbody id="yListe"><tr><td colspan="6" class="soluk">Yükleniyor…</td></tr></tbody></table></div>
+      </div>
+    </div>
+    </div>
+    <div class="sekme-paneli" data-panel="gorunum" hidden>
+    <div class="kart">
+      <h2>Görünüm</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Programın renklerini seçin. Seçiminiz hemen uygulanır ve bu bilgisayarda hatırlanır. Yazdırılan formlar ve raporlar her zaman beyaz kâğıt görünümünde çıkar.</p>
+        <div class="tema-secim" id="temaSecim">
+          <button type="button" data-tema="acik"><span class="tema-onizleme acik"><i></i><b></b><b></b></span><strong>Açık</strong><span>Beyaz zemin</span></button>
+          <button type="button" data-tema="koyu"><span class="tema-onizleme koyu"><i></i><b></b><b></b></span><strong>Koyu</strong><span>Göz yormayan koyu zemin</span></button>
+          <button type="button" data-tema="sistem"><span class="tema-onizleme sistem"><i></i><b></b><b></b></span><strong>Bilgisayara göre</strong><span>Windows ayarını izler</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="kart">
+      <h2>Etkinlik Bildirimleri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Saati girilmiş sınıf etkinliği, toplantı ve öğrenci hatırlatmalarının vakti gelince, program açıkken ekranın sağ üst köşesinde zil çalan bir bildirim kartı çıkar. Karttan "Tamamlandı" diyebilir, 5 dakika erteleyebilir ya da kapatabilirsiniz.</p>
+        <div class="bildirim-ayar">
+          <label class="cizelge-onay"><input type="checkbox" id="bAcik"> Bildirimler açık</label>
+          <div class="satir" style="gap:8px;align-items:center"><span>Bildirim</span>
+            <select id="bOnce" style="width:auto"><option value="0">tam vaktinde</option><option value="5">5 dk önce</option><option value="10">10 dk önce</option><option value="15">15 dk önce</option><option value="30">30 dk önce</option></select>
+            <span>gelsin</span></div>
+          <label class="cizelge-onay"><input type="checkbox" id="bSes"> Zil sesi çalsın</label>
+          <label class="cizelge-onay"><input type="checkbox" id="bWindows"> Program arka plandayken Windows bildirimi de göster</label>
+          <div class="satir" style="gap:10px;margin-top:4px"><button type="button" id="bDene">Örnek bildirimi göster</button></div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="sekme-paneli" data-panel="turler" hidden>
+    <div class="kart detay-kart">
+      <h2>Öğrenci Etiketleri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Öğrenci dosyalarına eklenebilecek özel etiketleri buradan tanımlayın. Öğrenciler ekranındaki filtrede bu etiketler görünür.</p>
+        <div class="filtre-cip-alan" id="etiketListesi" style="margin-bottom:16px"></div>
+        <div class="satir" style="gap:12px;align-items:center;flex-wrap:wrap">
+          <input type="text" id="yeniEtiketAd" placeholder="Yeni etiket adı…" style="max-width:220px">
+          <div class="renk-palet" id="yeniEtiketRenkPalet"></div><input type="hidden" id="yeniEtiketRenk" value="mavi">
+          <button class="birincil" id="etiketEkleBtn">+ Etiket Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart detay-kart">
+      <h2>Sınıf Etkinliği Türleri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Sınıf Etkinliği sayfasından bir sınıfa planlanabilecek etkinlik türlerini (örn. "Rehberlik Tanıtım Dersi") buradan tanımlayın. Yeni bir tür Sınıf Etkinliği sayfasındaki formdan da eklenebilir.</p>
+        <div class="filtre-cip-alan" id="etkinlikTuruListesi" style="margin-bottom:16px"></div>
+        <div class="satir" style="gap:8px">
+          <input type="text" id="yeniEtkinlikTuruAd" placeholder="Yeni etkinlik türü adı…" style="max-width:260px">
+          <button class="birincil" id="etkinlikTuruEkleBtn">+ Etkinlik Türü Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart detay-kart">
+      <h2>Toplantı Türleri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Toplantılar sayfasından planlanabilecek toplantı türlerini (örn. "Zümre Toplantısı", "RAM Toplantısı") buradan tanımlayın. Yeni bir tür Toplantılar sayfasındaki formdan da eklenebilir.</p>
+        <div class="filtre-cip-alan" id="toplantiTuruListesi" style="margin-bottom:16px"></div>
+        <div class="satir" style="gap:8px">
+          <input type="text" id="yeniToplantiTuruAd" placeholder="Yeni toplantı türü adı…" style="max-width:260px">
+          <button class="birincil" id="toplantiTuruEkleBtn">+ Toplantı Türü Ekle</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div class="sekme-paneli" data-panel="siniflar" hidden>
+    <div class="kart detay-kart">
+      <h2>Sınıf / Şube Öğretmenleri</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">Öğrenci listesi yüklendiğinde sınıf öğretmeni bilgisi otomatik alınır; burada gerektiğinde düzeltebilirsiniz.</p>
+        <table>
+          <thead><tr><th>Sınıf</th><th>Sınıf Öğretmeni</th><th>Öğrenci Sayısı</th><th></th></tr></thead>
+          <tbody id="siniflarGovde"><tr><td colspan="4" class="bos">Yükleniyor…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    </div>
+    <div class="sekme-paneli" data-panel="guvenlik" hidden>
+    <div class="kart detay-kart">
+      <h2>Lisans / Etkinleştirme</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0">
+          Bu bir giriş şifresi değildir. Program klasörü başka bir bilgisayara kopyalanırsa,
+          o bilgisayarda program hiç çalışmaz ve doğru şifre girilene kadar hiçbir sayfa
+          görüntülenmez. Bu bilgisayarda program şifreye ihtiyaç duymadan çalışmaya devam eder.
+          Bu koruma, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında
+          öğrenci ve veli kişisel verilerinin yetkisiz kişilerce erişilmesini/kopyalanmasını
+          önlemek amacıyla uygulanmaktadır.
+        </p>
+        <p><b>Bu Bilgisayarın Durumu:</b> <span id="lDurumEtiket">Yükleniyor…</span></p>
+        <div class="alanlar" style="margin-top:10px">
+          <div><label>Mevcut Şifre</label><input type="password" id="lEskiSifre" autocomplete="current-password"></div>
+          <div><label>Yeni Şifre</label><input type="password" id="lYeniSifre1" autocomplete="new-password"></div>
+          <div><label>Yeni Şifre (Tekrar)</label><input type="password" id="lYeniSifre2" autocomplete="new-password"></div>
+        </div>
+        <div class="satir yazdirma-gizle" style="margin-top:14px;justify-content:flex-end">
+          <button class="birincil" id="lSifreDegistirBtn">Şifreyi Değiştir</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div class="sekme-paneli" data-panel="hakkinda" hidden>
+    <div class="kart detay-kart">
+      <h2>Hakkında</h2>
+      <div class="icerik">
+        <dl class="hakkinda-izgara" id="hakkindaBilgi"><dt>Program</dt><dd>Yükleniyor…</dd></dl>
+        <div class="hakkinda-uyari">
+          Bu program <b>ücretsizdir</b> ve <b>"olduğu gibi"</b> sunulur. Girdiğiniz bütün bilgiler yalnızca bu
+          bilgisayarda tutulur; geliştiriciye veya başka birine gönderilmez. Verilerin hukuka uygun işlenmesi,
+          korunması ve düzenli yedeklenmesi kullanıcının ve bağlı olduğu kurumun sorumluluğundadır.
+          Program Millî Eğitim Bakanlığı'nın resmî yazılımı değildir.
+        </div>
+      </div>
+    </div>
+    <div class="kart detay-kart">
+      <h2>Kullanım Koşulları</h2>
+      <div class="icerik">
+        <p class="kucuk soluk" style="margin-top:0" id="kosulDurum">Yükleniyor…</p>
+        <div class="satir" style="gap:10px;flex-wrap:wrap">
+          <button type="button" class="birincil" id="kosulAcBtn">Kullanım Koşullarını Görüntüle</button>
+        </div>
+      </div>
+    </div>
+    <div class="kart detay-kart">
+      <h2>Üçüncü Taraf Bileşenler</h2>
+      <div class="icerik">
+        <ul class="kucuk" style="margin:0;padding-left:18px;line-height:1.7">
+          <li><b>pypdf</b> — PDF okuma kütüphanesi (BSD lisansı). Lisans metni: <code>uygulama/kutuphane/pypdf-LISANS.txt</code></li>
+          <li><b>Nunito / Nunito Sans</b> yazı tipleri (SIL Open Font License 1.1). Lisans metinleri: <code>uygulama/web/assets/font/</code></li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    <div class="imza-alani">
+      <div class="kucuk soluk surum-etiketi" id="surumEtiketi">&nbsp;</div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  document.getElementById("aOkulAdi").value = b.ayarlar.okulAdi || "";
+  document.getElementById("aIlceIl").value = b.ayarlar.ilceIl || "";
+  document.getElementById("aRehberAdSoyad").value = b.ayarlar.rehberAdSoyad || "";
+  document.getElementById("aUnvan").value = b.ayarlar.unvan || "";
+  etiketlerCiz(b.etiketler);
+  etkinlikTurleriCiz(b.etkinlikTurleri || []);
+  toplantiTurleriCiz(b.toplantiTurleri || []);
+  document.getElementById("surumEtiketi").textContent = "Sürüm " + (b.surum || "—");
+  logoOnizlemeCiz(b.logoSurum);
+  topluCiktiHazirla(b);
+  bildirimAyarlariHazirla(b);
+}).catch(apiHataGoster);
+
+document.getElementById("ayarlarKaydetBtn").addEventListener("click", function () {
+  apiPut("/api/ayarlar", {
+    okulAdi: document.getElementById("aOkulAdi").value.trim(),
+    ilceIl: document.getElementById("aIlceIl").value.trim(),
+    rehberAdSoyad: document.getElementById("aRehberAdSoyad").value.trim(),
+    unvan: document.getElementById("aUnvan").value.trim(),
+  }).then(function () { bildirim("Ayarlar kaydedildi."); }).catch(apiHataGoster);
+});
+
+/* ---- okul logosu: tarayıcıda en fazla 640 px PNG'ye küçültülür, sonra yerel sunucuya kaydedilir ---- */
+function logoOnizlemeCiz(surum) {
+  var kutu = document.getElementById("logoOnizleme");
+  kutu.innerHTML = surum ? '<img src="' + okulLogoUrl(surum) + '" alt="Okul logosu">' : '<span class="kucuk soluk">Logo yok</span>';
+  document.getElementById("logoKaldirBtn").hidden = !surum;
+  menuLogosunuUygula(surum);
+}
+document.getElementById("logoSecBtn").addEventListener("click", function () { document.getElementById("logoDosya").click(); });
+document.getElementById("logoDosya").addEventListener("change", function () {
+  var dosya = this.files && this.files[0];
+  this.value = "";
+  if (!dosya) return;
+  if (!/^image\/(png|jpeg|webp)$/.test(dosya.type)) { bildirim("Lütfen PNG, JPG veya WEBP bir resim seçin.", true); return; }
+  var okuyucu = new FileReader();
+  okuyucu.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var en = 640, oran = Math.min(1, en / Math.max(img.width, img.height));
+      var c = document.createElement("canvas");
+      c.width = Math.round(img.width * oran); c.height = Math.round(img.height * oran);
+      var ctx = c.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      apiPut("/api/okul-logo", { resim: c.toDataURL("image/png") }).then(function (y) {
+        logoOnizlemeCiz(y.logoSurum);
+        bildirim("Okul logosu kaydedildi.");
+      }).catch(apiHataGoster);
+    };
+    img.onerror = function () { bildirim("Resim okunamadı.", true); };
+    img.src = okuyucu.result;
+  };
+  okuyucu.readAsDataURL(dosya);
+});
+document.getElementById("logoKaldirBtn").addEventListener("click", function () {
+  if (!confirm("Okul logosu kaldırılsın mı?")) return;
+  apiDelete("/api/okul-logo").then(function () { logoOnizlemeCiz(0); bildirim("Logo kaldırıldı."); }).catch(apiHataGoster);
+});
+
+function etiketlerCiz(etiketler) {
+  var alan = document.getElementById("etiketListesi");
+  alan.innerHTML = etiketler.length ? etiketler.map(function (e) {
+    return '<span class="rozet-etiket ' + e.renk + '">' + kacHTML(e.ad) + ' <span class="sil" data-eid="' + e.id + '">✕</span></span>';
+  }).join("") : '<span class="kucuk soluk">Henüz etiket tanımlanmadı.</span>';
+  alan.querySelectorAll("[data-eid]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var eid = this.getAttribute("data-eid");
+      onayModali({
+        baslik: "Etiketi Sil",
+        mesaj: "Bu etiketi silmek istediğinize emin misiniz? Öğrencilerden de kaldırılacaktır.",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/etiketler/" + eid).then(function (e2) { etiketlerCiz(e2); bildirim("Etiket silindi."); }).catch(apiHataGoster);
+      });
+    });
+  });
+}
+
+(function renkPaletiKur() {
+  var alan = document.getElementById("yeniEtiketRenkPalet");
+  var gizli = document.getElementById("yeniEtiketRenk");
+  alan.innerHTML = ETIKET_RENKLER.map(function (r) {
+    return '<button type="button" title="' + r.isim + '" data-renk="' + r.ad + '" style="background:' + r.koyu + '"></button>';
+  }).join("") + '<span class="renk-adi" id="seciliRenkAdi"></span>';
+  function sec(ad) {
+    gizli.value = ad;
+    alan.querySelectorAll("button").forEach(function (b) { b.classList.toggle("secili", b.getAttribute("data-renk") === ad); });
+    document.getElementById("seciliRenkAdi").textContent = etiketRengi(ad).isim;
+  }
+  alan.querySelectorAll("button").forEach(function (b) {
+    b.addEventListener("click", function () { sec(this.getAttribute("data-renk")); });
+  });
+  sec("mavi");
+})();
+
+document.getElementById("etiketEkleBtn").addEventListener("click", function () {
+  var ad = document.getElementById("yeniEtiketAd").value.trim();
+  if (!ad) { bildirim("Etiket adı zorunludur.", true); return; }
+  apiPost("/api/etiketler", { ad: ad, renk: document.getElementById("yeniEtiketRenk").value }).then(function (e2) {
+    etiketlerCiz(e2);
+    document.getElementById("yeniEtiketAd").value = "";
+    bildirim("Etiket eklendi.");
+  }).catch(apiHataGoster);
+});
+
+function etkinlikTurleriCiz(turler) {
+  var alan = document.getElementById("etkinlikTuruListesi");
+  alan.innerHTML = turler.length ? turler.map(function (t) {
+    return '<span class="rozet-etiket mor">' + kacHTML(t.ad) + ' <span class="sil" data-tid="' + t.id + '">✕</span></span>';
+  }).join("") : '<span class="kucuk soluk">Henüz etkinlik türü tanımlanmadı.</span>';
+  alan.querySelectorAll("[data-tid]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var tid = this.getAttribute("data-tid");
+      onayModali({
+        baslik: "Etkinlik Türünü Sil",
+        mesaj: "Bu etkinlik türünü silmek istediğinize emin misiniz? Bu türde planlanmış sınıf etkinlikleri de birlikte silinecektir.",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/etkinlik-turleri/" + tid).then(function (t2) { etkinlikTurleriCiz(t2); bildirim("Etkinlik türü silindi."); }).catch(apiHataGoster);
+      });
+    });
+  });
+}
+
+document.getElementById("etkinlikTuruEkleBtn").addEventListener("click", function () {
+  var ad = document.getElementById("yeniEtkinlikTuruAd").value.trim();
+  if (!ad) { bildirim("Etkinlik türü adı zorunludur.", true); return; }
+  apiPost("/api/etkinlik-turleri", { ad: ad }).then(function (t2) {
+    etkinlikTurleriCiz(t2);
+    document.getElementById("yeniEtkinlikTuruAd").value = "";
+    bildirim("Etkinlik türü eklendi.");
+  }).catch(apiHataGoster);
+});
+
+function toplantiTurleriCiz(turler) {
+  var alan = document.getElementById("toplantiTuruListesi");
+  alan.innerHTML = turler.length ? turler.map(function (t) {
+    return '<span class="rozet-etiket teal">' + kacHTML(t.ad) + ' <span class="sil" data-tpid="' + t.id + '">✕</span></span>';
+  }).join("") : '<span class="kucuk soluk">Henüz toplantı türü tanımlanmadı.</span>';
+  alan.querySelectorAll("[data-tpid]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var tid = this.getAttribute("data-tpid");
+      onayModali({
+        baslik: "Toplantı Türünü Sil",
+        mesaj: "Bu toplantı türünü silmek istediğinize emin misiniz? Bu türde planlanmış toplantılar da birlikte silinecektir.",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/toplanti-turleri/" + tid).then(function (t2) { toplantiTurleriCiz(t2); bildirim("Toplantı türü silindi."); }).catch(apiHataGoster);
+      });
+    });
+  });
+}
+
+document.getElementById("toplantiTuruEkleBtn").addEventListener("click", function () {
+  var ad = document.getElementById("yeniToplantiTuruAd").value.trim();
+  if (!ad) { bildirim("Toplantı türü adı zorunludur.", true); return; }
+  apiPost("/api/toplanti-turleri", { ad: ad }).then(function (t2) {
+    toplantiTurleriCiz(t2);
+    document.getElementById("yeniToplantiTuruAd").value = "";
+    bildirim("Toplantı türü eklendi.");
+  }).catch(apiHataGoster);
+});
+
+function siniflarYukle() {
+  Promise.all([apiGet("/api/siniflar"), apiGet("/api/ogrenciler?sayfa=1&tumu=1")]).then(function (r) {
+    var siniflar = r[0];
+    var adlar = Object.keys(siniflar).sort();
+    var govde = document.getElementById("siniflarGovde");
+    if (!adlar.length) {
+      govde.innerHTML = '<tr><td colspan="4" class="bos">Henüz sınıf tanımlanmadı — öğrenci listesi içe aktardığınızda otomatik oluşur.</td></tr>';
+      return;
+    }
+    var sayilar = {};
+    (r[1].kayitlar || []).forEach(function (k) { sayilar[k.sinif] = (sayilar[k.sinif] || 0) + 1; });
+    govde.innerHTML = adlar.map(function (s) {
+      return '<tr><td>' + kacHTML(s) + '</td><td><input type="text" data-sinif="' + kacHTML(s) + '" value="' + kacHTML(siniflar[s].ogretmen || "") + '" style="max-width:220px"></td>' +
+        '<td>' + gSayi(sayilar[s] || 0) + '</td>' +
+        '<td><button data-sinif-kaydet="' + kacHTML(s) + '">Kaydet</button></td></tr>';
+    }).join("");
+    govde.querySelectorAll("[data-sinif-kaydet]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var sinif = this.getAttribute("data-sinif-kaydet");
+        var girdi = govde.querySelector('input[data-sinif="' + CSS.escape(sinif) + '"]');
+        apiPost("/api/siniflar", { sinif: sinif, ogretmen: girdi.value.trim() }).then(function () {
+          bildirim("Sınıf öğretmeni güncellendi.");
+        }).catch(apiHataGoster);
+      });
+    });
+  }).catch(apiHataGoster);
+}
+siniflarYukle();
+
+apiGet("/api/lisans/durum").then(function (d) {
+  var etiket = document.getElementById("lDurumEtiket");
+  if (d.durum === "yetkili") {
+    etiket.innerHTML = '<span class="etiket yesil">Yetkili (orijinal bilgisayar)</span>';
+  } else if (d.durum === "kilitli") {
+    etiket.innerHTML = '<span class="etiket kirmizi">Kilitli</span>';
+  } else {
+    etiket.innerHTML = '<span class="etiket">Etkinleştirilmemiş</span>';
+  }
+}).catch(function () { document.getElementById("lDurumEtiket").textContent = "—"; });
+
+document.getElementById("lSifreDegistirBtn").addEventListener("click", function () {
+  var eski = document.getElementById("lEskiSifre").value;
+  var yeni1 = document.getElementById("lYeniSifre1").value;
+  var yeni2 = document.getElementById("lYeniSifre2").value;
+  if (yeni1.length < 4) { bildirim("Yeni şifre en az 4 karakter olmalıdır.", true); return; }
+  if (yeni1 !== yeni2) { bildirim("Yeni şifreler birbiriyle uyuşmuyor.", true); return; }
+  apiPost("/api/lisans/sifre-degistir", { eskiSifre: eski, yeniSifre: yeni1 }).then(function () {
+    bildirim("Lisans şifresi değiştirildi.");
+    ["lEskiSifre", "lYeniSifre1", "lYeniSifre2"].forEach(function (id) { document.getElementById(id).value = ""; });
+  }).catch(apiHataGoster);
+});
+
+/* ---- yedekler ---- */
+function boyutMetni(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; }
+function yedekleriYukle() {
+  apiGet("/api/yedekler").then(function (v) {
+    document.getElementById("yGun").value = String(v.ayar.gun || 30);
+    document.getElementById("yEk").value = v.ayar.ekKlasor || "";
+    document.getElementById("yKlasor").textContent = "Yedeklerin bulunduğu klasör: " + v.klasor;
+    document.getElementById("ySayi").textContent = v.liste.length;
+    document.getElementById("ySon").textContent = v.liste.length ? v.liste[0].tarih : "Henüz yok";
+    var g = document.getElementById("yListe");
+    if (!v.liste.length) { g.innerHTML = '<tr><td colspan="6" class="soluk">Henüz yedek yok. "Şimdi Yedekle" ile ilk yedeği alabilirsiniz; otomatik yedek de birkaç dakika içinde alınır.</td></tr>'; return; }
+    g.innerHTML = v.liste.map(function (y) {
+      return '<tr><td><b>' + kacHTML(y.tarih) + '</b></td><td><span class="yedek-tur ' + kacHTML(y.tur) + '">' + kacHTML(y.turAdi) + '</span></td>' +
+        '<td class="s">' + (y.ogrenci == null ? "—" : gSayi(y.ogrenci)) + '</td><td class="s">' + (y.gorusme == null ? "—" : gSayi(y.gorusme)) + '</td>' +
+        '<td class="s">' + boyutMetni(y.boyut) + '</td>' +
+        '<td class="yedek-tuslar"><a href="/api/yedekler/indir?ad=' + encodeURIComponent(y.ad) + '" title="Bu yedeği zip dosyası olarak indir (USB belleğe kopyalamak için)">İndir</a>' +
+        '<button type="button" data-geri="' + kacHTML(y.ad) + '" data-tarih="' + kacHTML(y.tarih) + '">Bu tarihe geri dön</button></td></tr>';
+    }).join("");
+    g.querySelectorAll("[data-geri]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var ad = this.getAttribute("data-geri"), tarih = this.getAttribute("data-tarih");
+        onayModali({
+          baslik: "Yedekten Geri Dön",
+          mesaj: "Bütün veriler " + tarih + " tarihindeki hâline döndürülecek. Bu tarihten sonra girdiğiniz kayıtlar görünmez olur. " +
+            "Endişelenmeyin: şu anki durumunuz önce \"Geri dönüş öncesi\" yedeği olarak saklanır, isterseniz ona tekrar dönebilirsiniz. Devam edilsin mi?",
+          evetMetin: "Evet, geri dön", hayirMetin: "Vazgeç", tehlikeli: true,
+        }).then(function (onay) {
+          if (!onay) return;
+          apiPost("/api/yedekler/geri-yukle", { ad: ad }).then(function () {
+            bildirim("Veriler " + tarih + " tarihindeki hâline döndürüldü. Sayfa yenileniyor…");
+            setTimeout(function () { location.reload(); }, 1400);
+          }).catch(apiHataGoster);
+        });
+      });
+    });
+  }).catch(apiHataGoster);
+}
+document.getElementById("yAlBtn").addEventListener("click", function () {
+  var b = this; b.disabled = true; b.textContent = "Yedekleniyor…";
+  apiPost("/api/yedekler", {}).then(function () { bildirim("Yedek alındı."); yedekleriYukle(); })
+    .catch(apiHataGoster).then(function () { b.disabled = false; b.textContent = "Şimdi Yedekle"; });
+});
+function yedekAyarKaydet() {
+  apiPut("/api/ayarlar", { yedek: { gun: +document.getElementById("yGun").value, ekKlasor: document.getElementById("yEk").value.trim() } })
+    .then(function () { bildirim("Yedek ayarları kaydedildi."); }).catch(apiHataGoster);
+}
+document.getElementById("yGun").addEventListener("change", yedekAyarKaydet);
+document.getElementById("yAyarKaydet").addEventListener("click", yedekAyarKaydet);
+yedekleriYukle();
+
+/* ---- etkinlik bildirimleri ---- */
+function bildirimAyarlariHazirla(b) {
+  var a = Object.assign({}, ALARM_VARSAYILAN, (b.ayarlar || {}).bildirim || {});
+  document.getElementById("bAcik").checked = !!a.acik;
+  document.getElementById("bOnce").value = String(a.onceDk);
+  document.getElementById("bSes").checked = !!a.ses;
+  document.getElementById("bWindows").checked = !!a.windows;
+  function kaydet() {
+    var yeni = { acik: document.getElementById("bAcik").checked, onceDk: +document.getElementById("bOnce").value,
+                 ses: document.getElementById("bSes").checked, windows: document.getElementById("bWindows").checked };
+    ALARM_AYAR = yeni;
+    apiPut("/api/ayarlar", { bildirim: yeni }).then(function () { bildirim("Bildirim ayarları kaydedildi."); alarmlariDenetle(); }).catch(apiHataGoster);
+  }
+  ["bAcik", "bOnce", "bSes"].forEach(function (id) { document.getElementById(id).addEventListener("change", kaydet); });
+  document.getElementById("bWindows").addEventListener("change", function () {
+    var kutu = this;
+    if (kutu.checked && window.Notification && Notification.permission !== "granted") {
+      Notification.requestPermission().then(function (izin) {
+        if (izin !== "granted") { kutu.checked = false; bildirim("Windows bildirimi için tarayıcı izni verilmedi.", true); }
+        kaydet();
+      });
+    } else kaydet();
+  });
+  document.getElementById("bDene").addEventListener("click", function () {
+    var s = new Date(), saat = ("0" + s.getHours()).slice(-2) + ":" + ("0" + s.getMinutes()).slice(-2);
+    var ornek = { tur: "etkinlik", id: "ornek-" + Date.now(), saat: saat, bitis: "", baslik: "Örnek: Okul Kuralları ve Selamlaşmanın Önemi", alt: "1/A sınıfı · 1. ders saati", url: "sinif-etkinlik.html" };
+    alarmSesiCal();
+    _alarmKartCiz(ornek, "simdi", 0);
+    var kart = document.querySelector('.alarm-kart[data-anahtar="' + CSS.escape(_alarmAnahtar(ornek)) + '"]');
+    kart.querySelector(".alarm-tamam").onclick = function () { _alarmKaldir(_alarmAnahtar(ornek)); bildirim("Örnek bildirim — gerçek kayıtlarda bu tuş etkinliği tamamlandı yapar."); };
+    kart.querySelector(".alarm-ertele").onclick = kart.querySelector(".alarm-kapat").onclick = function () { _alarmKaldir(_alarmAnahtar(ornek)); };
+  });
+}
+
+/* ---- toplu çıktı ---- */
+function topluCiktiHazirla(b) {
+  var d = new Date(), pad = function (n) { return (n < 10 ? "0" : "") + n; };
+  document.getElementById("tBas").value = "01." + pad(d.getMonth() + 1) + "." + d.getFullYear();
+  document.getElementById("tBit").value = pad(d.getDate()) + "." + pad(d.getMonth() + 1) + "." + d.getFullYear();
+  var ss = document.getElementById("tSinif");
+  Object.keys(b.siniflar || {}).sort(function (a, c) { return a.localeCompare(c, "tr", { numeric: true }); }).forEach(function (sn) {
+    ss.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(sn) + '">' + kacHTML(sn) + '</option>');
+  });
+  var ks = document.getElementById("tKonu");
+  (b.konuSecenekleri || []).forEach(function (k) { ks.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(k) + '">' + kacHTML(k) + '</option>'); });
+  function sorgu() {
+    var p = new URLSearchParams();
+    p.set("bas", document.getElementById("tBas").value.trim());
+    p.set("bit", document.getElementById("tBit").value.trim());
+    ["tTur", "tSinif", "tKonu"].forEach(function (id, i) {
+      var v = document.getElementById(id).value; if (v) p.set(["tur", "sinif", "konu"][i], v);
+    });
+    return p.toString();
+  }
+  var sayiGuncelle = debounce(function () {
+    apiGet("/api/toplu-gorusmeler?" + sorgu()).then(function (v) {
+      document.getElementById("tSayi").textContent = v.sayi ? v.sayi + " görüşme formu basılacak." : "Bu seçimde görüşme yok.";
+    }).catch(function () { document.getElementById("tSayi").textContent = "Tarihleri gg.aa.yyyy biçiminde girin."; });
+  }, 300);
+  ["tBas", "tBit"].forEach(function (id) { document.getElementById(id).addEventListener("input", sayiGuncelle); });
+  ["tTur", "tSinif", "tKonu"].forEach(function (id) { document.getElementById(id).addEventListener("change", sayiGuncelle); });
+  sayiGuncelle();
+  document.getElementById("tHazirlaBtn").addEventListener("click", function () {
+    window.open("toplu-cikti.html?" + sorgu(), "_blank");
+  });
+}
+
+/* ---- görünüm (açık / koyu / sistem) ---- */
+(function () {
+  function isaretle() {
+    var t = temaTercihi();
+    document.querySelectorAll("#temaSecim [data-tema]").forEach(function (b) { b.classList.toggle("secili", b.getAttribute("data-tema") === t); });
+  }
+  document.querySelectorAll("#temaSecim [data-tema]").forEach(function (b) {
+    b.addEventListener("click", function () { temaUygula(this.getAttribute("data-tema")); isaretle(); bildirim("Görünüm değiştirildi."); });
+  });
+  isaretle();
+})();
+
+/* ---- ayar sekmeleri (tasarım 2.0) ---- */
+(function () {
+  function goster(kod) {
+    document.querySelectorAll("#ayarSekmeler [data-sekme]").forEach(function (b) { b.classList.toggle("etkin", b.getAttribute("data-sekme") === kod); });
+    document.querySelectorAll(".sekme-paneli").forEach(function (p) { p.hidden = p.getAttribute("data-panel") !== kod; });
+    try { history.replaceState(null, "", "#" + kod); } catch (e) {}
+  }
+  document.querySelectorAll("#ayarSekmeler [data-sekme]").forEach(function (b) {
+    b.addEventListener("click", function () { goster(this.getAttribute("data-sekme")); });
+  });
+  var h = (location.hash || "").replace("#", "");
+  if (["okul", "turler", "siniflar", "toplu", "yedek", "gorunum", "guvenlik"].indexOf(h) >= 0) goster(h);
+})();
+</script>
+<script>
+/* ---- Hakkında sekmesi ---- */
+(function () {
+  function satir(ad, deger) { return deger ? '<dt>' + kacHTML(ad) + '</dt><dd>' + deger + '</dd>' : ''; }
+  Promise.all([apiGet("/api/baslangic"), apiGet("/api/kosullar")]).then(function (r) {
+    var b = r[0], k = r[1], g = b.gelistirici || {};
+    var web = g.web ? '<a href="' + kacHTML(g.web) + '" target="_blank" rel="noopener">' + kacHTML(g.web.replace(/^https?:\/\//, "")) + '</a>' : "";
+    var ep = g.eposta ? '<a href="mailto:' + kacHTML(g.eposta) + '">' + kacHTML(g.eposta) + '</a>' : "";
+    document.getElementById("hakkindaBilgi").innerHTML =
+      satir("Program", "Öğrenci Rehberlik Takip Sistemi") +
+      satir("Sürüm", kacHTML(b.surum)) +
+      satir("Lisans", "Ücretsiz kullanım (satılamaz, ücret karşılığı dağıtılamaz)") +
+      satir("Geliştirici", g.ad ? kacHTML(g.ad) : "") +
+      satir("Web sitesi", web) +
+      satir("İletişim", ep) +
+      satir("Geliştirme talepleri", (web || ep) ? "Yeni özellik ve kuruma özel uyarlama talepleri için yukarıdaki adresten ulaşabilirsiniz." : "") +
+      satir("Veri klasörü", '<code>' + kacHTML(b.veriKlasoru || "") + '</code>');
+    document.getElementById("kosulDurum").textContent = k.kabul && k.kabul.tarih
+      ? "Koşul sürümü " + k.surum + " — bu bilgisayarda " + k.kabul.tarih + " tarihinde kabul edildi."
+      : "Koşul sürümü " + k.surum + " — henüz kabul edilmedi.";
+  }).catch(apiHataGoster);
+  document.getElementById("kosulAcBtn").addEventListener("click", function () { window.open("kullanim-kosullari.html", "_blank"); });
+})();
+</script>
+</body>
+</html>

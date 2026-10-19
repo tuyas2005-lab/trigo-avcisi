@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bu Bilgisayarda Kilitli</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+<style>
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  .lk-kart{max-width:440px;width:100%}
+  .lk-kart>.icerik{padding:22px 24px 20px}
+  .lk-logo{text-align:center;margin-bottom:6px}
+  .lk-logo h1{font-size:17px;color:var(--lacivert);margin:0 0 3px}
+  .lk-logo .alt{color:var(--kirmizi);font-size:13px;font-weight:600}
+  .lk-aciklama{font-size:13.5px;line-height:1.6;color:var(--metin);background:#fdeceb;
+    border:1px solid #f3c9c3;border-radius:7px;padding:11px 13px;margin:16px 0 18px}
+  .lk-alan{margin-bottom:13px}
+  .lk-buton{width:100%;margin-top:4px;padding:10px;font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="lk-sarma">
+<div class="lk-gorsel">
+  <img src="assets/basliklar/karsilama.webp" alt="" onerror="this.remove()">
+  <div class="lk-gorsel-metin"><span class="lk-marka">__MARKA__</span><b>Bu bilgisayarda kilitli</b><span>Program klasörü başka bir bilgisayara taşınmış görünüyor. Devam etmek için şifreyi girin.</span></div>
+</div>
+<div class="kart lk-kart">
+  <div class="icerik">
+    <div class="lk-logo">
+      <h1>Öğrenci Rehberlik Takip Sistemi</h1>
+      <div class="alt">Bu Bilgisayarda Kilitli</div>
+    </div>
+    <div class="lk-aciklama">
+      Program klasörü bu bilgisayara <b>kopyalanmış</b> görünüyor. Bu bilgisayar orijinal
+      kurulum yapılan bilgisayar olmadığı için program kilitlendi; devam etmek için ilk
+      kurulumda belirlenen kopyalamaya karşı şifreyi girin. Doğru şifre girildiğinde program
+      bu bilgisayarda normal şekilde çalışmaya başlar.
+      <br><br>
+      <b>Yasal dayanak:</b> Bu koruma, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK)
+      kapsamında öğrenci ve veli kişisel verilerinin yetkisiz kişilerce erişilmesini veya
+      kopyalanmasını önlemek amacıyla uygulanmaktadır.
+    </div>
+    <div class="lk-alan">
+      <label>Kopyalamaya Karşı Şifre</label>
+      <input type="password" id="sifre" placeholder="Şifrenizi girin" autocomplete="current-password">
+    </div>
+    <button class="birincil lk-buton" id="btnCoz">Etkinleştir</button>
+    <p class="kucuk soluk" style="margin:14px 0 0;text-align:center">
+      Şifrenizi unuttuysanız rehber öğretmen/sistem yöneticinizle görüşün.
+    </p>
+  </div>
+</div>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+document.getElementById("btnCoz").addEventListener("click", function () {
+  var s = document.getElementById("sifre").value;
+  if (!s) { bildirim("Şifre giriniz.", true); return; }
+  var btn = document.getElementById("btnCoz");
+  btn.disabled = true; btn.textContent = "Kontrol ediliyor…";
+  apiPost("/api/lisans/coz", { sifre: s }).then(function () {
+    bildirim("Bu bilgisayar etkinleştirildi.");
+    setTimeout(function () { location.href = "panel.html"; }, 500);
+  }).catch(function (e) {
+    btn.disabled = false; btn.textContent = "Etkinleştir";
+    apiHataGoster(e);
+  });
+});
+document.getElementById("sifre").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") document.getElementById("btnCoz").click();
+});
+</script>
+<script>document.querySelectorAll(".lk-marka").forEach(function (e) { e.innerHTML = ikonSvg("kalkan"); });</script>
+</body>
+</html>

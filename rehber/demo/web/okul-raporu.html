@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okul Raporu — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body class="sayfa-okulrapor">
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+    <header class="sayfa-bandi">
+      <div class="bant-metin">
+        <h2 class="baslik">Okul Raporu</h2>
+        <p>Okuldaki bütün rehber öğretmenlerin verileri tek bir okul geneli faaliyet raporunda birleşir. Öğrenci adları ve görüşme notları hiçbir zaman paylaşılmaz; yalnızca sayılar birleşir.</p>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/rapor.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="okul-adimlar">
+      <div><b>1</b><span>Her öğretmen <strong>paketini indirir</strong> ve başkan öğretmene WhatsApp veya e-posta ile gönderir.</span></div>
+      <div><b>2</b><span>Başkan öğretmen gelen paketleri <strong>"Gelen Paketler"</strong> bölümüne ekler.</span></div>
+      <div><b>3</b><span>Başkan <strong>dönemi seçer</strong> ve okul raporunu oluşturur.</span></div>
+    </div>
+
+    <div class="kart">
+      <h2><span class="kart-ikon">__IK_yukle__</span>1. Okul Raporu Paketimi Gönder</h2>
+      <div class="icerik">
+        <p style="margin-top:0">Bu düğme, verilerinizin <b>isimsiz</b> bir özetini tek bir dosya (.json) olarak indirir. Dosyada öğrenci adı, numarası, görüşme notu, özet, telefon ya da adres <b>yoktur</b>; yalnızca tarih, sınıf, görüşme türü, konu, başvuru şekli, yapılan çalışma, yönlendirme, sınıf etkinlikleri ve toplantılar bulunur.</p>
+        <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:center">
+          <button type="button" class="birincil" id="paketIndirBtn">⭳ Paketimi indir</button>
+          <span class="kucuk soluk">Dönem seçmenize gerek yok; dosya bütün verinizi taşır, dönemi başkan rapor alırken seçer. Her ay yeni paket gönderebilirsiniz; yenisi eskisinin yerine geçer.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2><span class="kart-ikon">__IK_okulrapor__</span>2. Gelen Paketler <span class="kucuk soluk" style="font-weight:600">(başkan öğretmen için)</span></h2>
+      <div class="icerik">
+        <p style="margin-top:0" class="kucuk soluk">Öğretmenlerden gelen paket dosyalarını buraya bırakın ya da seçin. Aynı öğretmenden yeni paket gelince eskisinin yerine geçer. Başkan her yıl değişebilir: bu bölüm her programda vardır, yeni başkan paketleri kendi programına ekler.</p>
+        <label class="okul-birak" id="birakAlan">
+          <input type="file" id="paketDosya" accept=".json,application/json" multiple hidden>
+          <span class="okul-birak-ikon">__IK_yukle__</span>
+          <b>Paket dosyalarını buraya sürükleyin</b>
+          <span class="kucuk soluk">ya da tıklayıp seçin (birden çok dosya seçebilirsiniz)</span>
+        </label>
+        <div id="uyarilar"></div>
+        <div class="tablo-sarma" style="margin-top:12px"><table class="yedek-tablo okul-paket-tablo">
+          <thead><tr><th>Kaynak</th><th>Sınıf düzeyleri</th><th class="s">Şube</th><th class="s">Öğrenci</th><th class="s">Görüşme</th><th>Paket tarihi</th><th>Son görüşme</th><th></th></tr></thead>
+          <tbody id="paketListe"><tr><td colspan="8" class="soluk">Yükleniyor…</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2><span class="kart-ikon">__IK_rapor__</span>3. Okul Raporunu Oluştur</h2>
+      <div class="icerik">
+        <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:flex-end">
+          <div><label class="kucuk">Başlangıç Tarihi</label><input type="text" id="oBas" style="max-width:120px"></div>
+          <div><label class="kucuk">Bitiş Tarihi</label><input type="text" id="oBit" style="max-width:120px"></div>
+          <button type="button" class="ikincil" data-hazir="yil">Bu eğitim yılı</button>
+          <button type="button" class="ikincil" data-hazir="ay">Bu ay</button>
+          <button type="button" class="ikincil" data-hazir="gecenay">Geçen ay</button>
+          <button type="button" class="birincil" id="olusturBtn">Okul Faaliyet Raporunu Aç</button>
+        </div>
+        <div id="onizleme" class="okul-onizleme"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+document.querySelectorAll(".kart-ikon, .okul-birak-ikon").forEach(function (el) {
+  el.innerHTML = el.innerHTML.replace(/__IK_(\w+)__/g, function (_, ad) { return ikonSvg(ad); });
+});
+function pad(n) { return (n < 10 ? "0" : "") + n; }
+function dd(d) { return pad(d.getDate()) + "." + pad(d.getMonth() + 1) + "." + d.getFullYear(); }
+function hazirDonem(tur) {
+  var b = new Date(), bas, bit = b;
+  if (tur === "ay") bas = new Date(b.getFullYear(), b.getMonth(), 1);
+  else if (tur === "gecenay") { bas = new Date(b.getFullYear(), b.getMonth() - 1, 1); bit = new Date(b.getFullYear(), b.getMonth(), 0); }
+  else bas = new Date(b.getMonth() >= 8 ? b.getFullYear() : b.getFullYear() - 1, 8, 1);
+  document.getElementById("oBas").value = dd(bas);
+  document.getElementById("oBit").value = dd(bit);
+  onizle();
+}
+document.querySelectorAll("[data-hazir]").forEach(function (b) {
+  b.addEventListener("click", function () { hazirDonem(b.getAttribute("data-hazir")); });
+});
+["oBas", "oBit"].forEach(function (id) { document.getElementById(id).addEventListener("change", onizle); });
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+}).catch(apiHataGoster);
+
+function listeCiz(v) {
+  var tb = document.getElementById("paketListe");
+  tb.innerHTML = v.paketler.map(function (p) {
+    var kaynak = p.kendi
+      ? '<b>Bu bilgisayar</b> <span class="kucuk soluk">(' + kacHTML(p.ogretmen) + ')</span><br><label class="kucuk okul-dahil"><input type="checkbox" id="kendiDahil"' + (v.kendiDahil ? " checked" : "") + '> Kendi verilerimi rapora dahil et</label>'
+      : '<b>' + kacHTML(p.ogretmen) + '</b>';
+    return '<tr' + (p.kendi && !v.kendiDahil ? ' class="soluk-satir"' : '') + '><td>' + kaynak + '</td><td>' + (p.duzeyler.map(function (d) { return '<span class="okul-duzey">' + kacHTML(d) + '</span>'; }).join(" ") || "—") +
+      '</td><td class="s">' + gSayi(p.subeSayisi) + '</td><td class="s">' + gSayi(p.ogrenciSayisi) + '</td><td class="s">' + gSayi(p.gorusmeSayisi) +
+      '</td><td>' + (p.kendi ? '<span class="kucuk soluk">her zaman güncel</span>' : kacHTML(p.olusturma || "")) + '</td><td>' + kacHTML(p.sonGorusme || "—") +
+      '</td><td class="r">' + (p.kendi ? "" : '<button class="tehlike" style="padding:5px 11px;font-size:13px" data-sil="' + kacHTML(p.kaynakId) + '" data-ad="' + kacHTML(p.ogretmen) + '">Kaldır</button>') + '</td></tr>';
+  }).join("");
+  document.getElementById("uyarilar").innerHTML = v.uyarilar.map(function (u) {
+    return '<div class="okul-uyari">' + ikonSvg("uyari") + '<span>' + kacHTML(u) + '</span></div>';
+  }).join("");
+  var kd = document.getElementById("kendiDahil");
+  if (kd) kd.addEventListener("change", function () {
+    apiPost("/api/okul-paketleri/ayar", { kendiDahil: kd.checked }).then(function (v2) { listeCiz(v2); onizle(); }).catch(apiHataGoster);
+  });
+  tb.querySelectorAll("[data-sil]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (!confirm(b.getAttribute("data-ad") + " paketini kaldırmak istiyor musunuz? (Öğretmenin kendi bilgisayarındaki verilere dokunulmaz.)")) return;
+      apiDelete("/api/okul-paketleri/" + b.getAttribute("data-sil")).then(function (v2) { listeCiz(v2); onizle(); bildirim("Paket kaldırıldı."); }).catch(apiHataGoster);
+    });
+  });
+}
+function listeYukle() { return apiGet("/api/okul-paketleri").then(listeCiz).catch(apiHataGoster); }
+
+function dosyalariYukle(dosyalar) {
+  var liste = Array.prototype.slice.call(dosyalar || []);
+  if (!liste.length) return;
+  var sonuclar = [];
+  liste.reduce(function (zincir, f) {
+    return zincir.then(function () {
+      return f.text().then(function (metin) {
+        var veri;
+        try { veri = JSON.parse(metin); } catch (e) { throw new Error(f.name + ": dosya okunamadı (okul raporu paketi değil)."); }
+        return apiPost("/api/okul-paketleri", veri);
+      }).then(function (r) {
+        sonuclar.push((r.ogretmen || f.name) + (r.guncellendi ? " (güncellendi)" : " (eklendi)"));
+      }).catch(function (e) { sonuclar.push("✗ " + f.name + ": " + e.message); });
+    });
+  }, Promise.resolve()).then(function () {
+    var hatali = sonuclar.some(function (s) { return s.charAt(0) === "✗"; });
+    bildirim(sonuclar.join(" · "), hatali);
+    document.getElementById("paketDosya").value = "";
+    listeYukle().then(onizle);
+  });
+}
+document.getElementById("paketDosya").addEventListener("change", function (e) { dosyalariYukle(e.target.files); });
+var birak = document.getElementById("birakAlan");
+["dragenter", "dragover"].forEach(function (t) { birak.addEventListener(t, function (e) { e.preventDefault(); birak.classList.add("ustunde"); }); });
+["dragleave", "drop"].forEach(function (t) { birak.addEventListener(t, function (e) { e.preventDefault(); birak.classList.remove("ustunde"); }); });
+birak.addEventListener("drop", function (e) { dosyalariYukle(e.dataTransfer.files); });
+
+function sorgu() {
+  var p = new URLSearchParams();
+  p.set("baslangic", document.getElementById("oBas").value.trim());
+  p.set("bitis", document.getElementById("oBit").value.trim());
+  return p.toString();
+}
+function onizle() {
+  var kutu = document.getElementById("onizleme");
+  apiGet("/api/okul-raporu?" + sorgu()).then(function (v) {
+    var t = v.toplam;
+    kutu.innerHTML = '<div class="okul-ozet-satir">' +
+      '<div><b>' + gSayi(t.toplam) + '</b><span>Toplam görüşme</span></div>' +
+      '<div><b>' + gSayi(t.ogrenci) + '</b><span>Öğrenci görüşmesi</span></div>' +
+      '<div><b>' + gSayi(t.veli) + '</b><span>Veli görüşmesi</span></div>' +
+      '<div><b>' + gSayi(t.gorusulen) + '<small>/' + gSayi(t.kayitli) + '</small></b><span>Görüşülen öğrenci · kapsama %' + t.kapsama + '</span></div>' +
+      '<div><b>' + gSayi(v.paketSayisi) + '</b><span>Birleşen kaynak</span></div></div>' +
+      '<p class="kucuk soluk" style="margin:8px 0 0">Sınıf düzeyleri: ' + v.duzeyler.map(kacHTML).join(", ") + ' · Dönem: ' + kacHTML(v.donem.baslangic) + ' – ' + kacHTML(v.donem.bitis) + '</p>';
+  }).catch(function (e) { kutu.innerHTML = '<div class="bos">Önizleme alınamadı: ' + kacHTML(e.message) + '</div>'; });
+}
+document.getElementById("olusturBtn").addEventListener("click", function () {
+  window.open("okul-faaliyet-raporu.html?" + sorgu(), "_blank");
+});
+
+document.getElementById("paketIndirBtn").addEventListener("click", function () {
+  var a = document.createElement("a");
+  a.href = "/api/okul-paketi/indir";
+  a.download = "";
+  document.body.appendChild(a); a.click(); a.remove();
+  bildirim("Paket indirildi. İndirilenler klasöründeki .json dosyasını başkan öğretmene gönderin.");
+});
+
+hazirDonem("yil");
+listeYukle();
+</script>
+</body>
+</html>

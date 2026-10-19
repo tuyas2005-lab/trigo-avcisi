@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Öğrenci Dosyası — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler" class="etkin">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+    <a href="ogrenciler.html" class="geri-baglanti yazdirma-gizle">← Öğrenci listesi</a>
+    <div id="icerikKok"><div class="yukleniyor" style="padding:40px">Yükleniyor…</div></div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var ogrenciId = new URLSearchParams(location.search).get("id");
+var ETIKETLER = [], AYARLAR = {};
+var kayit = null;
+
+if (!ogrenciId) {
+  document.getElementById("icerikKok").innerHTML = '<div class="bos">Öğrenci belirtilmedi.</div>';
+} else {
+  Promise.all([apiGet("/api/baslangic"), apiGet("/api/ogrenci/" + encodeURIComponent(ogrenciId))])
+    .then(function (r) {
+      var b = r[0]; kayit = r[1]; ETIKETLER = b.etiketler; AYARLAR = b.ayarlar;
+      document.getElementById("kullaniciKutu").innerHTML =
+        kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+      cizVeSarmala();
+    }).catch(function (e) {
+      document.getElementById("icerikKok").innerHTML = '<div class="bos">Öğrenci dosyası yüklenemedi.</div>';
+      apiHataGoster(e);
+    });
+}
+
+var AKTIF_SEKME = "bilgi";   /* dosya her zaman "Bilgiler ve Not" sekmesiyle açılır */
+function sekmeGoster(kod) {
+  AKTIF_SEKME = kod;
+  document.querySelectorAll("#dosyaSekmeler [data-sekme]").forEach(function (b) {
+    b.classList.toggle("etkin", b.getAttribute("data-sekme") === kod);
+  });
+  document.querySelectorAll(".sekme-paneli").forEach(function (p) { p.hidden = p.getAttribute("data-panel") !== kod; });
+}
+
+function cinsiyetUzun(c) { return c === "K" ? "Kız" : (c === "E" ? "Erkek" : "—"); }
+
+function yenidenYukle() {
+  apiGet("/api/ogrenci/" + encodeURIComponent(ogrenciId)).then(function (k) { kayit = k; cizVeSarmala(); }).catch(apiHataGoster);
+}
+
+function cizVeSarmala() {
+  var k = kayit;
+  document.title = k.adSoyad + " — Öğrenci Dosyası";
+  var etiketliOlmayan = ETIKETLER.filter(function (e) { return (k.etiketler || []).every(function (x) { return x.id !== e.id; }); });
+
+  var acikZaman = (k.zamanlamalar || []).filter(function (z) { return !z.tamamlandi; }).length;
+  var h = '';
+  /* ---- profil başlığı ---- */
+  h += '<section class="profil-bandi">' +
+    '<img class="bant-gorsel" src="assets/basliklar/dosya.webp" alt="" onerror="this.remove()">' +
+    '<div class="profil-ust">' + avatarHtml(k.adSoyad, "buyuk") +
+    '<div class="profil-kimlik"><h2 class="baslik">' + kacHTML(k.adSoyad) + '</h2>' +
+    '<div class="profil-alt"><span class="sinif-rozet">' + kacHTML(k.sinif || "—") + '</span>' +
+    '<span>No ' + kacHTML(k.okulNo || "—") + '</span><span>' + cinsiyetUzun(k.cinsiyet) + '</span>' +
+    (k.sinifOgretmeni ? '<span>Sınıf öğretmeni: ' + kacHTML(k.sinifOgretmeni) + '</span>' : '') + '</div>' +
+    '<div class="satir yazdirma-gizle" style="margin-top:10px;align-items:center;gap:6px" id="ogrenciEtiketAlan">' +
+    k.etiketler.map(function (e) {
+      return '<span class="rozet-etiket ' + e.renk + '" data-eid="' + e.id + '">' + kacHTML(e.ad) + ' <span class="sil" data-kaldir-eid="' + e.id + '">✕</span></span>';
+    }).join(" ") +
+    '<div class="cop-dropdown" id="ogrenciEtiket"><button class="cop-dropdown-tus" type="button" style="padding:4px 10px;font-size:12px" id="etiketEkleAc">+ Etiket Ekle <span class="cop-ok">▾</span></button>' +
+    '<div class="cop-dropdown-panel">' + etiketliOlmayan.map(function (e) {
+      return '<label data-ekle-eid="' + e.id + '"><input type="checkbox"><span class="nokta" style="background:' + renkKodu(e.renk) + '"></span> ' + kacHTML(e.ad) + '</label>';
+    }).join("") + '<div class="cop-dropdown-alt"><a href="ayarlar.html">+ Yeni etiket tanımla</a></div></div></div>' +
+    '</div></div></div>' +
+    '<div class="profil-alt-satir">' +
+    '<div class="profil-istatistik">' +
+    '<div><b>' + gSayi(k.toplamGorusme) + '</b><span>Toplam görüşme</span></div>' +
+    '<div><b>' + gSayi(k.ogrenciGorusmeSayisi) + '</b><span>Öğrenci</span></div>' +
+    '<div><b>' + gSayi(k.veliGorusmeSayisi) + '</b><span>Veli</span></div>' +
+    '<div><b>' + kacHTML(k.sonGorusme || "—") + '</b><span>Son görüşme</span></div>' +
+    '<div><b>' + gSayi(acikZaman) + '</b><span>Açık hatırlatma</span></div></div>' +
+    '<div class="profil-eylem yazdirma-gizle">' +
+    '<button class="birincil" id="btnOgrenciGorusme">+ Öğrenci Görüşmesi</button>' +
+    '<button class="ikincil" id="btnVeliGorusme">+ Veli Görüşmesi</button>' +
+    '<button class="tehlike" id="btnSil">Sil</button></div>' +
+    '</div></section>';
+
+  /* ---- sekmeler ---- */
+  var sekmeler = [
+    { kod: "bilgi", ad: "Bilgiler ve Not" },
+    { kod: "gorusme", ad: "Görüşmeler", sayi: (k.gorusmeler || []).length },
+    { kod: "zaman", ad: "Hatırlatmalar", sayi: acikZaman },
+    { kod: "yorum", ad: "Yorumlar", sayi: (k.yorumlar || []).length }
+  ];
+  h += '<div class="sekme-cubugu yazdirma-gizle" id="dosyaSekmeler">' + sekmeler.map(function (s) {
+    return '<button type="button" data-sekme="' + s.kod + '"' + (s.kod === AKTIF_SEKME ? ' class="etkin"' : '') + '>' + s.ad +
+      (s.sayi !== undefined ? ' <span class="sayac">' + s.sayi + '</span>' : '') + '</button>';
+  }).join("") + '</div>';
+
+  h += '<div class="sekme-paneli bilgi-izgara" data-panel="bilgi">';
+  h += '<div class="kart detay-kart bilgi-kutu" id="genelBilgilerKart"><h2 class="baslik-tuslu"><span>Genel Bilgiler</span>' +
+    '<button type="button" class="kart-baslik-tus yazdirma-gizle" id="btnDuzenle">' + ikonSvg("kalem") + 'Bilgileri Düzenle</button></h2><div class="icerik" id="genelBilgilerIcerik"></div></div>';
+  h += '<div class="kart detay-kart not-kutu"><h2>Genel Açıklama Notu</h2><div class="icerik">' +
+    '<p class="kucuk soluk" style="margin-top:0">Görüşme kayıtlarından bağımsız, öğrencinin dosyasına ait serbest açıklama notu.</p>' +
+    '<textarea id="genelNotAlani" placeholder="Öğrenciyle ilgili genel notunuzu buraya yazın…">' + kacHTML(k.genelNot || "") + '</textarea>' +
+    '<div class="satir yazdirma-gizle" style="margin-top:8px;justify-content:flex-end"><button class="birincil" id="genelNotKaydet">Kaydet</button></div>' +
+    '</div></div></div>';
+
+  h += '<div class="sekme-paneli" data-panel="zaman"><div class="kart detay-kart"><h2>Zamanlama / Hatırlatma</h2><div class="icerik">' +
+    '<p class="kucuk soluk" style="margin-top:0">Öğrenciyle ilgili takip edilecek tarihli işler. Tümü sol menüdeki Takvim ve Gündem ekranlarında da görünür.</p>' +
+    '<div class="zamanlama-liste" id="zamanlamaListe"></div>' +
+    '<div class="satir yazdirma-gizle zaman-ekle" style="margin-top:12px;gap:8px;flex-wrap:wrap">' +
+    '<input type="text" id="zTarih" placeholder="gg.aa.yyyy" style="max-width:130px">' +
+    '<select id="zSaat" style="max-width:150px"></select>' +
+    '<input type="text" id="zMetin" placeholder="Yapılacak iş / hatırlatma…" style="flex:1;min-width:220px">' +
+    '<button class="birincil" id="zEkleBtn">Ekle</button></div></div></div></div>';
+
+  h += '<div class="sekme-paneli" data-panel="gorusme"><div class="kart"><h2>Görüşme Geçmişi</h2><div class="icerik zaman-cizelgesi" id="gorusmeListe"></div></div></div>';
+
+  h += '<div class="sekme-paneli" data-panel="yorum"><div class="kart yorum-karti"><h2>Yorumlar</h2><div class="icerik">' +
+    '<div class="ses-tuslari yazdirma-gizle"><span class="ses-tusu" id="yorumSesTus"><span class="nokta"></span> Sesle Yorum Ekle</span>' +
+    '<button type="button" id="yorumDuzenleBtn" title="Fazla boşlukları temizler, cümle başlarını büyütür (internete çıkmaz)">Noktalama / Büyük Harf Düzenle</button>' +
+    '<span class="ses-durum" id="yorumSesDurum">Tuşa basıp konuşun, söyledikleriniz aşağıya yazıya dökülsün.</span></div>' +
+    '<textarea id="yorumMetni" placeholder="Öğrenci dosyasına yorum ekleyin… (yazabilir veya yukarıdaki tuşla sesli anlatabilirsiniz)"></textarea>' +
+    '<div class="satir yazdirma-gizle" style="margin-top:8px;justify-content:flex-end"><button class="birincil" id="yorumEkleBtn">Yorum Ekle</button></div>' +
+    '</div><div class="yorum-listesi" id="yorumListesi"></div></div></div>';
+
+  document.getElementById("icerikKok").innerHTML = h;
+
+  genelBilgilerCiz(false);
+  zamanlamaCiz();
+  gorusmeCiz();
+  yorumCiz();
+  sekmeGoster(AKTIF_SEKME);
+  document.querySelectorAll("#dosyaSekmeler [data-sekme]").forEach(function (b) {
+    b.addEventListener("click", function () { sekmeGoster(this.getAttribute("data-sekme")); });
+  });
+
+  document.getElementById("btnOgrenciGorusme").addEventListener("click", function () {
+    location.href = "form-ogrenci.html?ogrenciId=" + encodeURIComponent(ogrenciId) + "&yeni=1";
+  });
+  document.getElementById("btnVeliGorusme").addEventListener("click", function () {
+    location.href = "form-veli.html?ogrenciId=" + encodeURIComponent(ogrenciId) + "&yeni=1";
+  });
+  document.getElementById("btnDuzenle").addEventListener("click", function () { sekmeGoster("bilgi"); genelBilgilerCiz(true); });
+  document.getElementById("btnSil").addEventListener("click", function () {
+    onayModali({
+      baslik: "Öğrenciyi Sil",
+      mesaj: "\"" + k.adSoyad + "\" adlı öğrencinin dosyasını ve tüm görüşme kayıtlarını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+      evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+    }).then(function (onay) {
+      if (!onay) return;
+      apiDelete("/api/ogrenci/" + encodeURIComponent(ogrenciId)).then(function () {
+        location.href = "ogrenciler.html";
+      }).catch(apiHataGoster);
+    });
+  });
+
+  document.getElementById("etiketEkleAc").addEventListener("click", function () {
+    document.getElementById("ogrenciEtiket").classList.toggle("acik");
+  });
+  document.querySelectorAll("[data-ekle-eid]").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/etiket", { etiketId: el.getAttribute("data-ekle-eid"), ekle: true })
+        .then(function (k2) { kayit = k2; cizVeSarmala(); }).catch(apiHataGoster);
+    });
+  });
+  document.querySelectorAll("[data-kaldir-eid]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/etiket", { etiketId: el.getAttribute("data-kaldir-eid"), ekle: false })
+        .then(function (k2) { kayit = k2; cizVeSarmala(); }).catch(apiHataGoster);
+    });
+  });
+
+  document.getElementById("genelNotKaydet").addEventListener("click", function () {
+    apiPut("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/not", { metin: document.getElementById("genelNotAlani").value })
+      .then(function (k2) { kayit = k2; bildirim("Not kaydedildi."); }).catch(apiHataGoster);
+  });
+}
+
+function genelBilgilerCiz(duzenleModu) {
+  var k = kayit;
+  var icerik = document.getElementById("genelBilgilerIcerik");
+  var duzTus = document.getElementById("btnDuzenle");
+  if (duzTus) duzTus.hidden = !!duzenleModu;
+  if (!duzenleModu) {
+    icerik.innerHTML = '<dl class="bolum">' +
+      '<dt>Adı Soyadı</dt><dd>' + kacHTML(k.adSoyad) + '</dd>' +
+      '<dt>Doğum Tarihi</dt><dd>' + kacHTML(k.dogumTarihi || "—") + '</dd>' +
+      '<dt>Cinsiyeti</dt><dd>' + cinsiyetUzun(k.cinsiyet) + '</dd>' +
+      '<dt>Okulu</dt><dd>' + kacHTML(AYARLAR.okulAdi || "—") + '</dd>' +
+      '<dt>Sınıfı</dt><dd>' + kacHTML(k.sinif || "—") + (k.okulNo ? " — No " + kacHTML(k.okulNo) : "") + '</dd>' +
+      '<dt>Sınıf Rehber Öğretmeni</dt><dd>' + kacHTML(k.sinifOgretmeni || "—") + '</dd>' +
+      '<dt>Veli Adı Soyadı</dt><dd>' + kacHTML(k.veliAdSoyad || "—") + (k.veliYakinlik ? " (" + kacHTML(k.veliYakinlik) + ")" : "") + '</dd>' +
+      '<dt>Veli Telefon</dt><dd>' + kacHTML(k.veliTelefon || "—") + '</dd>' +
+      '</dl>';
+    return;
+  }
+  icerik.innerHTML = '<div class="alanlar">' +
+    '<div><label>Adı Soyadı</label><input type="text" id="dAdSoyad" value="' + kacHTML(k.adSoyad) + '"></div>' +
+    '<div><label>Öğrenci No</label><input type="text" id="dOkulNo" value="' + kacHTML(k.okulNo) + '"></div>' +
+    '<div><label>Sınıf / Şube</label><input type="text" id="dSinif" value="' + kacHTML(k.sinif) + '"></div>' +
+    '<div><label>Cinsiyet</label><select id="dCinsiyet"><option value="K"' + (k.cinsiyet === "K" ? " selected" : "") + '>Kız</option><option value="E"' + (k.cinsiyet === "E" ? " selected" : "") + '>Erkek</option></select></div>' +
+    '<div><label>Doğum Tarihi</label><input type="text" id="dDogumTarihi" value="' + kacHTML(k.dogumTarihi) + '"></div>' +
+    '<div><label>Sınıf Rehber Öğretmeni</label><input type="text" id="dSinifOgretmeni" value="' + kacHTML(k.sinifOgretmeni) + '"></div>' +
+    '<div><label>Veli Adı Soyadı</label><input type="text" id="dVeliAdSoyad" value="' + kacHTML(k.veliAdSoyad) + '"></div>' +
+    '<div><label>Veli Yakınlığı</label><input type="text" id="dVeliYakinlik" value="' + kacHTML(k.veliYakinlik) + '"></div>' +
+    '<div><label>Veli Telefon</label><input type="text" id="dVeliTelefon" value="' + kacHTML(k.veliTelefon) + '"></div>' +
+    '</div><div class="satir yazdirma-gizle" style="margin-top:12px;justify-content:flex-end">' +
+    '<button id="dVazgec">Vazgeç</button><button class="birincil" id="dKaydet">Kaydet</button></div>';
+  document.getElementById("dVazgec").addEventListener("click", function () { genelBilgilerCiz(false); });
+  document.getElementById("dKaydet").addEventListener("click", function () {
+    apiPut("/api/ogrenci/" + encodeURIComponent(ogrenciId), {
+      adSoyad: document.getElementById("dAdSoyad").value.trim(),
+      okulNo: document.getElementById("dOkulNo").value.trim(),
+      sinif: document.getElementById("dSinif").value.trim(),
+      cinsiyet: document.getElementById("dCinsiyet").value,
+      dogumTarihi: document.getElementById("dDogumTarihi").value.trim(),
+      sinifOgretmeni: document.getElementById("dSinifOgretmeni").value.trim(),
+      veliAdSoyad: document.getElementById("dVeliAdSoyad").value.trim(),
+      veliYakinlik: document.getElementById("dVeliYakinlik").value.trim(),
+      veliTelefon: document.getElementById("dVeliTelefon").value.trim(),
+    }).then(function (k2) { kayit = k2; bildirim("Bilgiler kaydedildi."); cizVeSarmala(); }).catch(apiHataGoster);
+  });
+}
+
+function zamanlamaCiz() {
+  var liste = document.getElementById("zamanlamaListe");
+  var zamanlamalar = kayit.zamanlamalar || [];
+  if (!zamanlamalar.length) {
+    liste.innerHTML = '<p class="kucuk soluk" style="margin:0">Henüz zamanlama eklenmedi.</p>';
+  } else {
+    var bug = new Date(); bug.setHours(0, 0, 0, 0);
+    liste.innerHTML = zamanlamalar.map(function (z) {
+      var parcalar = z.tarih.split(".");
+      var zTarih = parcalar.length === 3 ? new Date(parcalar[2], parcalar[1] - 1, parcalar[0]) : null;
+      var gecti = zTarih && zTarih < bug && !z.tamamlandi;
+      var ayKisa = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+      var gosterTarih = (zTarih ? (zTarih.getDate() + " " + ayKisa[zTarih.getMonth()]) : z.tarih) + (z.saat ? " · " + z.saat : "");
+      var durumEtiket = z.tamamlandi ? '<span class="etiket">Tamamlandı</span>' : (gecti ? '<span class="etiket kirmizi">Gecikti</span>' : '<span class="etiket turuncu">Yaklaşıyor</span>');
+      return '<div class="zamanlama-satir' + (z.tamamlandi ? " gecti" : "") + '">' +
+        tarihRozetiHtml(z.tarih, z.saat) +
+        '<div class="zamanlama-metin">' + kacHTML(z.metin) + '</div>' +
+        '<div class="zamanlama-durum yazdirma-gizle" style="display:flex;gap:8px;align-items:center">' + durumEtiket +
+        '<button style="padding:3px 9px;font-size:12.5px" data-z-tamamla="' + z.id + '">' + (z.tamamlandi ? "Geri Al" : "Tamamlandı İşaretle") + '</button>' +
+        '<button class="tehlike" style="padding:3px 9px;font-size:12.5px" data-z-sil="' + z.id + '">Sil</button></div></div>';
+    }).join("");
+  }
+  liste.querySelectorAll("[data-z-tamamla]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/zamanlama/" + b.getAttribute("data-z-tamamla") + "/tamamla", {})
+        .then(function (k2) { kayit = k2; cizVeSarmala(); }).catch(apiHataGoster);
+    });
+  });
+  liste.querySelectorAll("[data-z-sil]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var zid = b.getAttribute("data-z-sil");
+      onayModali({
+        baslik: "Zamanlamayı Sil",
+        mesaj: "Bu zamanlamayı silmek istediğinize emin misiniz?",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/zamanlama/" + zid)
+          .then(function (k2) { kayit = k2; cizVeSarmala(); }).catch(apiHataGoster);
+      });
+    });
+  });
+  tarihMaskeUygula(document.getElementById("zTarih"));
+  saatSecenekleriDoldur(document.getElementById("zSaat"), true);
+  document.getElementById("zEkleBtn").addEventListener("click", function () {
+    var tarih = document.getElementById("zTarih").value.trim();
+    var saat = document.getElementById("zSaat").value;
+    var metin = document.getElementById("zMetin").value.trim();
+    if (!tarih || !metin) { bildirim("Tarih ve açıklama zorunludur.", true); return; }
+    apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/zamanlama", { tarih: tarih, saat: saat, metin: metin })
+      .then(function (k2) {
+        kayit = k2; bildirim("Zamanlama eklendi.");
+        document.getElementById("zTarih").value = ""; document.getElementById("zSaat").value = "";
+        document.getElementById("zMetin").value = "";
+        cizVeSarmala();
+      }).catch(apiHataGoster);
+  });
+}
+
+function gorusmeCiz() {
+  var kok = document.getElementById("gorusmeListe");
+  var gorusmeler = kayit.gorusmeler || [];
+  if (!gorusmeler.length) {
+    kok.innerHTML = bosDurumHtml("Henüz görüşme kaydı yok", "Yukarıdaki \"+ Öğrenci Görüşmesi\" veya \"+ Veli Görüşmesi\" ile ilk görüşmeyi başlatabilirsiniz.", "yorum");
+    return;
+  }
+  kok.innerHTML = gorusmeler.map(function (g, i) {
+    var turAd = g.tur === "veli" ? "Veli Görüşmesi" : "Öğrenci Görüşmesi";
+    var konu = coguldan(g.konu, ", ") || "—";
+    var etiketler = [];
+    if (g.tur === "ogrenci") {
+      if ((g.basvurma || []).length) etiketler.push("Başvurma: " + coguldan(g.basvurma, ", "));
+      etiketler.push("Konu: " + konu);
+      if ((g.calisma || []).length) etiketler.push("Çalışma: " + coguldan(g.calisma, ", "));
+    } else {
+      etiketler.push("Konu: " + konu);
+      if (g.isbirligi) etiketler.push("İş Birliği: " + g.isbirligi);
+    }
+    var formSayfa = g.tur === "veli" ? "form-veli.html" : "form-ogrenci.html";
+    return '<div class="gorusme-akordeon tur-' + g.tur + (i === 0 ? " acik" : "") + '" id="g-' + g.id + '">' +
+      '<div class="gorusme-baslik" data-toggle="' + g.id + '">' +
+      '<div class="gorusme-no">' + g.sira + '</div>' +
+      '<div class="gorusme-baslik-metin"><b>' + g.sira + '. Görüşme — ' + turAd + '</b><span>' + kacHTML(g.tarih) + (g.saat ? ' · ' + kacHTML(g.saat) : '') + ' · ' + kacHTML(konu) + '</span></div>' +
+      '<button class="yazdirma-gizle gorusme-aksiyon" data-yazdir="' + formSayfa + '?ogrenciId=' + encodeURIComponent(ogrenciId) + '&gorusmeId=' + g.id + '">🖨 Yazdır</button>' +
+      '<button class="yazdirma-gizle gorusme-aksiyon" data-duzenle="' + formSayfa + '?ogrenciId=' + encodeURIComponent(ogrenciId) + '&gorusmeId=' + g.id + '">✎ Düzenle</button>' +
+      '<button class="yazdirma-gizle gorusme-aksiyon sil" data-gorusme-sil="' + g.id + '">🗑 Sil</button>' +
+      '<span class="gorusme-ok">▶</span></div>' +
+      '<div class="gorusme-govde"><div class="gorusme-ozet-liste">' +
+      etiketler.map(function (e) { return '<span class="etiket">' + kacHTML(e) + '</span>'; }).join("") +
+      '</div><div class="gorusme-not-metin">' + kacHTML(g.notMetin || "—") + '</div>' +
+      (g.sonucOneri ? '<p class="kucuk soluk" style="margin:10px 0 0"><b>Sonuç ve Öneri:</b> ' + kacHTML(g.sonucOneri) + '</p>' : "") +
+      '</div></div>';
+  }).join("");
+
+  kok.querySelectorAll("[data-toggle]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.getElementById("g-" + this.getAttribute("data-toggle")).classList.toggle("acik");
+    });
+  });
+  kok.querySelectorAll("[data-yazdir]").forEach(function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); location.href = this.getAttribute("data-yazdir") + "&yazdir=1"; });
+  });
+  kok.querySelectorAll("[data-duzenle]").forEach(function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); location.href = this.getAttribute("data-duzenle"); });
+  });
+  kok.querySelectorAll("[data-gorusme-sil]").forEach(function (b) {
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var gid = this.getAttribute("data-gorusme-sil");
+      onayModali({
+        baslik: "Görüşmeyi Sil",
+        mesaj: "Bu görüşme kaydını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+        evetMetin: "Kalıcı Sil", hayirMetin: "İptal", tehlikeli: true,
+      }).then(function (onay) {
+        if (!onay) return;
+        apiDelete("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/gorusme/" + gid)
+          .then(function (k2) { kayit = k2; bildirim("Görüşme silindi."); cizVeSarmala(); }).catch(apiHataGoster);
+      });
+    });
+  });
+}
+
+function yorumCiz() {
+  var liste = document.getElementById("yorumListesi");
+  var yorumlar = kayit.yorumlar || [];
+  liste.innerHTML = yorumlar.length ? yorumlar.map(function (y) {
+    return '<div class="yorum"><div class="yorum-meta"><b>' + kacHTML(y.yazan) + '</b><span>' + kacHTML(y.tarih) + '</span></div>' +
+      '<div class="yorum-metin">' + kacHTML(y.metin) + '</div></div>';
+  }).join("") : '<p class="kucuk soluk" style="padding:0 0 6px">Henüz yorum eklenmedi.</p>';
+
+  sesliYazimKurulumu(document.getElementById("yorumSesTus"), document.getElementById("yorumSesDurum"),
+    document.getElementById("yorumMetni"), { baslatMetin: " Sesle Yorum Ekle", durdurMetin: " Kaydı Durdur" });
+  duzenleTusuEkle(document.getElementById("yorumDuzenleBtn"), document.getElementById("yorumMetni"));
+
+  document.getElementById("yorumEkleBtn").addEventListener("click", function () {
+    var metin = document.getElementById("yorumMetni").value.trim();
+    if (!metin) { bildirim("Yorum metni boş olamaz.", true); return; }
+    apiPost("/api/ogrenci/" + encodeURIComponent(ogrenciId) + "/yorum", { metin: metin })
+      .then(function (k2) { kayit = k2; bildirim("Yorum eklendi."); cizVeSarmala(); }).catch(apiHataGoster);
+  });
+}
+
+document.addEventListener("click", function (e) {
+  var kutu = document.getElementById("ogrenciEtiket");
+  if (kutu && kutu.classList.contains("acik") && !kutu.contains(e.target)) kutu.classList.remove("acik");
+});
+</script>
+</body>
+</html>

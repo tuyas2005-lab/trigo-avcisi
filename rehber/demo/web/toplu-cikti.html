@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toplu Görüşme Formu Çıktısı</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="resmi-form.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+<style>
+  .toplu-ozet{max-width:900px;margin:0 auto 14px;font-size:14px}
+  .toplu-form{margin-bottom:26px}
+  .toplu-form .rf-not-yazdirma{display:block;white-space:pre-wrap;font-size:14px;line-height:1.55;color:var(--rf-metin);
+    padding:6px 8px;min-height:54px}
+  .toplu-form .rf-secenek{cursor:default}
+  @media print{
+    .toplu-form{margin:0;break-after:page;page-break-after:always}
+    .toplu-form:last-child{break-after:auto;page-break-after:auto}
+    .toplu-form .rf-not-yazdirma{font-size:13.5px;line-height:1.45;padding:1px 2px;min-height:0}
+  }
+</style>
+</head>
+<body>
+<main id="ana" style="padding:22px">
+  <div class="rf-sayfa">
+    <div class="rf-araclar yazdirma-gizle">
+      <div><b id="baslik">Toplu görüşme formu çıktısı</b><div class="kucuk soluk" id="altBaslik">Yükleniyor…</div></div>
+      <div class="sag"><button id="btnKapat">Kapat</button><button class="birincil" id="btnYazdir" disabled>Yazdır / PDF</button></div>
+    </div>
+    <div id="formlar"><div class="yukleniyor">Görüşmeler hazırlanıyor…</div></div>
+  </div>
+</main>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+/* Ayarlar > Toplu Çıktı'dan açılır. Seçilen tarih aralığındaki her görüşme,
+   resmi MEB formu olarak (salt okunur) ayrı bir A4 sayfasına basılır.
+   Görünüm form-ogrenci.html / form-veli.html ile aynı tutulmalıdır. */
+var q = new URLSearchParams(location.search);
+var B = {};
+
+function secenekler(secili, tum) {
+  return '<div class="rf-secenekler">' + (tum || []).map(function (s) {
+    return '<label class="rf-secenek"><input type="checkbox" disabled' + ((secili || []).indexOf(s) >= 0 ? " checked" : "") +
+      '> ' + kacHTML(s) + '</label>';
+  }).join("") + '</div>';
+}
+function deger(v) { return '<input type="text" value="' + kacHTML(v || "—") + '" readonly>'; }
+function cinsiyet(c) {
+  return '<div class="rf-secenekler"><label class="rf-secenek"><input type="radio" disabled' + (c === "K" ? " checked" : "") + '> K</label>' +
+    '<label class="rf-secenek"><input type="radio" disabled' + (c === "E" ? " checked" : "") + '> E</label></div>';
+}
+function ust(baslikGorseli, tarih, saat) {
+  return '<thead><tr><td colspan="4" style="border:0;padding:0"><div class="rf-ust">' +
+    (B.logoSurum ? '<img class="rf-logo" src="' + okulLogoUrl(B.logoSurum) + '" alt="Okul logosu">' : '') +
+    '<img class="rf-ust-img" src="assets/' + baslikGorseli + '" alt="">' +
+    '<div class="rf-tarih-ust"><span class="rf-tarih-etiket">Görüşme Tarihi</span>' + deger(tarih) +
+    '<span class="rf-tarih-etiket rf-saat-etiket">Görüşme Saati</span>' + deger(saat) + '</div>' +
+    '</div></td></tr></thead>';
+}
+function alt() {
+  return '<tr class="rf-alt-satiri"><td colspan="4" style="border:0;padding:0"><div class="rf-alt"><div class="rf-imza"><div class="cizgi"><b>' +
+    kacHTML(B.ayarlar.rehberAdSoyad || "—") + '</b><span>' + kacHTML(B.ayarlar.unvan || "Rehber Öğretmen") + '</span></div></div></div>' +
+    '<div class="rf-footer">' + kacHTML(B.ayarlar.okulAdi || "") + '</div></td></tr>';
+}
+function kart(ic) {
+  return '<div class="toplu-form"><div class="rf-kart"><span class="rf-yan-kod">B.K.G.5.c</span>' +
+    '<table class="rf-tablo"><colgroup><col class="rf-kolon-etiket"><col class="rf-kolon-deger"><col class="rf-kolon-etiket"><col class="rf-kolon-deger"></colgroup>' +
+    ic + '</table></div></div>';
+}
+function ogrenciFormu(o, g) {
+  return kart(ust("ogrenci-header.png", g.tarih, g.saat) + '<tbody>' +
+    '<tr><td class="rf-etiket-hucre">Adı Soyadı</td><td>' + deger(o.adSoyad) + '</td><td class="rf-etiket-hucre">Cinsiyeti</td><td>' + cinsiyet(o.cinsiyet) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Doğum Tarihi</td><td>' + deger(o.dogumTarihi) + '</td><td class="rf-etiket-hucre">Okul Numarası</td><td>' + deger(o.okulNo) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Okulu</td><td colspan="3">' + deger(B.ayarlar.okulAdi) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Sınıfı ve Sınıf<br>Rehber Öğretmeni</td><td>' + deger((o.sinif || "—") + (o.sinifOgretmeni ? " — " + o.sinifOgretmeni : "")) + '</td>' +
+    '<td class="rf-etiket-hucre">Görüşme Sayısı</td><td>' + deger(String(g.sira || o.toplamGorusme)) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Başvurma Şekli</td><td colspan="3">' + secenekler(g.basvurma, B.basvurmaSecenekleri) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Görüşme Konusu<br><span class="kucuk soluk" style="font-weight:400">(birden fazla seçilebilir)</span></td><td colspan="3">' + secenekler(g.konu, B.konuSecenekleri) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Yapılan Çalışma</td><td colspan="3">' + secenekler(g.calisma, B.calismaSecenekleri) + '</td></tr>' +
+    '<tr class="rf-bant-baslik"><td colspan="4">Çalışmanın Özeti</td></tr>' +
+    '<tr class="rf-gorusme-satir"><td colspan="4" class="rf-gorusme-sag"><div class="rf-not-yazdirma">' + kacHTML(g.notMetin || "") + '</div></td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Sonuç ve Öneri</td><td colspan="3"><div class="rf-not-yazdirma">' + kacHTML(g.sonucOneri || "") + '</div></td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Varsa<br>Yönlendirildiği<br>Kurum</td><td colspan="3">' + secenekler(g.yonlendirilenKurum, B.kurumSecenekleri) + '</td></tr>' +
+    alt() + '</tbody>');
+}
+function veliFormu(o, g) {
+  return kart(ust("veli-header.png", g.tarih, g.saat) + '<tbody>' +
+    '<tr><td class="rf-etiket-hucre">Öğrencinin Adı Soyadı</td><td>' + deger(o.adSoyad) + '</td><td class="rf-etiket-hucre">Öğrencinin Cinsiyeti</td><td>' + cinsiyet(o.cinsiyet) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Velinin Adı Soyadı</td><td>' + deger(o.veliAdSoyad) + '</td><td class="rf-etiket-hucre">Öğrencinin Sınıfı / Numarası</td><td>' + deger((o.sinif || "—") + " — " + (o.okulNo || "—")) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Öğrenciye Yakınlığı</td><td>' + deger(o.veliYakinlik) + '</td><td class="rf-etiket-hucre">Veli; Telefon / e-posta</td><td>' + deger(o.veliTelefon) + '</td></tr>' +
+    '<tr><td class="rf-etiket-hucre">Görüşme Konusu</td><td colspan="3">' + secenekler(g.konu, B.konuSecenekleri) + '</td></tr>' +
+    '<tr class="rf-bant-baslik"><td colspan="4">Çalışmanın Özeti</td></tr>' +
+    '<tr class="rf-gorusme-satir"><td colspan="4" class="rf-gorusme-sag"><div class="rf-not-yazdirma">' + kacHTML(g.notMetin || "") + '</div></td></tr>' +
+    alt() + '</tbody>');
+}
+
+var turAdi = { ogrenci: "öğrenci", veli: "veli" };
+Promise.all([apiGet("/api/baslangic"), apiGet("/api/toplu-gorusmeler?" + q.toString())]).then(function (r) {
+  B = r[0]; var v = r[1];
+  var ek = [];
+  if (q.get("tur")) ek.push("yalnızca " + turAdi[q.get("tur")] + " görüşmeleri");
+  if (q.get("sinif")) ek.push(q.get("sinif") + " sınıfı");
+  if (q.get("konu")) ek.push("konu: " + q.get("konu"));
+  document.getElementById("altBaslik").textContent = v.bas + " – " + v.bit + " arası · " + v.sayi + " görüşme formu" +
+    (ek.length ? " · " + ek.join(", ") : "") + (v.sayi ? " · her form ayrı sayfaya basılır" : "");
+  if (!v.sayi) {
+    document.getElementById("formlar").innerHTML = '<div class="kart"><div class="icerik">' +
+      bosDurumHtml("Bu tarih aralığında görüşme bulunamadı.", "Ayarlar > Toplu Çıktı ekranında tarihleri değiştirip yeniden deneyin.") + '</div></div>';
+    return;
+  }
+  document.getElementById("formlar").innerHTML = v.kayitlar.map(function (x) {
+    return x.gorusme.tur === "veli" ? veliFormu(x.ogrenci, x.gorusme) : ogrenciFormu(x.ogrenci, x.gorusme);
+  }).join("");
+  document.getElementById("btnYazdir").disabled = false;
+  document.title = "Görüşme Formları " + v.bas + " – " + v.bit;
+}).catch(function (e) {
+  document.getElementById("formlar").innerHTML = '<div class="bos">Çıktı hazırlanamadı.</div>';
+  apiHataGoster(e);
+});
+document.getElementById("btnYazdir").addEventListener("click", function () { window.print(); });
+document.getElementById("btnKapat").addEventListener("click", function () { window.close(); setTimeout(function () { location.href = "ayarlar.html#toplu"; }, 150); });
+</script>
+</body>
+</html>

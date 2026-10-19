@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1B2A41">
+<meta name="description" content="Öğrenci Rehberlik Takip Sistemi: geliştirme ve okula özel uyarlama talebi, iletişim ve güncelleme duyuruları için gönüllü e-posta listesi.">
+<title>Geliştirme Talebi ve İletişim · Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="site.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+.iki{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0}
+@media (max-width:720px){.iki{grid-template-columns:1fr}}
+.ucret{font-weight:900;font-size:13px;letter-spacing:.05em;padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:10px}
+.ucret.yok{background:var(--teal2);color:var(--teal)}.ucret.var{background:var(--warm2);color:var(--warm)}
+.kart ul{margin:8px 0 0;padding-left:20px;color:var(--muted)}
+form label.ad{display:block;font-weight:800;font-size:14px;margin:14px 0 6px}
+textarea{min-height:120px;resize:vertical}
+.aydinlatma{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14px;color:var(--muted);margin-top:12px}
+.satir{display:flex;gap:10px;flex-wrap:wrap}
+.satir input{flex:1;min-width:220px}
+</style>
+</head>
+<body data-sayfa="iletisim">
+<main>
+<section style="padding-top:44px">
+  <div class="wrap dar">
+    <p class="ust">Geliştirme talebi / İletişim</p>
+    <h1>Size nasıl yardımcı olabiliriz?</h1>
+    <p class="lead">Kurulum kılavuzu ve hata düzeltmeleri ücretsiz; yeni özellik ve okula özel uyarlama ücretlidir.</p>
+    <div class="iki">
+      <div class="kart"><span class="ucret yok">ÜCRETSİZ</span><h3>Program ve destek</h3><ul><li>Programın kendisi</li><li>Kurulum kılavuzu</li><li>Hata düzeltmeleri (<a href="surumler.html">Sürüm Notları</a>'nda duyurulur)</li></ul></div>
+      <div class="kart"><span class="ucret var">ÜCRETLİ</span><h3>Geliştirme talepleri</h3><ul><li>Yeni özellik</li><li>Okulunuza ya da kurumunuza özel uyarlama</li><li>Özel destek</li></ul><p style="margin-top:10px;font-size:14px">Ücretli talepler ayrıca yapılacak yazılı anlaşmayla karşılanır (<a href="kosullar.html">Kullanım Koşulları</a>, madde 9).</p></div>
+    </div>
+
+    <h2 style="margin-top:40px">Talep ya da hata bildirimi gönderin</h2>
+    <p class="ipucu">Bu form hiçbir şeyi sitede saklamaz; yazdıklarınızla e-posta programınızı açar, gönderen sizsiniz. <b>Öğrenci adı ya da kişisel bilgi yazmayın.</b></p>
+    <form id="talepForm">
+      <label class="ad" for="tTur">Konu</label>
+      <select id="tTur"><option>Hata bildirimi</option><option>Kurulum sorusu</option><option>Yeni özellik talebi (ücretli)</option><option>Okula özel uyarlama (ücretli)</option><option>Diğer</option></select>
+      <label class="ad" for="tSurum">Programdaki sürüm <span class="ipucu">(Ayarlar → Hakkında)</span></label>
+      <input type="text" id="tSurum" maxlength="20" placeholder="Örn. 3.4">
+      <label class="ad" for="tMetin">Açıklama</label>
+      <textarea id="tMetin" maxlength="3000" required placeholder="Ne yapmak istediniz, ne oldu? Hata mesajı varsa yazın."></textarea>
+      <div class="satir" style="margin-top:14px"><button class="btn ana" type="submit">✉ E-posta programımda aç</button><a class="btn cizgi" id="waBag" hidden target="_blank" rel="noopener">WhatsApp</a></div>
+      <p class="mesaj" id="talepMesaj" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<section id="abone" class="alt">
+  <div class="wrap dar">
+    <p class="ust">İsteğe bağlı</p>
+    <h2>Güncellemelerden haberdar olun</h2>
+    <p class="lead">Yeni sürüm ve önemli güncelleme duyurularını e-postayla almak isterseniz adresinizi bırakın. Zorunlu değildir ve indirmeyle bir bağlantısı yoktur.</p>
+    <form id="aboneForm" style="margin-top:20px">
+      <label class="ad" for="aEposta" style="font-weight:800">E-posta adresiniz</label>
+      <div class="satir"><input type="email" id="aEposta" autocomplete="email" maxlength="120" required placeholder="ornek@ornek.com"><button class="btn koyu" type="submit">Listeye katıl</button></div>
+      <div class="aydinlatma">E-posta adresiniz yalnızca yeni sürüm ve önemli güncelleme duyuruları için kullanılır, üçüncü kişilerle paylaşılmaz ve reklam amaçlı kullanılmaz. Her e-postadaki bağlantıyla ya da bize yazarak dilediğiniz an listeden çıkabilir, adresinizin silinmesini isteyebilirsiniz. (6698 sayılı KVKK)</div>
+      <label class="kutu"><input type="checkbox" id="aOnay" required> Okudum, kabul ediyorum.</label>
+      <p class="mesaj" id="aboneMesaj" aria-live="polite"></p>
+    </form>
+    <details id="cik" style="margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 18px">
+      <summary style="font-weight:800;cursor:pointer;padding:12px 0">Listeden çıkmak istiyorum</summary>
+      <form id="cikForm" style="padding-bottom:14px">
+        <p class="ipucu">Adresinizi yazın; listede varsa hemen silinir.</p>
+        <div class="satir"><input type="email" id="cEposta" autocomplete="email" maxlength="120" required placeholder="ornek@ornek.com"><button class="btn cizgi" type="submit">Listeden çık</button></div>
+        <p class="mesaj" id="cikMesaj" aria-live="polite"></p>
+      </form>
+    </details>
+  </div>
+</section>
+</main>
+<script src="config.js"></script>
+<script src="site.js"></script>
+<script>
+const CFG=window.RG_CONFIG||{};
+/* talep: yalnızca kullanıcının e-posta programını açar */
+if(CFG.whatsapp){const w=document.getElementById('waBag');w.hidden=false;w.href='https://wa.me/'+CFG.whatsapp.replace(/\D/g,'');}
+document.getElementById('talepForm').addEventListener('submit',e=>{
+  e.preventDefault();const m=document.getElementById('talepMesaj');
+  if(!CFG.eposta){m.className='mesaj kotu';m.textContent='İletişim adresi henüz eklenmedi. Lütfen daha sonra tekrar deneyin.';return;}
+  const tur=document.getElementById('tTur').value,surum=document.getElementById('tSurum').value.trim(),metin=document.getElementById('tMetin').value.trim();
+  const govde=metin+'\n\n---\nProgram sürümü: '+(surum||'bilinmiyor')+'\nİşletim sistemi: '+(navigator.userAgentData&&navigator.userAgentData.platform||navigator.platform||'');
+  location.href='mailto:'+CFG.eposta+'?subject='+encodeURIComponent('[Rehberlik Takip] '+tur)+'&body='+encodeURIComponent(govde);
+  m.className='mesaj iyi';m.textContent='E-posta programınız açılıyor. Açılmazsa '+CFG.eposta+' adresine yazabilirsiniz.';});
+/* e-posta listesi (supabase/rehber-site.sql) */
+async function rpc(fn,args){
+  if(!CFG.supabaseUrl||!CFG.supabaseKey)throw new Error('kapali');
+  const h={'Content-Type':'application/json',apikey:CFG.supabaseKey};if(!/^sb_/.test(CFG.supabaseKey))h.Authorization='Bearer '+CFG.supabaseKey;
+  const r=await fetch(CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(args)});
+  if(!r.ok)throw new Error('http');return r.json();}
+const MESAJ={ok:'Teşekkürler, listeye eklendiniz. Yeni sürümlerde size yazacağız.',gecersiz:'Geçerli bir e-posta adresi yazın.',onay_yok:'Lütfen aydınlatma metnini onaylayın.',yogun:'Şu an çok fazla istek var, biraz sonra tekrar deneyin.'};
+document.getElementById('aboneForm').addEventListener('submit',async e=>{
+  e.preventDefault();const m=document.getElementById('aboneMesaj'),b=e.target.querySelector('button');
+  b.disabled=true;m.className='mesaj';m.textContent='Gönderiliyor…';
+  try{const r=await rpc('rs_abone_ol',{p_eposta:document.getElementById('aEposta').value,p_onay:document.getElementById('aOnay').checked});
+    m.className='mesaj '+(r==='ok'?'iyi':'kotu');m.textContent=MESAJ[r]||'Bir sorun oluştu.';if(r==='ok')e.target.reset();}
+  catch(err){m.className='mesaj kotu';m.textContent='Liste şu an kapalı. Lütfen daha sonra tekrar deneyin.';}
+  b.disabled=false;});
+document.getElementById('cikForm').addEventListener('submit',async e=>{
+  e.preventDefault();const m=document.getElementById('cikMesaj');
+  try{await rpc('rs_abone_cik',{p_eposta:document.getElementById('cEposta').value});m.className='mesaj iyi';m.textContent='Adresiniz listede varsa silindi.';e.target.reset();}
+  catch(err){m.className='mesaj kotu';m.textContent='Şu an işlem yapılamadı. Bize yazarak da silinmesini isteyebilirsiniz.';}});
+if(location.hash==='#cik')document.getElementById('cik').open=true;
+</script>
+</body>
+</html>

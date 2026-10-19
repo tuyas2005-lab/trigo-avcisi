@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Canlı Örnek · Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="icon" type="image/png" href="../icon-192.png">
+<style>
+/* Canlı örnek kabuğu: programın gerçek sunucu.py dosyası tarayıcıda (Pyodide) çalışır, program sayfaları
+   aşağıdaki çerçevede açılır. Üst şerit deneme sınırını gösterir; yönlendirmeli eğitim bu sayfadan yönetilir. */
+:root{
+  --bg:#F3F5F8; --panel:#FFFFFF; --panel2:#E9EDF3; --line:#D9DFE8;
+  --fg:#1B2A41; --muted:#5D6B80; --accent:#1B2A41; --accent2:#E3E9F2; --warm:#E8833A; --warm2:#FCEBDD; --bad:#C2413A;
+  --body:'Nunito Sans','Segoe UI',Roboto,sans-serif; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1724; --panel:#172234; --panel2:#1F2C42; --line:#2B3A52; --fg:#E8EEF7; --muted:#9FB0C8; --accent:#7FB2FF; --accent2:#1F2C42; --warm:#F2A361; --warm2:#3A2A1D; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex;flex-direction:column;overflow:hidden}
+.serit{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line);flex:none;flex-wrap:wrap}
+.serit .ad{font-weight:800;display:flex;align-items:center;gap:8px;margin-right:auto;white-space:nowrap}
+.serit .ad i{font-style:normal;background:var(--warm);color:#fff;font-size:12px;font-weight:800;padding:3px 9px;border-radius:99px}
+.sayac{font-size:13px;font-weight:700;color:var(--muted);min-width:150px}
+.sayac div{height:6px;border-radius:99px;background:var(--panel2);margin-top:3px;overflow:hidden}
+.sayac i{display:block;height:100%;background:var(--warm);border-radius:99px;transition:width .3s}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:8px 12px;font:800 14px var(--body);cursor:pointer;text-decoration:none;background:var(--panel2);color:var(--fg);white-space:nowrap}
+.btn.ana{background:var(--warm);color:#fff}
+.btn[disabled]{opacity:.5;cursor:default}
+@media (max-width:640px){.serit .gizle-dar{display:none}.sayac{min-width:110px}}
+#uyg{flex:1;width:100%;border:0;background:var(--bg)}
+/* başlatma ve yükleme ekranı */
+#perde{position:absolute;inset:0;top:0;display:grid;place-items:center;background:var(--bg);z-index:20;padding:20px;text-align:center}
+#perde .kutu{max-width:460px}
+#perde h1{font-size:24px;margin:0 0 8px}
+#perde p{color:var(--muted);margin:0 0 18px}
+#perde .btn.ana{font-size:17px;padding:14px 22px}
+.cubuk{height:8px;border-radius:99px;background:var(--panel2);overflow:hidden;margin:16px auto 8px;max-width:320px}
+.cubuk i{display:block;height:100%;width:0;background:var(--warm);transition:width .4s}
+.kucuk{font-size:13px;color:var(--muted)}
+/* yönlendirmeli eğitim */
+.coach{position:fixed;inset:0;z-index:40}
+.coach .hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(10,16,28,.62);transition:all .3s ease;pointer-events:none}
+.coach .hole::after{content:'';position:absolute;inset:-6px;border-radius:16px;border:3px solid var(--warm);animation:halka 1.4s ease-out infinite}
+.coach .hole.yok{width:0!important;height:0!important;left:50%!important;top:50%!important}
+.coach .hole.yok::after{display:none}
+@keyframes halka{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.08)}}
+.balon{position:fixed;width:min(370px,calc(100vw - 24px));background:var(--panel);color:var(--fg);border-radius:16px;padding:16px 16px 14px;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:top .3s,left .3s}
+.balon .no{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 8px;border-radius:99px;background:var(--warm);color:#fff;font-weight:800;font-size:14px;margin-right:8px;flex:none}
+.balon h3{display:flex;align-items:center;font-size:17px;margin:0 0 6px}
+.balon p{margin:0 0 12px;font-size:15px}
+.balon .bas{display:inline-block;font-weight:800;color:var(--warm);font-size:14px;margin-bottom:10px;animation:dur 1s ease-in-out infinite}
+@keyframes dur{50%{transform:translateY(-3px)}}
+.balon .noktalar{display:flex;gap:3px;margin-bottom:12px}
+.balon .noktalar i{height:4px;flex:1;border-radius:99px;background:var(--panel2)}
+.balon .noktalar i.on{background:var(--warm)}
+.balon .eylem{display:flex;align-items:center;gap:8px}
+.balon .gec{margin-right:auto;background:none;border:0;color:var(--muted);font:700 14px var(--body);cursor:pointer;padding:6px 2px;text-decoration:underline}
+.balon .btn.ana{background:var(--accent);color:var(--panel)}
+.bekle{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--panel);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.coach .hole,.balon{transition:none}.coach .hole::after,.balon .bas{animation:none}}
+</style>
+</head>
+<body>
+<div class="serit">
+  <span class="ad">Öğrenci Rehberlik Takip Sistemi <i>Canlı örnek</i></span>
+  <div class="sayac" id="sayac" aria-live="polite">– / 20 deneme kaydı<div><i style="width:0"></i></div></div>
+  <button class="btn" type="button" id="egitimBtn" disabled>❔ Eğitim</button>
+  <button class="btn gizle-dar" type="button" id="sifirlaBtn" disabled>↺ Sıfırla</button>
+  <a class="btn ana" id="indirBtn" href="../indir.html" target="_top">⬇ Ücretsiz indir</a>
+</div>
+<iframe id="uyg" title="Öğrenci Rehberlik Takip Sistemi canlı örnek"></iframe>
+<div id="perde">
+  <div class="kutu" id="perdeKutu">
+    <h1>Programı tarayıcınızda deneyin</h1>
+    <p>Gerçek program burada, bilgisayarınıza hiçbir şey kurmadan açılır. Bir örnek öğrenci kaydı hazır; kısa bir eğitim sizi adım adım gezdirir. Deneme kayıtları yalnızca bu tarayıcıda durur, en fazla 20 öğrenci eklenebilir.</p>
+    <button class="btn ana" type="button" id="baslaBtn">▶ Canlı örneği başlat</button>
+    <p class="kucuk" style="margin-top:12px">İlk açılışta yaklaşık 14 MB indirilir.</p>
+  </div>
+</div>
+<script src="../indir/surum.js"></script>
+<script>
+const PYODIDE='https://cdn.jsdelivr.net/pyodide/v0.27.7/full/';
+const SINIR=20,EGITIM_KEY='rg-canli-egitim',BASLADI_KEY='rg-canli-basladi';
+const uyg=document.getElementById('uyg'),perde=document.getElementById('perde'),kutu=document.getElementById('perdeKutu');
+let py=null,K=null,kaydetZaman=null;
+const utcFark=()=>-new Date().getTimezoneOffset();
+const ls={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+
+function ilerleme(metin,yuzde){kutu.innerHTML='<h1>Canlı örnek hazırlanıyor</h1><div class="cubuk"><i style="width:'+yuzde+'%"></i></div><p class="kucuk">'+metin+'</p>';}
+function hata(metin){kutu.innerHTML='<h1>Canlı örnek açılamadı</h1><p>'+metin+'</p><a class="btn ana" href="../indir.html" target="_top">Programı indirin</a>';}
+function betik(src){return new Promise((tamam,olmadi)=>{const s=document.createElement('script');s.src=src;s.onload=tamam;s.onerror=()=>olmadi(new Error('yüklenemedi'));document.head.appendChild(s);});}
+function idbEsitle(okuma){return new Promise((tamam,olmadi)=>py.FS.syncfs(okuma,e=>e?olmadi(e):tamam()));}
+function kaydet(){clearTimeout(kaydetZaman);kaydetZaman=setTimeout(()=>idbEsitle(false).catch(()=>{}),300);}
+function sayacGuncelle(){
+  const n=K.ogrenci_sayisi(),el=document.getElementById('sayac');
+  el.firstChild.textContent=n+' / '+SINIR+' deneme kaydı';el.querySelector('i').style.width=Math.min(100,n/SINIR*100)+'%';}
+
+async function basla(){
+  ls.set(BASLADI_KEY,'1');
+  if(!('serviceWorker' in navigator)){hata('Tarayıcınız canlı örneği desteklemiyor. Güncel Chrome, Edge, Firefox ya da Safari ile deneyin.');return;}
+  try{
+    ilerleme('Hazırlanıyor…',8);
+    await navigator.serviceWorker.register('sw.js',{scope:'./'});
+    await navigator.serviceWorker.ready;
+    navigator.serviceWorker.addEventListener('message',istekGeldi);
+    ilerleme('Program altyapısı indiriliyor…',22);
+    await betik(PYODIDE+'pyodide.js');
+    py=await loadPyodide({indexURL:PYODIDE});
+    ilerleme('Program dosyaları yükleniyor…',70);
+    const surum=(window.RG_DOSYA&&RG_DOSYA.surum)||'';
+    const [prog,kopru]=await Promise.all([fetch('program.zip?v='+surum),fetch('kopru.py?v='+surum)]);
+    if(!prog.ok||!kopru.ok)throw new Error('program dosyaları alınamadı');
+    py.unpackArchive(new Uint8Array(await prog.arrayBuffer()),'zip',{extractDir:'/app'});
+    py.FS.writeFile('/app/kopru.py',await kopru.text());
+    py.FS.mkdirTree('/app/veri');
+    py.FS.mount(py.FS.filesystems.IDBFS,{},'/app/veri');
+    await idbEsitle(true);
+    ilerleme('Program başlatılıyor…',90);
+    py.runPython("import sys\nsys.path.insert(0,'/app')");
+    K=py.pyimport('kopru');
+    K.hazirla(utcFark());kaydet();sayacGuncelle();
+    uyg.addEventListener('load',function ilk(){uyg.removeEventListener('load',ilk);perde.remove();
+      ['egitimBtn','sifirlaBtn'].forEach(id=>document.getElementById(id).disabled=false);
+      if(ls.get(EGITIM_KEY)!=='1')setTimeout(egitimBaslat,500);});
+    uyg.src='web/panel.html';
+  }catch(err){console.error(err);hata('Bağlantınızı kontrol edip sayfayı yenileyin. ('+(err.message||err)+')');}
+}
+
+/* Program sayfalarının /api istekleri service worker'dan buraya gelir. */
+function istekGeldi(e){
+  const m=e.data;if(!m||m.tur!=='rg-istek'||!e.ports[0])return;
+  const port=e.ports[0];
+  if(!K){port.postMessage({durum:503,basliklar:[['Content-Type','application/json; charset=utf-8']],govde:new TextEncoder().encode('{"hata":"Canlı örnek henüz hazır değil."}')});return;}
+  try{
+    const r=K.istek(m.yontem,m.url,JSON.stringify(m.basliklar),m.govde?new Uint8Array(m.govde):null);
+    const [durum,basliklar,govde]=r.toJs();r.destroy();
+    port.postMessage({durum,basliklar,govde},[govde.buffer]);
+    if(m.yontem!=='GET'){kaydet();sayacGuncelle();}
+  }catch(err){
+    console.error(err);
+    port.postMessage({durum:500,basliklar:[['Content-Type','application/json; charset=utf-8']],govde:new TextEncoder().encode(JSON.stringify({hata:'Canlı örnekte bir sorun oluştu.'}))});
+  }
+}
+
+document.getElementById('baslaBtn').addEventListener('click',basla);
+document.getElementById('sifirlaBtn').addEventListener('click',async()=>{
+  if(!confirm('Canlı örnek ilk haline dönsün mü? Eklediğiniz deneme kayıtları silinir.'))return;
+  K.sifirla(utcFark());await idbEsitle(false).catch(()=>{});sayacGuncelle();uyg.src='web/panel.html';});
+document.getElementById('egitimBtn').addEventListener('click',()=>egitimBaslat());
+if(ls.get(BASLADI_KEY)==='1')basla();
+
+/* ---------- yönlendirmeli eğitim ----------
+   Her adım bir alanı vurgular. sayfa: adımın program sayfası (gerekirse çerçeve oraya götürülür).
+   bas:1 olan adımda vurgulanan yere basmak o düğmeye/bağlantıya gerçekten basar ve eğitimi ilerletir.
+   kabuk:1 olan adımın hedefi bu sayfanın üst şeridindedir. Hedefi bulunamayan adım atlanır. */
+const ADIMLAR=[
+ {b:'Hoş geldiniz 👋',m:'Programı birkaç adımda tanıtalım. İstediğiniz an <b>Eğitimi geç</b> deyip kendiniz kullanmaya başlayabilirsiniz.'},
+ {sayfa:'panel',sec:'#yan nav',b:'Sol menü',m:'Programın bütün bölümleri burada: günlük işler, öğrenciler, planlama ve raporlar.'},
+ {sayfa:'panel',sec:'#kpiSatir',b:'Panel özeti',m:'Bugünkü ve bu ayki görüşmeleriniz, eğitim yılı toplamı ve görüşülen öğrenci oranı tek bakışta.'},
+ {sayfa:'panel',sec:'.pano .kart',b:'Bugünün ajandası',m:'Bugünkü görüşmeler ve hatırlatmalar burada listelenir.'},
+ {sayfa:'panel',sec:'a[data-yol="ogrenciler"]',bas:1,b:'Öğrenciler',m:'Öğrenci listesine gitmek için <b>Öğrenciler</b>\'e basın.'},
+ {sayfa:'ogrenciler',sec:'#aramaKutusu',b:'Arama ve süzme',m:'Ad ya da numarayla arayın; sınıf, görüşme konusu ve etiketle süzün.'},
+ {sayfa:'ogrenciler',sec:'#ogrenciGovde .tikla-satir',bas:1,b:'Öğrenci dosyası',m:'<b>ÖRNEK ÖĞRENCİ</b>\'ye basarak dosyasını açın.'},
+ {sayfa:'dosya',sec:'#btnOgrenciGorusme',b:'Öğrenci görüşmesi',m:'Yeni görüşme resmî <b>Öğrenci Görüşme Formu</b> düzeninde açılır. Notu yazabilir ya da mikrofonla söyleyebilirsiniz.'},
+ {sayfa:'dosya',sec:'#btnVeliGorusme',b:'Veli görüşmesi',m:'Veli görüşmeleri de resmî <b>Veli Görüşme Formu</b> ile kaydedilir ve yazdırılır.'},
+ {sayfa:'dosya',sec:'#dosyaSekmeler',b:'Dosya sekmeleri',m:'Görüşme geçmişi, hatırlatmalar ve yorumlar bu sekmelerde.'},
+ {sayfa:'dosya',sec:'a[data-yol="kayit"]',bas:1,b:'Öğrenci kaydı',m:'Yeni öğrenci eklemek için <b>Öğrenci Kayıt</b>\'a basın.'},
+ {sayfa:'ogrenci-kayit',sec:'#sekmeToplu',b:'Toplu liste yükleme',m:'e-Okul\'dan aldığınız <b>Sınıf Listesi</b> dosyasını (PDF, Excel, CSV) yükleyin; öğrencileri tek tek girmeniz gerekmez.'},
+ {sayfa:'ogrenci-kayit',sec:'#sekmeTek',b:'Tek öğrenci',m:'Tek bir öğrenciyi bu sekmeden elle ekleyebilirsiniz. Canlı örnekte en fazla 20 deneme kaydı yapılabilir.'},
+ {sayfa:'ogrenci-kayit',sec:'a[data-yol="gundem"]',bas:1,b:'Gündem',m:'Yaklaşan görüşme ve hatırlatmalar için <b>Gündem</b>\'e basın.'},
+ {sayfa:'gundem',sec:'#gundemKart',b:'Gündem',m:'Takip randevuları ve hatırlatmalar tarih sırasıyla burada.'},
+ {sayfa:'gundem',sec:'a[data-yol="rapor"]',bas:1,b:'Raporlar',m:'Şimdi <b>Raporlar</b>\'a basın.'},
+ {sayfa:'raporlar',sec:'#rKpiSatir',b:'Rapor özeti',m:'Tarih, sınıf, konu ve görüşme türüne göre süzülebilen istatistikler ve önceki döneme göre değişim.'},
+ {sayfa:'raporlar',sec:'#faaliyetRaporuBtn',b:'Dönem sonu faaliyet raporu',m:'İdareye sunulabilir, öğrenci adı içermeyen faaliyet raporu tek tıkla hazır.'},
+ {kabuk:1,sec:'#indirBtn',b:'Ücretsiz indirin',m:'Beğendiyseniz programı ücretsiz indirin. Verileriniz yalnızca kendi bilgisayarınızda kalır.'},
+ {kabuk:1,sec:'#egitimBtn',b:'Eğitimi tekrar izleyin',m:'Bu eğitimi istediğiniz zaman buradan yeniden açabilirsiniz.'},
+ {b:'Hazırsınız 🎉',m:'Şimdi programı serbestçe deneyin: görüşme ekleyin, formları ve raporları inceleyin.',son:1}
+];
+let eg=null;
+const bekle=ms=>new Promise(r=>setTimeout(r,ms));
+function uygBelge(){try{return uyg.contentDocument;}catch(e){return null;}}
+function uygSayfa(){try{return (uyg.contentWindow.location.pathname.match(/([\w-]+)\.html$/)||[])[1]||'';}catch(e){return '';}}
+async function sayfayaGit(sayfa){
+  if(uygSayfa()===sayfa)return;
+  let hedef='web/'+sayfa+'.html';
+  if(sayfa==='dosya')hedef+='?id='+encodeURIComponent(K.ornek_id());
+  uyg.src=hedef;}
+async function hedefBul(ad,jeton){
+  if(ad.kabuk)return document.querySelector(ad.sec);
+  for(let i=0;i<60;i++){
+    if(eg!==jeton)return null;
+    if(uygSayfa()===ad.sayfa){const d=uygBelge(),el=d&&d.querySelector(ad.sec);if(el&&el.getClientRects().length&&d.readyState!=='loading')return el;}
+    else if(i===0||i===20)await sayfayaGit(ad.sayfa);
+    await bekle(100);}
+  return null;}
+function egitimBaslat(){
+  egitimBitir(true);
+  const el=document.createElement('div');el.className='coach';el.innerHTML='<div class="hole yok"></div><div class="balon" role="dialog" aria-live="polite"></div>';
+  document.body.appendChild(el);
+  eg={i:-1,el,hedef:null};el.addEventListener('click',coachTik);adim(1);}
+function egitimBitir(sessiz){if(!eg)return;eg.el.remove();eg=null;if(!sessiz)ls.set(EGITIM_KEY,'1');}
+async function adim(yon){
+  const jeton=eg;let i=eg.i,ad,hedef=null;
+  const yuk=setTimeout(()=>{if(eg===jeton&&!eg.el.querySelector('.bekle'))eg.el.insertAdjacentHTML('beforeend','<div class="bekle">Sayfa açılıyor…</div>');},400);
+  do{i+=yon;if(i<0)i=0;if(i>=ADIMLAR.length){clearTimeout(yuk);egitimBitir();return;}ad=ADIMLAR[i];hedef=ad.sec?await hedefBul(ad,jeton):null;if(eg!==jeton){clearTimeout(yuk);return;}}
+  while(ad.sec&&!hedef&&i>0&&i<ADIMLAR.length-1);
+  clearTimeout(yuk);const b=eg.el.querySelector('.bekle');if(b)b.remove();
+  eg.i=i;eg.hedef=hedef;
+  if(hedef&&!ad.kabuk)hedef.scrollIntoView({block:'center',behavior:'instant'});
+  const no=ADIMLAR.slice(1,i+1).filter(x=>x.sec).length;
+  eg.el.querySelector('.balon').innerHTML='<div class="noktalar">'+ADIMLAR.map((_,k)=>'<i class="'+(k<=i?'on':'')+'"></i>').join('')+'</div><h3>'+(ad.sec?'<span class="no">'+no+'</span>':'')+ad.b+'</h3><p>'+ad.m+'</p>'+(ad.bas?'<span class="bas">👆 Vurgulanan yere basın</span>':'')+
+    '<div class="eylem">'+(ad.son?'<span style="margin-right:auto"></span>':'<button class="gec" type="button" data-e="gec">Eğitimi geç</button>')+(i>0&&!ad.son?'<button class="btn" type="button" data-e="geri">Geri</button>':'')+'<button class="btn ana" type="button" data-e="ileri">'+(ad.son?'Başla':i===0?'Başlayalım':'İleri')+'</button></div>';
+  yerlestir();eg.el.querySelector('[data-e="ileri"]').focus({preventScroll:true});}
+function hedefKutusu(){
+  const el=eg&&eg.hedef;if(!el)return null;const r=el.getBoundingClientRect();
+  if(ADIMLAR[eg.i].kabuk)return r;const f=uyg.getBoundingClientRect();
+  return {left:r.left+f.left,top:r.top+f.top,width:r.width,height:r.height,right:r.right+f.left,bottom:r.bottom+f.top};}
+function yerlestir(){
+  if(!eg)return;const delik=eg.el.querySelector('.hole'),b=eg.el.querySelector('.balon'),r=hedefKutusu(),vw=innerWidth,vh=innerHeight,bw=b.offsetWidth,bh=b.offsetHeight;
+  if(!r){delik.className='hole yok';b.style.left=(vw-bw)/2+'px';b.style.top=Math.max(12,(vh-bh)/2)+'px';return;}
+  const p=6;delik.className='hole';delik.style.cssText='left:'+(r.left-p)+'px;top:'+(r.top-p)+'px;width:'+(r.width+2*p)+'px;height:'+(r.height+2*p)+'px';
+  let top=r.bottom+p+14;if(top+bh>vh-12)top=r.top-p-14-bh;if(top<12)top=Math.max(12,vh-bh-12);
+  let left=r.left+r.width/2-bw/2;
+  if(r.right+p+20+bw<vw&&r.right<vw*.35){left=r.right+p+20;top=Math.min(Math.max(12,r.top+r.height/2-bh/2),vh-bh-12);}  // sol menüdeki hedefte balon sağa
+  else if(r.width>vw*.6&&r.height>vh*.5){left=vw-bw-24;top=vh-bh-24;}  // büyük hedefte balon köşeye
+  b.style.top=top+'px';b.style.left=Math.min(Math.max(12,left),vw-bw-12)+'px';}
+function coachTik(e){
+  const c=e.target.closest('[data-e]');
+  if(c){const a=c.dataset.e;if(a==='gec'||(a==='ileri'&&ADIMLAR[eg.i].son))egitimBitir();else adim(a==='ileri'?1:-1);return;}
+  const ad=ADIMLAR[eg.i],r=hedefKutusu();if(!ad.bas||!r||e.target.closest('.balon'))return;
+  if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){eg.hedef.click();adim(1);}}
+addEventListener('resize',yerlestir);
+uyg.addEventListener('load',()=>{try{uyg.contentDocument.addEventListener('scroll',yerlestir,{capture:true,passive:true});uyg.contentWindow.addEventListener('resize',yerlestir);}catch(e){}});
+addEventListener('keydown',e=>{if(!eg)return;if(e.key==='Escape'){e.preventDefault();egitimBitir();}else if(e.key==='ArrowRight')eg.el.querySelector('[data-e="ileri"]').click();});
+</script>
+</body>
+</html>

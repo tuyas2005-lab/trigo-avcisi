@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Takvim — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim" class="etkin">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+<header class="sayfa-bandi yazdirma-gizle kompakt">
+      <div class="bant-metin">
+        <h2 class="baslik">Takvim</h2>
+        <p>Görüşmeler, hatırlatmalar, sınıf etkinlikleri ve toplantılar tek takvimde.</p>
+        <div class="bant-arac"><div class="gorunum-sekme" id="gorunumSekme">
+          <button type="button" data-gorunum="ay" class="etkin">Aylık</button>
+          <button type="button" data-gorunum="hafta">Haftalık</button>
+        </div>
+        <div class="ay-nav">
+          <button id="oncekiBtn">‹ Önceki</button>
+          <b id="baslikMetni">…</b>
+          <button id="sonrakiBtn">Sonraki ›</button>
+        </div>
+        <button class="buton-bugun" id="bugunBtn" type="button">Bugün</button></div>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/takvim.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="kart" id="aySayfasi">
+      <div class="icerik">
+        <div class="takvim" id="takvimIzgara">
+          <div class="basl">Pzt</div><div class="basl">Sal</div><div class="basl">Çar</div><div class="basl">Per</div><div class="basl">Cum</div><div class="basl">Cmt</div><div class="basl">Paz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart" id="haftaSayfasi" style="display:none">
+      <div class="icerik">
+        <div class="hafta-basliklar" id="haftaBasliklar"></div>
+        <div class="hafta-tumgun" id="haftaTumGun" style="display:none"></div>
+        <div class="hafta-govde-sarmal">
+          <div class="hafta-saat-etiketler" id="haftaSaatEtiketler"></div>
+          <div class="hafta-govde" id="haftaGovde"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <div class="icerik">
+        <div class="lejant">
+          <span class="lejant-oge"><i style="background:#1a6b45"></i> Öğrenci Görüşmesi</span>
+          <span class="lejant-oge"><i style="background:#d98014"></i> Veli Görüşmesi</span>
+          <span class="lejant-oge"><i style="background:#17457d"></i> RAM / Kurum Yönlendirme</span>
+          <span class="lejant-oge"><i style="background:#64748b"></i> Planlanan Hatırlatma</span>
+          <span class="lejant-oge"><i style="background:#5b2d9e"></i> Sınıf Etkinliği</span>
+          <span class="lejant-oge"><i style="background:#0e7490"></i> Toplantı</span>
+          <span class="lejant-oge"><i style="background:#96271b"></i> Gecikmiş / Tamamlanmamış</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var AY_KISA = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+
+var simdi = new Date();
+var goruntulenenYil = simdi.getFullYear();
+var goruntulenenAy = simdi.getMonth() + 1;
+var gorunumModu = "ay";
+var haftaBaslangic = pazartesiBul(simdi);
+
+function pazartesiBul(d) {
+  var kopya = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  var gun = (kopya.getDay() + 6) % 7; // Pzt=0 ... Paz=6
+  kopya.setDate(kopya.getDate() - gun);
+  return kopya;
+}
+function isoTarih(d) {
+  var mm = ("0" + (d.getMonth() + 1)).slice(-2), dd = ("0" + d.getDate()).slice(-2);
+  return d.getFullYear() + "-" + mm + "-" + dd;
+}
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+}).catch(function () {});
+
+function olayEtiketMetni(kategori) {
+  return { ram: "ram", aile: "aile", izleme: "izleme", gecmis: "gecmis", plan: "plan", etkinlik: "etkinlik", toplanti: "toplanti" }[kategori] || "izleme";
+}
+function olayHedefUrl(o) {
+  if (o.ogrenciId) return "dosya.html?id=" + encodeURIComponent(o.ogrenciId);
+  if (o.toplantiId) return "toplanti.html";
+  return "sinif-etkinlik.html";
+}
+
+document.querySelectorAll("#gorunumSekme button").forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (this.getAttribute("data-gorunum") === gorunumModu) return;
+    gorunumModu = this.getAttribute("data-gorunum");
+    document.querySelectorAll("#gorunumSekme button").forEach(function (x) {
+      x.classList.toggle("etkin", x === b);
+    });
+    document.getElementById("aySayfasi").style.display = gorunumModu === "ay" ? "" : "none";
+    document.getElementById("haftaSayfasi").style.display = gorunumModu === "hafta" ? "" : "none";
+    veriYukle();
+  });
+});
+
+function veriYukle() {
+  if (gorunumModu === "ay") aylikYukle(); else haftalikYukle();
+}
+
+function aylikYukle() {
+  apiGet("/api/takvim?yil=" + goruntulenenYil + "&ay=" + goruntulenenAy).then(function (v) {
+    document.getElementById("baslikMetni").textContent = v.ayAdi;
+    var izgara = document.getElementById("takvimIzgara");
+    var hucreHtml = v.hucreler.map(function (h) {
+      if (h.disari) return '<div class="hucre disari"></div>';
+      var olaylar = (h.olaylar || []).map(function (o) {
+        return '<span class="olay ' + olayEtiketMetni(o.sinif) + '" title="' + kacHTML(o.metin) +
+          '" onclick="location.href=\'' + olayHedefUrl(o) + '\'">' + kacHTML(o.metin) + '</span>';
+      }).join("");
+      return '<div class="hucre' + (h.bugunMu ? " bugun" : "") + '"><span class="no">' + h.gun + '</span>' + olaylar + '</div>';
+    }).join("");
+    izgara.innerHTML =
+      '<div class="basl">Pzt</div><div class="basl">Sal</div><div class="basl">Çar</div><div class="basl">Per</div>' +
+      '<div class="basl">Cum</div><div class="basl">Cmt</div><div class="basl">Paz</div>' + hucreHtml;
+  }).catch(apiHataGoster);
+}
+
+function haftalikYukle() {
+  apiGet("/api/takvim-hafta?tarih=" + isoTarih(haftaBaslangic)).then(function (v) {
+    var son = new Date(haftaBaslangic.getFullYear(), haftaBaslangic.getMonth(), haftaBaslangic.getDate() + 4);
+    document.getElementById("baslikMetni").textContent =
+      haftaBaslangic.getDate() + " " + AY_KISA[haftaBaslangic.getMonth()] + " – " +
+      son.getDate() + " " + AY_KISA[son.getMonth()] + " " + son.getFullYear();
+    izgarayiCiz(v);
+  }).catch(apiHataGoster);
+}
+
+function izgarayiCiz(v) {
+  var basSaat = v.baslangicSaat, bitSaat = v.bitisSaat;
+  var pxPerMin = 1;
+  var yukseklik = (bitSaat - basSaat) * 60 * pxPerMin;
+
+  document.getElementById("haftaBasliklar").innerHTML =
+    '<div class="hafta-saat-bosluk"></div>' + v.gunler.map(function (g) {
+      return '<div class="hafta-gun-baslik' + (g.bugunMu ? " bugun" : "") + '">' + kacHTML(g.gunAdiKisa) +
+        '<span>' + g.gun + ' ' + kacHTML(g.ayKisa) + '</span></div>';
+    }).join("");
+
+  var herhangiTumGun = v.gunler.some(function (g) { return g.tumGunOlaylar.length > 0; });
+  var tumGunEl = document.getElementById("haftaTumGun");
+  if (herhangiTumGun) {
+    tumGunEl.style.display = "";
+    tumGunEl.innerHTML = '<div class="hafta-saat-bosluk kucuk">Tüm gün</div>' + v.gunler.map(function (g) {
+      var ogeler = g.tumGunOlaylar.map(function (o) {
+        return '<span class="hafta-tumgun-oge ' + olayEtiketMetni(o.kategori) + '" title="' + kacHTML(o.metin) +
+          '" onclick="location.href=\'' + olayHedefUrl(o) + '\'">' + kacHTML(o.metin) + '</span>';
+      }).join("");
+      return '<div class="hafta-tumgun-hucre">' + ogeler + '</div>';
+    }).join("");
+  } else {
+    tumGunEl.style.display = "none";
+    tumGunEl.innerHTML = "";
+  }
+
+  var etiketHtml = "";
+  for (var sa = basSaat; sa <= bitSaat; sa++) {
+    var top = (sa - basSaat) * 60 * pxPerMin;
+    etiketHtml += '<div class="hafta-saat-etiket" style="top:' + top + 'px">' + (sa < 10 ? "0" + sa : sa) + ':00</div>';
+  }
+  var etiketKutu = document.getElementById("haftaSaatEtiketler");
+  etiketKutu.style.height = yukseklik + "px";
+  etiketKutu.innerHTML = etiketHtml;
+
+  var govde = document.getElementById("haftaGovde");
+  govde.style.height = yukseklik + "px";
+  govde.innerHTML = v.gunler.map(function (g) {
+    var olaylarHtml = g.saatliOlaylar.map(function (o) {
+      var basDk = Math.max(o.baslangicDk, basSaat * 60);
+      var bitDk = Math.min(o.bitisDk, bitSaat * 60);
+      if (bitDk <= basDk) bitDk = basDk + 18;
+      var top = (basDk - basSaat * 60) * pxPerMin;
+      var yuk = Math.max(18, (bitDk - basDk) * pxPerMin);
+      return '<div class="hafta-olay ' + olayEtiketMetni(o.kategori) + '" style="top:' + top + 'px;height:' + yuk + 'px" ' +
+        'title="' + kacHTML((o.saatMetni || "") + " — " + o.metin) + '" onclick="location.href=\'' + olayHedefUrl(o) + '\'">' +
+        '<b>' + kacHTML(o.saatMetni || "") + '</b>' + kacHTML(o.metin) + '</div>';
+    }).join("");
+    return '<div class="hafta-gun-sutun' + (g.bugunMu ? " bugun" : "") + '">' + olaylarHtml + '</div>';
+  }).join("");
+}
+
+document.getElementById("oncekiBtn").addEventListener("click", function () {
+  if (gorunumModu === "ay") {
+    goruntulenenAy--;
+    if (goruntulenenAy < 1) { goruntulenenAy = 12; goruntulenenYil--; }
+  } else {
+    haftaBaslangic = new Date(haftaBaslangic.getFullYear(), haftaBaslangic.getMonth(), haftaBaslangic.getDate() - 7);
+  }
+  veriYukle();
+});
+document.getElementById("sonrakiBtn").addEventListener("click", function () {
+  if (gorunumModu === "ay") {
+    goruntulenenAy++;
+    if (goruntulenenAy > 12) { goruntulenenAy = 1; goruntulenenYil++; }
+  } else {
+    haftaBaslangic = new Date(haftaBaslangic.getFullYear(), haftaBaslangic.getMonth(), haftaBaslangic.getDate() + 7);
+  }
+  veriYukle();
+});
+document.getElementById("bugunBtn").addEventListener("click", function () {
+  var s = new Date();
+  goruntulenenYil = s.getFullYear();
+  goruntulenenAy = s.getMonth() + 1;
+  haftaBaslangic = pazartesiBul(s);
+  veriYukle();
+});
+
+veriYukle();
+</script>
+</body>
+</html>

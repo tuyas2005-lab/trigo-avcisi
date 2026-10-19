@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raporlar — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body class="sayfa-raporlar">
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor" class="etkin">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+    <div class="rapor-yazdirma-baslik">
+      <div class="rapor-yazdirma-baslik-ust">
+        <div class="ry-okul-blok"><img class="ry-logo" id="ryLogo" alt="Okul logosu" hidden><div>
+          <div class="rapor-yazdirma-okul" id="ryOkul"></div>
+          <div id="ryIlceIl"></div>
+        </div></div>
+        <div class="rapor-yazdirma-hazirlayan">
+          <div id="ryHazirlayan"></div>
+          <div id="ryTarih"></div>
+        </div>
+      </div>
+      <h1 class="rapor-yazdirma-baslik-metin">Rehberlik ve Psikolojik Danışma Hizmetleri Faaliyet Raporu</h1>
+      <div class="rapor-yazdirma-donem" id="ryDonem"></div>
+    </div>
+
+<header class="sayfa-bandi yazdirma-gizle">
+      <div class="bant-metin">
+        <h2 class="baslik">Raporlar</h2>
+        <p>Seçtiğiniz dönem ve filtrelere göre görüşme, etkinlik ve toplantı istatistikleri.</p>
+        <div class="bant-arac"><button id="disaAktarBtn" class="birincil">⭳ Yazdır / PDF olarak kaydet</button> <button id="faaliyetRaporuBtn" class="ikincil">Dönem Sonu Faaliyet Raporu</button></div>
+      </div>
+      <img class="bant-gorsel" src="assets/basliklar/rapor.webp" alt="" onerror="this.remove()">
+    </header>
+
+    <div class="kart yazdirma-gizle">
+      <div class="icerik">
+        <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:flex-end">
+          <div><label class="kucuk" style="color:#3c5375">Başlangıç Tarihi</label><input type="text" id="rBaslangic" style="max-width:120px"></div>
+          <div><label class="kucuk" style="color:#3c5375">Bitiş Tarihi</label><input type="text" id="rBitis" style="max-width:120px"></div>
+          <div><label class="kucuk" style="color:#3c5375">Sınıf</label><select id="rSinif" style="max-width:140px"><option value="">Tüm Sınıflar</option></select></div>
+          <div><label class="kucuk" style="color:#3c5375">Görüşme Konusu</label><select id="rKonu" style="max-width:180px"><option value="">Tümü</option></select></div>
+          <div><label class="kucuk" style="color:#3c5375">Görüşme Türü</label><select id="rTur" style="max-width:140px"><option value="">Tümü</option><option value="ogrenci">Öğrenci</option><option value="veli">Veli</option></select></div>
+          <button class="filtre-temizle" id="rTemizleBtn">Filtreyi Temizle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-satir" id="rKpiSatir"><div class="yukleniyor">Yükleniyor…</div></div>
+
+    <div class="pano yan-yana">
+      <div class="kart">
+        <h2>Kapsama — Görüşülen Öğrenci Oranı (Sınıf Bazında)</h2>
+        <div class="icerik">
+          <div id="rKapsama" class="yukleniyor">Yükleniyor…</div>
+          <p class="kucuk soluk" style="margin:10px 0 0">Seçili dönemde kendisiyle veya velisiyle en az bir görüşme yapılan öğrencilerin, sınıftaki tüm kayıtlı öğrencilere oranı.</p>
+        </div>
+      </div>
+      <div class="kart yazdirma-gizle" id="takip">
+        <h2>Takip Uyarı Listesi</h2>
+        <div class="icerik">
+          <div id="rTakip" class="yukleniyor">Yükleniyor…</div>
+          <p class="kucuk soluk" style="margin:10px 0 0">Etiketi olan ama son <span id="rTakipEsik">30</span> gündür görüşülmeyen öğrenciler (bugüne göre). Öğrenci adları içerdiği için bu liste yazdırılan rapora <b>eklenmez</b>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pano">
+      <div class="kart">
+        <h2>Aylık Görüşme Trendi</h2>
+        <div class="icerik">
+          <div id="rSutunGrafik" class="yukleniyor">Yükleniyor…</div>
+          <p class="kucuk soluk" style="margin:10px 0 0" id="rTrendNot"></p>
+        </div>
+      </div>
+      <div class="kart">
+        <h2>Görüşme Konusu Dağılımı</h2>
+        <div class="icerik"><div id="rHalkaGrafik" class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+    </div>
+
+    <div class="pano yan-yana">
+      <div class="kart">
+        <h2>Başvuru Şekli (Öğrenci Görüşmeleri)</h2>
+        <div class="icerik"><div id="rBasvuru" class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+      <div class="kart">
+        <h2>Yapılan Çalışma Türü (Öğrenci Görüşmeleri)</h2>
+        <div class="icerik"><div id="rCalisma" class="yukleniyor">Yükleniyor…</div></div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Sınıf Bazında Görüşme Sayısı</h2>
+      <div class="icerik"><div id="rSinifCubuk" class="yukleniyor">Yükleniyor…</div></div>
+    </div>
+
+    <div class="kart">
+      <h2>Etikete Göre Görüşülen Öğrenci Sayısı</h2>
+      <div class="icerik">
+        <div id="rEtiketCubuk" class="yukleniyor">Yükleniyor…</div>
+        <p class="kucuk soluk" style="margin:10px 0 0">Bir öğrenci birden fazla etikete sahip olabileceğinden toplam, görüşülen öğrenci sayısını aşabilir.</p>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Yönlendirme Dağılımı (RAM / Hastane / Diğer Kurumlar)</h2>
+      <div class="icerik">
+        <div id="rKurumCubuk" class="yukleniyor">Yükleniyor…</div>
+        <p class="kucuk soluk" style="margin:10px 0 0" id="rKurumNot"></p>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Sınıflara Göre Etiket Dağılımı</h2>
+      <div class="icerik">
+        <div id="rEtiketMatris" class="yukleniyor">Yükleniyor…</div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Yapılan Sınıf Etkinlikleri</h2>
+      <div class="icerik">
+        <div id="rEtkinlikMatris" class="yukleniyor">Yükleniyor…</div>
+        <p class="kucuk soluk" style="margin:10px 0 0" id="rEtkinlikNot"></p>
+      </div>
+    </div>
+
+    <div class="kart">
+      <h2>Yapılan Toplantılar</h2>
+      <div class="icerik">
+        <div id="rToplanti" class="yukleniyor">Yükleniyor…</div>
+        <p class="kucuk soluk" style="margin:10px 0 0" id="rToplantiNot"></p>
+      </div>
+    </div>
+
+    <div class="rapor-yazdirma-alt" id="ryAlt"></div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+function bugunDD() {
+  var d = new Date();
+  var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+  return pad(d.getDate()) + "." + pad(d.getMonth() + 1) + "." + d.getFullYear();
+}
+function yilBasiDD() {
+  var d = new Date();
+  return "01.09." + (d.getMonth() >= 7 ? d.getFullYear() : d.getFullYear() - 1);
+}
+
+document.getElementById("rBaslangic").value = yilBasiDD();
+document.getElementById("rBitis").value = bugunDD();
+
+var AYAR = {};
+apiGet("/api/baslangic").then(function (b) {
+  AYAR = b.ayarlar || {};
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  var konuSel = document.getElementById("rKonu");
+  b.konuSecenekleri.forEach(function (k) { konuSel.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(k) + '">' + kacHTML(k) + '</option>'); });
+
+  document.getElementById("ryOkul").textContent = AYAR.okulAdi || "—";
+  document.getElementById("ryIlceIl").textContent = AYAR.ilceIl || "";
+  if (b.logoSurum) { var rl = document.getElementById("ryLogo"); rl.src = okulLogoUrl(b.logoSurum); rl.hidden = false; }
+  document.getElementById("ryHazirlayan").textContent =
+    "Hazırlayan: " + (AYAR.rehberAdSoyad || b.kullanici) + " — " + (AYAR.unvan || "Rehber Öğretmen");
+  document.getElementById("ryTarih").textContent = "Rapor Alınma Tarihi: " + bugunDD();
+  document.getElementById("ryAlt").textContent =
+    (AYAR.okulAdi || "") + (AYAR.okulAdi ? " — " : "") + "Rehberlik Servisi Faaliyet Raporu · " + bugunDD();
+
+  yukle();
+}).catch(apiHataGoster);
+
+["rBaslangic", "rBitis"].forEach(function (id) {
+  document.getElementById(id).addEventListener("change", yukle);
+});
+["rSinif", "rKonu", "rTur"].forEach(function (id) {
+  document.getElementById(id).addEventListener("change", yukle);
+});
+document.getElementById("rTemizleBtn").addEventListener("click", function () {
+  document.getElementById("rBaslangic").value = yilBasiDD();
+  document.getElementById("rBitis").value = bugunDD();
+  document.getElementById("rSinif").value = "";
+  document.getElementById("rKonu").value = "";
+  document.getElementById("rTur").value = "";
+  yukle();
+});
+document.getElementById("disaAktarBtn").addEventListener("click", function () { window.print(); });
+
+var siniflarDolduruldu = false;
+function yukle() {
+  var p = new URLSearchParams();
+  p.set("baslangic", document.getElementById("rBaslangic").value.trim());
+  p.set("bitis", document.getElementById("rBitis").value.trim());
+  if (document.getElementById("rSinif").value) p.set("sinif", document.getElementById("rSinif").value);
+  if (document.getElementById("rKonu").value) p.set("konu", document.getElementById("rKonu").value);
+  if (document.getElementById("rTur").value) p.set("tur", document.getElementById("rTur").value);
+
+  apiGet("/api/raporlar?" + p.toString()).then(function (v) {
+    if (!siniflarDolduruldu) {
+      siniflarDolduruldu = true;
+      var sel = document.getElementById("rSinif");
+      v.siniflar.forEach(function (s) { sel.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(s) + '">' + kacHTML(s) + '</option>'); });
+    }
+
+    var yuzdeOgr = v.toplamGorusme ? Math.round(1000 * v.ogrenciGorusme / v.toplamGorusme) / 10 : 0;
+    var yuzdeVeli = v.toplamGorusme ? Math.round(1000 * v.veliGorusme / v.toplamGorusme) / 10 : 0;
+    var od = v.oncekiDonem || {};
+    var odEtiket = "Önceki dönem: " + od.baslangic + " – " + od.bitis;
+    document.getElementById("rKpiSatir").innerHTML =
+      '<div class="kpi"><div class="kpi-baslik">Toplam Görüşme</div><div class="kpi-deger">' + gSayi(v.toplamGorusme) +
+      degisimRozeti(v.toplamGorusme, od.toplamGorusme, odEtiket) + '</div>' +
+      '<div class="kpi-alt">' + kacHTML(document.getElementById("rBaslangic").value) + ' – ' + kacHTML(document.getElementById("rBitis").value) +
+      '<span class="ekran-yalniz"> · önceki dönem: ' + gSayi(od.toplamGorusme) + '</span></div></div>' +
+      '<div class="kpi"><div class="kpi-baslik">Öğrenci Görüşmesi</div><div class="kpi-deger">' + gSayi(v.ogrenciGorusme) +
+      degisimRozeti(v.ogrenciGorusme, od.ogrenciGorusme, odEtiket) + '</div><div class="kpi-alt">Toplamın %' + yuzdeOgr + '\'i</div></div>' +
+      '<div class="kpi"><div class="kpi-baslik">Veli Görüşmesi</div><div class="kpi-deger">' + gSayi(v.veliGorusme) +
+      degisimRozeti(v.veliGorusme, od.veliGorusme, odEtiket) + '</div><div class="kpi-alt">Toplamın %' + yuzdeVeli + '\'i</div></div>' +
+      '<div class="kpi"><div class="kpi-baslik" title="Kendisiyle veya velisiyle en az bir kez görüşülen FARKLI öğrenci sayısı. Aynı öğrenciyle yapılan tekrar görüşmeler bir kez sayılır.">Görüşülen Öğrenci</div><div class="kpi-deger">' + gSayi(v.kapsama.gorusulenOgrenci) +
+      '<span class="kpi-bolu"> / ' + gSayi(v.toplamOgrenciDosyasi) + '</span></div>' +
+      '<div class="kpi-alt">Farklı öğrenci · kapsama %' + v.kapsama.oran + ' · ' + gSayi(v.toplamOgrenciDosyasi) + ' öğrenci dosyası, ' + gSayi(v.sinifDuzeyi) + ' sınıf/şube</div></div>';
+
+
+    document.getElementById("ryDonem").textContent =
+      "Rapor Dönemi: " + document.getElementById("rBaslangic").value + " – " + document.getElementById("rBitis").value;
+
+    cizSutun(document.getElementById("rSutunGrafik"), v.aylikTrend.map(function (a) { return { ad: a.ay, sayi: a.sayi }; }));
+    var enYogun = v.aylikTrend.reduce(function (a, b) { return (!a || b.sayi > a.sayi) ? b : a; }, null);
+    var yilToplam = v.aylikTrend.reduce(function (a, b) { return a + b.sayi; }, 0);
+    document.getElementById("rTrendNot").textContent = (enYogun && enYogun.sayi > 0)
+      ? ("Eğitim-öğretim yılı boyunca toplam " + yilToplam + " görüşme; en yoğun ay " + enYogun.ay + " (" + enYogun.sayi + " görüşme).")
+      : "Bu eğitim-öğretim yılında henüz görüşme kaydedilmedi.";
+
+    cizHalka(document.getElementById("rHalkaGrafik"), konuHalkaVerisi(v.konuDagilimi, 5), "görüşme", v.toplamGorusme);
+    cizYatayCubuk(document.getElementById("rSinifCubuk"), v.sinifDagilimi.map(function (s) { return { ad: s.sinif, sayi: s.sayi }; }));
+    cizYatayCubuk(document.getElementById("rEtiketCubuk"), v.etiketDagilimi.map(function (e) { return { ad: e.etiket, sayi: e.sayi }; }),
+      { renkler: v.etiketDagilimi.map(function (e) { return renkKodu(e.renk); }) });
+    cizYatayCubuk(document.getElementById("rKurumCubuk"), v.kurumDagilimi.map(function (k) { return { ad: k.kurum, sayi: k.sayi }; }),
+      { renkler: ["#96271b", "#17457d", "#7a4708", "#1a6b45", "#5b2d9e"] });
+    document.getElementById("rKurumNot").textContent = v.yonlendirilenToplamOgrenci
+      ? ("Bu dönemde " + gSayi(v.yonlendirilenToplamOgrenci) + " öğrenci en az bir kuruma yönlendirildi.")
+      : "Bu dönemde herhangi bir kuruma yönlendirme yapılmamış.";
+
+    etiketMatrisiCiz(v.etiketMatrisi);
+
+    etkinlikMatrisiCiz(v.sinifEtkinlikMatrisi);
+    kapsamaCiz(v.kapsama);
+    takipCiz(v.takipUyarilari, v.takipEsikGun);
+    cizYatayCubuk(document.getElementById("rBasvuru"), v.basvuruDagilimi.map(function (d) { return { ad: d.ad, sayi: d.sayi }; }),
+      { renkler: ["#0e7490"] });
+    cizYatayCubuk(document.getElementById("rCalisma"), v.calismaDagilimi.map(function (d) { return { ad: d.ad, sayi: d.sayi }; }),
+      { renkler: ["#5b2d9e"] });
+    toplantiCiz(v.toplantiRaporu);
+    SON_SORGU = p.toString();
+    document.getElementById("rEtkinlikNot").textContent =
+      "Bu dönemde " + gSayi(v.yapilanSinifEtkinligi) + " sınıf etkinliği gerçekleştirildi." +
+      (v.acikSinifEtkinligi ? (" Ayrıca " + gSayi(v.acikSinifEtkinligi) + " etkinlik henüz açıkta (tarihi geçmiş olabilir de dahil) — Sınıf Etkinliği sayfasından takip edilebilir.") : "");
+  }).catch(apiHataGoster);
+}
+
+function etkinlikMatrisiCiz(matris) {
+  var kutu = document.getElementById("rEtkinlikMatris");
+  var siniflar = (matris && matris.siniflar) || [];
+  var satirlar = (matris && matris.satirlar) || [];
+  if (!satirlar.length) {
+    kutu.innerHTML = '<div class="bos">Bu dönemde tamamlandı olarak işaretlenmiş bir sınıf etkinliği yok — Sınıf Etkinliği sayfasından planlayıp tamamlandığında işaretleyebilirsiniz.</div>';
+    return;
+  }
+  var h = '<div style="overflow-x:auto"><table><thead><tr><th>Etkinlik</th><th>Toplam</th>' +
+    siniflar.map(function (s) { return '<th style="text-align:center">' + kacHTML(s) + '</th>'; }).join("") + '</tr></thead><tbody>';
+  satirlar.forEach(function (satir) {
+    h += '<tr><td><b>' + kacHTML(satir.etkinlikAdi) + '</b></td><td>' + gSayi(satir.toplam) + '</td>' +
+      siniflar.map(function (s) {
+        var sayi = satir.sayilar[s] || 0;
+        return '<td style="text-align:center' + (sayi ? "" : ";color:var(--soluk)") + '">' + gSayi(sayi) + '</td>';
+      }).join("") + '</tr>';
+  });
+  h += '</tbody></table></div>';
+  kutu.innerHTML = h;
+}
+
+
+function etiketMatrisiCiz(matris) {
+  var kutu = document.getElementById("rEtiketMatris");
+  var etiketler = (matris && matris.etiketler) || [];
+  var satirlar = (matris && matris.satirlar) || [];
+  if (!etiketler.length || !satirlar.length) {
+    kutu.innerHTML = '<div class="bos">Hiçbir öğrenciye etiket eklenmemiş — Ayarlar sayfasından etiket tanımlayıp öğrenci dosyalarına ekleyebilirsiniz.</div>';
+    return;
+  }
+  var h = '<div style="overflow-x:auto"><table><thead><tr><th>Sınıf</th><th>Öğrenci Sayısı</th>' +
+    etiketler.map(function (e) {
+      return '<th style="text-align:center;color:' + renkKodu(e.renk) + '">' + kacHTML(e.ad) + '</th>';
+    }).join("") + '</tr></thead><tbody>';
+  satirlar.forEach(function (satir) {
+    h += '<tr><td><b>' + kacHTML(satir.sinif) + '</b></td><td>' + gSayi(satir.toplamOgrenci) + '</td>' +
+      etiketler.map(function (e) {
+        var sayi = satir.sayilar[e.id] || 0;
+        return '<td style="text-align:center' + (sayi ? "" : ";color:var(--soluk)") + '">' + gSayi(sayi) + '</td>';
+      }).join("") + '</tr>';
+  });
+  h += '</tbody></table></div>';
+  kutu.innerHTML = h;
+}
+
+var SON_SORGU = "";
+document.getElementById("faaliyetRaporuBtn").addEventListener("click", function () {
+  window.open("faaliyet-raporu.html?" + SON_SORGU, "_blank");
+});
+
+function kapsamaCiz(k) {
+  var kutu = document.getElementById("rKapsama");
+  if (!k || !k.siniflar.length) { kutu.innerHTML = '<div class="bos">Kayıtlı öğrenci yok.</div>'; return; }
+  kutu.innerHTML = '<div class="kapsama-ozet"><b>%' + k.oran + '</b><span>' + gSayi(k.gorusulenOgrenci) + ' / ' + gSayi(k.toplamOgrenci) +
+    ' öğrenciyle görüşüldü</span></div><div class="kapsama-liste">' + k.siniflar.map(function (s) {
+    var renk = s.oran >= 75 ? "#1a6b45" : (s.oran >= 40 ? "#d98014" : "#96271b");
+    return '<div class="kapsama-satir"><span class="kapsama-sinif">' + kacHTML(s.sinif) + '</span>' +
+      '<span class="kapsama-cubuk"><i style="width:' + s.oran + '%;background:' + renk + '"></i></span>' +
+      '<span class="kapsama-deger"><b>%' + s.oran + '</b> <span class="soluk">' + s.gorusulen + '/' + s.toplam + '</span></span></div>';
+  }).join("") + '</div>';
+}
+
+function takipCiz(liste, esik) {
+  document.getElementById("rTakipEsik").textContent = esik;
+  var kutu = document.getElementById("rTakip");
+  if (!liste.length) { kutu.innerHTML = bosDurumHtml("Takip bekleyen öğrenci yok", "Etiketli tüm öğrencilerle son " + esik + " gün içinde görüşülmüş.", "hedef"); return; }
+  kutu.innerHTML = '<div class="takip-liste takip-kaydir">' + liste.map(function (o) {
+    return '<a class="takip-oge" href="dosya.html?id=' + encodeURIComponent(o.ogrenciId) + '">' + avatarHtml(o.adSoyad) +
+      '<span class="takip-govde"><b>' + kacHTML(o.adSoyad) + '</b> <span class="soluk">' + kacHTML(o.sinif || "") + '</span><br>' +
+      o.etiketler.map(function (e) { return '<span class="rozet-etiket kucuk-rozet ' + e.renk + '">' + kacHTML(e.ad) + '</span>'; }).join(" ") +
+      '</span><span class="takip-sure' + (o.gecenGun === null ? " hic" : "") + '">' + gunFarkiMetni(o.gecenGun) + '</span></a>';
+  }).join("") + '</div>';
+}
+
+function toplantiCiz(r) {
+  var kutu = document.getElementById("rToplanti");
+  if (!r || !r.turler.length) {
+    kutu.innerHTML = '<div class="bos">Bu dönemde planlanmış veya yapılmış toplantı yok.</div>';
+    document.getElementById("rToplantiNot").textContent = "";
+    return;
+  }
+  function saat(dk) { var s = Math.floor(dk / 60), d = dk % 60; return dk ? (s ? s + " sa" : "") + (d ? " " + d + " dk" : "") : "—"; }
+  kutu.innerHTML = '<table><thead><tr><th>Toplantı Türü</th><th style="text-align:center">Planlanan</th><th style="text-align:center">Tamamlanan</th><th style="text-align:right">Süre</th></tr></thead><tbody>' +
+    r.turler.map(function (x) {
+      return '<tr><td><b>' + kacHTML(x.tur) + '</b></td><td style="text-align:center">' + gSayi(x.adet) + '</td><td style="text-align:center">' +
+        gSayi(x.tamamlanan) + '</td><td style="text-align:right">' + saat(x.dakika) + '</td></tr>';
+    }).join("") + '<tr class="toplam-satir"><td>Toplam</td><td style="text-align:center">' + gSayi(r.toplamAdet) + '</td><td style="text-align:center">' +
+    gSayi(r.tamamlanan) + '</td><td style="text-align:right">' + saat(r.toplamDakika) + '</td></tr></tbody></table>';
+  document.getElementById("rToplantiNot").textContent = "Süre, yalnızca tamamlandı olarak işaretlenen ve başlangıç–bitiş saati girilmiş toplantılardan hesaplanır.";
+}
+</script>
+</body>
+</html>

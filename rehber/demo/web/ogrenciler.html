@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Öğrenciler — Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="tasarim.css">
+<link rel="stylesheet" href="koyu.css">
+<script src="tema.js"></script>
+</head>
+<body>
+<div id="kabuk">
+  <aside id="yan" class="yazdirma-gizle">
+    <h1>Öğrenci Rehberlik<br>Takip Sistemi</h1>
+    <div class="alt">Rehberlik Servisi</div>
+    <nav>
+      <a href="panel.html" data-yol="panel">Panel</a>
+      <a href="gundem.html" data-yol="gundem">Gündem</a>
+      <a href="takvim.html" data-yol="takvim">Takvim</a>
+      <a href="ogrenciler.html" data-yol="ogrenciler" class="etkin">Öğrenciler</a>
+      <a href="ogrenci-kayit.html" data-yol="kayit">Öğrenci Kayıt</a>
+      <a href="sinif-etkinlik.html" data-yol="etkinlik">Sınıf Etkinliği</a>
+      <a href="toplanti.html" data-yol="toplanti">Toplantılar</a>
+      <a href="raporlar.html" data-yol="rapor">Raporlar</a>
+      <a href="ayarlar.html" data-yol="ayarlar">Ayarlar</a>
+    </nav>
+    <div class="kullanici" id="kullaniciKutu">Yükleniyor…</div>
+  </aside>
+  <main id="ana">
+
+
+    <div class="kart dosya-arama-karti arama-bandi">
+      <img class="bant-gorsel" src="assets/basliklar/ogrenciler.webp" alt="" onerror="this.remove()">
+      <div class="icerik">
+        <div class="arama-baslik"><h2 class="baslik">Öğrenciler</h2><span class="soluk">Arayın, sınıfa veya etikete göre süzün, satıra tıklayarak dosyayı açın.</span></div>
+        <input type="text" id="aramaKutusu" aria-label="Ara" placeholder="Öğrenci adı, veli adı, sınıf, sınıf öğretmeni veya görüşme notları içinde ara…" style="margin-bottom:12px">
+
+        <div class="satir" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px">
+          <div class="satir" style="gap:10px;flex-wrap:wrap;align-items:flex-end">
+            <div>
+              <label class="kucuk">Sınıf</label>
+              <select id="sinifSecim" style="max-width:130px"><option value="">Tüm Sınıflar</option></select>
+            </div>
+            <div>
+              <label class="kucuk">Sınıf Öğretmeni</label>
+              <select id="ogretmenSecim" style="max-width:170px"><option value="">Tümü</option></select>
+            </div>
+            <div>
+              <label class="kucuk">Görüşme Durumu</label>
+              <select id="durumSecim" style="max-width:180px">
+                <option value="">Tümü</option><option value="var">Görüşmesi Olanlar</option><option value="yok">Hiç Görüşülmemiş</option>
+              </select>
+            </div>
+            <div>
+              <label class="kucuk">Görüşme Konusu</label>
+              <select id="konuSecim" style="max-width:220px"><option value="">Tümü</option></select>
+            </div>
+            <div>
+              <label class="kucuk">Etiket</label>
+              <div class="cop-dropdown" id="etiketFiltre">
+                <button class="cop-dropdown-tus" type="button" id="etiketFiltreTus">
+                  Etiket Filtrele <span class="cop-sayi" id="etiketFiltreSayi">0</span> <span class="cop-ok">▾</span>
+                </button>
+                <div class="cop-dropdown-panel" id="etiketFiltrePanel"></div>
+              </div>
+            </div>
+          </div>
+          <button class="filtre-temizle" id="filtreTemizleBtn">Filtreyi Temizle</button>
+        </div>
+        <div class="secili-etiket-alani" id="seciliEtiketAlani" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div class="kart dosya-liste-karti">
+      <div class="liste-aciklama"><span class="soluk kucuk" id="listeAciklama">Yükleniyor…</span></div>
+      <table>
+        <thead>
+          <tr><th>No</th><th>Adı Soyadı</th><th>Sınıf</th><th>Cins.</th><th>Etiketler</th><th>Görüşme</th><th>Son Görüşme</th><th></th></tr>
+        </thead>
+        <tbody id="ogrenciGovde"><tr><td colspan="8" class="bos">Yükleniyor…</td></tr></tbody>
+      </table>
+      <div class="sayfalama" id="sayfalamaAlan"></div>
+    </div>
+  </main>
+</div>
+<div id="bildirim"></div>
+<script src="ortak.js"></script>
+<script>
+var durum = { q: "", sinif: "", ogretmen: "", durum: "", etiket: "", konu: "", sayfa: 1 };
+var etiketler = [];
+
+apiGet("/api/baslangic").then(function (b) {
+  document.getElementById("kullaniciKutu").innerHTML =
+    kacHTML(b.ayarlar.rehberAdSoyad || b.kullanici) + "<br>" + kacHTML(b.ayarlar.unvan || "Rehber Öğretmen");
+  etiketler = b.etiketler;
+  var ks = document.getElementById("konuSecim");
+  (b.konuSecenekleri || []).forEach(function (k) { ks.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(k) + '">' + kacHTML(k) + '</option>'); });
+  document.getElementById("etiketFiltrePanel").innerHTML = etiketler.map(function (e) {
+    return '<label><input type="checkbox" data-eid="' + e.id + '"><span class="nokta" style="background:' +
+      renkKoduAl(e.renk) + '"></span> ' + kacHTML(e.ad) + '</label>' +
+      '<div class="cop-dropdown-alt" style="display:none"></div>';
+  }).join("") + '<div class="cop-dropdown-alt"><a href="ayarlar.html">+ Yeni etiket tanımla</a></div>';
+  document.querySelectorAll("#etiketFiltrePanel input[data-eid]").forEach(function (kutu) {
+    kutu.addEventListener("change", function () {
+      document.querySelectorAll("#etiketFiltrePanel input[data-eid]").forEach(function (k2) {
+        if (k2 !== kutu) k2.checked = false;
+      });
+      durum.etiket = kutu.checked ? kutu.getAttribute("data-eid") : "";
+      durum.sayfa = 1;
+      guncelleEtiketGosterim();
+      yukle();
+    });
+  });
+}).catch(apiHataGoster);
+
+function renkKoduAl(renk) {
+  return renkKodu(renk);
+}
+
+function guncelleEtiketGosterim() {
+  var secili = etiketler.find(function (e) { return e.id === durum.etiket; });
+  document.getElementById("etiketFiltreSayi").textContent = secili ? "1" : "0";
+  document.getElementById("seciliEtiketAlani").innerHTML = secili
+    ? '<span class="rozet-etiket ' + secili.renk + '">' + kacHTML(secili.ad) + ' <span class="sil" data-kaldir="1">✕</span></span>'
+    : "";
+  var sil = document.querySelector('[data-kaldir="1"]');
+  if (sil) sil.addEventListener("click", function () {
+    durum.etiket = ""; durum.sayfa = 1;
+    document.querySelectorAll("#etiketFiltrePanel input[data-eid]").forEach(function (k) { k.checked = false; });
+    guncelleEtiketGosterim(); yukle();
+  });
+}
+
+document.getElementById("etiketFiltreTus").addEventListener("click", function () {
+  document.getElementById("etiketFiltre").classList.toggle("acik");
+});
+document.addEventListener("click", function (e) {
+  var kutu = document.getElementById("etiketFiltre");
+  if (kutu && !kutu.contains(e.target)) kutu.classList.remove("acik");
+});
+
+var aramaGuncelle = debounce(function () { durum.sayfa = 1; yukle(); }, 320);
+document.getElementById("aramaKutusu").addEventListener("input", function () {
+  durum.q = this.value; aramaGuncelle();
+});
+document.getElementById("sinifSecim").addEventListener("change", function () { durum.sinif = this.value; durum.sayfa = 1; yukle(); });
+document.getElementById("ogretmenSecim").addEventListener("change", function () { durum.ogretmen = this.value; durum.sayfa = 1; yukle(); });
+document.getElementById("durumSecim").addEventListener("change", function () { durum.durum = this.value; durum.sayfa = 1; yukle(); });
+document.getElementById("konuSecim").addEventListener("change", function () { durum.konu = this.value; durum.sayfa = 1; yukle(); });
+document.getElementById("filtreTemizleBtn").addEventListener("click", function () {
+  durum = { q: "", sinif: "", ogretmen: "", durum: "", etiket: "", konu: "", sayfa: 1 };
+  document.getElementById("konuSecim").value = "";
+  document.getElementById("aramaKutusu").value = "";
+  document.getElementById("sinifSecim").value = "";
+  document.getElementById("ogretmenSecim").value = "";
+  document.getElementById("durumSecim").value = "";
+  document.querySelectorAll("#etiketFiltrePanel input[data-eid]").forEach(function (k) { k.checked = false; });
+  guncelleEtiketGosterim();
+  yukle();
+});
+
+var seciliListelerDolduruldu = false;
+function secimListeleriDoldur(siniflar, ogretmenler) {
+  if (seciliListelerDolduruldu) return;
+  seciliListelerDolduruldu = true;
+  var s = document.getElementById("sinifSecim");
+  siniflar.forEach(function (sn) { s.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(sn) + '">' + kacHTML(sn) + '</option>'); });
+  var o = document.getElementById("ogretmenSecim");
+  ogretmenler.forEach(function (og) { o.insertAdjacentHTML("beforeend", '<option value="' + kacHTML(og) + '">' + kacHTML(og) + '</option>'); });
+}
+
+function vurgula(metin, q) {
+  if (!q) return kacHTML(metin);
+  var kucukMetin = metin.toLowerCase(), kucukQ = q.toLowerCase();
+  var idx = kucukMetin.indexOf(kucukQ);
+  if (idx < 0) return kacHTML(metin);
+  return kacHTML(metin.slice(0, idx)) + '<span class="arama-vurgu">' + kacHTML(metin.slice(idx, idx + q.length)) + '</span>' + kacHTML(metin.slice(idx + q.length));
+}
+
+function yukle() {
+  var p = new URLSearchParams();
+  if (durum.q) p.set("q", durum.q);
+  if (durum.sinif) p.set("sinif", durum.sinif);
+  if (durum.ogretmen) p.set("ogretmen", durum.ogretmen);
+  if (durum.durum) p.set("durum", durum.durum);
+  if (durum.etiket) p.set("etiket", durum.etiket);
+  if (durum.konu) p.set("konu", durum.konu);
+  p.set("sayfa", durum.sayfa);
+
+  apiGet("/api/ogrenciler?" + p.toString()).then(function (v) {
+    secimListeleriDoldur(v.siniflar, v.ogretmenler);
+    var aciklama = document.getElementById("listeAciklama");
+    aciklama.textContent = v.toplam + " öğrenci dosyası içinde" +
+      (durum.q || durum.sinif || durum.ogretmen || durum.durum || durum.etiket || durum.konu
+        ? " filtreye uyan " + v.bulunan + " kayıt listeleniyor" : " " + v.bulunan + " kayıt listeleniyor") +
+      (durum.konu ? " — “" + durum.konu + "” konusunda görüşülen öğrenciler" : "");
+
+    var govde = document.getElementById("ogrenciGovde");
+    if (!v.kayitlar.length) {
+      govde.innerHTML = '<tr><td colspan="8">' + bosDurumHtml("Kayıt bulunamadı", "Arama veya filtreleri değiştirip tekrar deneyin.", "ogrenciler") + '</td></tr>';
+    } else {
+      govde.innerHTML = v.kayitlar.map(function (k) {
+        var etiketHtml = k.etiketler.map(function (e) {
+          return '<span class="rozet-etiket ' + e.renk + '">' + kacHTML(e.ad) + '</span>';
+        }).join(" ") || '<span class="soluk kucuk">—</span>';
+        return '<tr class="tikla-satir" onclick="location.href=\'dosya.html?id=' + encodeURIComponent(k.id) + '\'">' +
+          '<td class="soluk">' + kacHTML(k.okulNo) + '</td><td><span class="ad-hucre">' + avatarHtml(k.adSoyad) + '<span>' + vurgula(k.adSoyad, durum.q) + '</span></span></td>' +
+          '<td><span class="sinif-rozet">' + kacHTML(k.sinif || "—") + '</span></td>' +
+          '<td>' + kacHTML(k.cinsiyet) + '</td><td>' + etiketHtml + '</td>' +
+          '<td>' + (k.toplamGorusme ? '<span class="sayi-rozet">' + gSayi(k.toplamGorusme) + '</span>' +
+            (k.konuGorusmeSayisi ? ' <span class="kucuk soluk" title="Seçili konudaki görüşme sayısı">(' + k.konuGorusmeSayisi + ' bu konuda)</span>' : '') : '<span class="kucuk" style="color:#96271b;font-weight:700">Görüşülmedi</span>') + '</td>' +
+          '<td class="soluk">' + kacHTML(k.sonGorusme || "—") + '</td>' +
+          '<td class="ok-hucre">›</td></tr>';
+      }).join("");
+    }
+
+    var sayfalama = document.getElementById("sayfalamaAlan");
+    if (v.toplamSayfa <= 1) { sayfalama.innerHTML = ""; return; }
+    var h = '<button ' + (v.sayfa <= 1 ? "disabled" : "") + ' data-sayfa="' + (v.sayfa - 1) + '">‹ Önceki</button>';
+    for (var i = 1; i <= v.toplamSayfa; i++) {
+      if (i === 1 || i === v.toplamSayfa || Math.abs(i - v.sayfa) <= 1) {
+        h += '<button class="sayfa-no' + (i === v.sayfa ? " aktif" : "") + '" data-sayfa="' + i + '">' + i + '</button>';
+      } else if (Math.abs(i - v.sayfa) === 2) {
+        h += '<span class="sayfa-nokta">…</span>';
+      }
+    }
+    h += '<button ' + (v.sayfa >= v.toplamSayfa ? "disabled" : "") + ' data-sayfa="' + (v.sayfa + 1) + '">Sonraki ›</button>';
+    sayfalama.innerHTML = h;
+    sayfalama.querySelectorAll("button[data-sayfa]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        durum.sayfa = parseInt(this.getAttribute("data-sayfa"), 10);
+        yukle();
+        window.scrollTo(0, 0);
+      });
+    });
+  }).catch(apiHataGoster);
+}
+yukle();
+</script>
+</body>
+</html>
