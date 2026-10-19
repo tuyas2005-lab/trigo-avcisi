@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rehber Takip · Yönetim</title>
+<link rel="icon" href="icon-192.png">
+<style>
+/* Site sahibinin üyelik başvurularını onayladığı sayfa. PIN Supabase'de rg_set_admin_pin ile belirlenir. */
+:root{--bg:#F6F3EC;--panel:#fff;--panel2:#EFEAE0;--line:#E2DBCD;--fg:#1E2A2A;--muted:#5E6B69;--accent:#1F6F5C;--accent2:#E7F1EC;--warm:#E8833A;--warm2:#FCEBDD;--bad:#C2413A;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141B1A;--panel:#1C2524;--panel2:#24302E;--line:#2F3C3A;--fg:#EEF2EF;--muted:#A3B1AE;--accent:#5FC3A5;--accent2:#1F3A33;--warm:#F2A361;--warm2:#3A2A1D;--bad:#F07C74;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 'Segoe UI',Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:24px;margin:0 0 16px}h2{font-size:18px;margin:28px 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.btn{border:0;border-radius:9px;padding:8px 12px;font:700 14px inherit;cursor:pointer;background:var(--panel2);color:var(--fg)}
+.btn.primary{background:var(--accent);color:#fff}.btn.bad{color:var(--bad)}
+input{font:15px inherit;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;background:var(--panel);color:var(--fg)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--panel2)}
+.pill.ok{background:var(--accent2);color:var(--accent)}.pill.wait{background:var(--warm2);color:var(--warm)}
+.tbl{width:100%;border-collapse:collapse;background:var(--panel);border-radius:14px;overflow:hidden}
+.tbl th,.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-size:12px;text-transform:uppercase;color:var(--muted);background:var(--panel2)}
+.scroll{overflow-x:auto}
+.msg{color:var(--bad);font-weight:700;min-height:20px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="config.js"></script>
+<script src="rg.js"></script>
+<script>
+const app=document.getElementById('app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dt=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}):'–';
+const plus=(m)=>{const d=new Date();d.setMonth(d.getMonth()+m);return d.toLocaleDateString('sv-SE');};
+let PIN=sessionStorage.getItem('rg-admin')||'',D=null;
+function login(msg){app.innerHTML='<h1>Rehber Takip · Yönetim</h1><form id="pinF" class="card"><label>Yönetici PIN\'i</label><div class="row"><input type="password" id="pin" autocomplete="current-password" required><button class="btn primary">Giriş</button></div><p class="msg">'+esc(msg||'')+'</p></form>';document.getElementById('pin').focus();}
+async function load(){
+  try{D=await RG.admin(PIN);}catch(e){login(RG.errText(e));return;}
+  if(D.error){sessionStorage.removeItem('rg-admin');login(RG.errText(new Error(D.error)));return;}
+  sessionStorage.setItem('rg-admin',PIN);render();}
+function render(){
+  const wait=D.requests.filter(r=>r.status==='bekliyor'),old=D.requests.filter(r=>r.status!=='bekliyor');
+  app.innerHTML='<h1>Rehber Takip · Yönetim</h1><p class="muted">'+D.teachers.length+' öğretmen · '+D.teachers.filter(t=>t.member).length+' aktif üye · <a href="#" data-act="out">Çıkış</a></p>'+
+  '<h2>Bekleyen başvurular ('+wait.length+')</h2>'+(wait.length?wait.map(r=>'<div class="card"><b>'+esc(r.name)+'</b> · '+esc(r.email)+(r.school?' · '+esc(r.school):'')+'<br><span class="pill wait">'+(r.plan==='yillik'?'Yıllık':'Aylık')+'</span> <span class="muted">'+dt(r.created_at)+'</span>'+(r.note?'<p style="margin:8px 0 0">'+esc(r.note)+'</p>':'')+
+    '<div class="row"><button class="btn primary" data-act="set" data-t="'+r.teacher_id+'" data-u="'+plus(r.plan==='yillik'?12:1)+'">Ödeme alındı · '+(r.plan==='yillik'?'1 yıl':'1 ay')+' aç</button><button class="btn bad" data-act="rej" data-r="'+r.id+'">Reddet</button></div></div>').join(''):'<p class="muted">Bekleyen başvuru yok.</p>')+
+  '<h2>Öğretmenler</h2><div class="scroll"><table class="tbl"><thead><tr><th>Ad</th><th>E-posta / okul</th><th>Üyelik</th><th>Kayıt · son giriş</th><th></th></tr></thead><tbody>'+
+  D.teachers.map(t=>'<tr><td><b>'+esc(t.name)+'</b></td><td>'+esc(t.email)+'<br><span class="muted">'+esc(t.school)+'</span></td><td>'+(t.member?'<span class="pill ok">'+dt(t.member_until)+'</span>':t.member_until?'<span class="pill">Bitti '+dt(t.member_until)+'</span>':'<span class="muted">Ücretsiz</span>')+'</td><td>'+dt(t.created_at)+'<br><span class="muted">'+dt(t.last_seen)+'</span></td><td><div class="row" style="margin:0"><input type="date" value="'+(t.member_until||'')+'" data-d="'+t.id+'"><button class="btn" data-act="date" data-t="'+t.id+'">Kaydet</button></div></td></tr>').join('')+
+  '</tbody></table></div>'+(old.length?'<h2>Son 90 gün</h2>'+old.map(r=>'<div class="card"><b>'+esc(r.name)+'</b> · '+(r.plan==='yillik'?'Yıllık':'Aylık')+' · <span class="pill '+(r.status==='onaylandi'?'ok':'')+'">'+(r.status==='onaylandi'?'Onaylandı':'Reddedildi')+'</span> <span class="muted">'+dt(r.created_at)+'</span></div>').join(''):'');}
+document.addEventListener('submit',e=>{if(e.target.id!=='pinF')return;e.preventDefault();PIN=document.getElementById('pin').value;load();});
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;e.preventDefault();const a=b.dataset.act;
+  try{
+    if(a==='out'){sessionStorage.removeItem('rg-admin');PIN='';login();return;}
+    let r;
+    if(a==='set')r=await RG.adminSetMember(PIN,b.dataset.t,b.dataset.u);
+    else if(a==='rej'){if(!confirm('Başvuru reddedilsin mi?'))return;r=await RG.adminReject(PIN,+b.dataset.r);}
+    else if(a==='date'){const v=document.querySelector('[data-d="'+b.dataset.t+'"]').value||null;r=await RG.adminSetMember(PIN,b.dataset.t,v);}
+    if(r!=='ok')throw new Error(r);
+    await load();
+  }catch(err){alert(RG.errText(err));}
+});
+if(PIN)load();else login();
+</script>
+</body>
+</html>
