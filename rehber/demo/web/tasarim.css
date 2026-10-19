@@ -667,3 +667,9 @@ body.menu-dar #yan:hover .kullanici{justify-content:flex-start;padding:14px 16px
 .hakkinda-izgara dt{color:var(--soluk);font-weight:600}
 .hakkinda-izgara dd{margin:0;color:var(--metin);word-break:break-word}
 .hakkinda-uyari{background:#fff7e6;border:1px solid #f5d38f;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.6;margin-top:14px}
+
+/* ---- canlı örnek (araclar/rehber-guncelle.py ekler): kısa ekranda sol menü kendi içinde kaydırılır ---- */
+#yan nav{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+#yan nav::-webkit-scrollbar{width:6px}
+#yan nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:6px}
+#yan .kullanici{flex:none}
