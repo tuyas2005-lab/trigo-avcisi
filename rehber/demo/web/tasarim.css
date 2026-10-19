@@ -676,8 +676,13 @@ body.menu-dar #yan:hover .kullanici{justify-content:flex-start;padding:14px 16px
 .surum-hatirlatma a{font-weight:800;color:#9a4f00}
 .surum-hatirlatma button{flex:0 0 auto;padding:6px 12px;font-size:13px}
 
-/* ---- canlı örnek (araclar/rehber-guncelle.py ekler): kısa ekranda sol menü kendi içinde kaydırılır ---- */
-#yan nav{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
-#yan nav::-webkit-scrollbar{width:6px}
-#yan nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:6px}
-#yan .kullanici{flex:none}
+/* ---- sol menü: küçük ekranlarda kaydırılabilir (sürüm 3.7) ----
+   Marka (üst) ve kullanıcı kutusu (alt) sabit kalır; aradaki menü sığmazsa
+   kendi içinde ince bir kaydırma çubuğuyla kayar. */
+#yan .marka,#yan .kullanici{flex:0 0 auto}
+#yan nav{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.45) rgba(255,255,255,.06)}
+#yan nav::-webkit-scrollbar{width:8px}
+#yan nav::-webkit-scrollbar-track{background:transparent}
+#yan nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.45);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
+#yan nav::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4);background-clip:padding-box}

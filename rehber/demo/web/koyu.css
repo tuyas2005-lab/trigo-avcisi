@@ -276,6 +276,8 @@ html.koyu .hakkinda-uyari{background:#40341a;border:1px solid #8a7854}
 html.koyu .surum-hatirlatma{background:#40341a;border:1px solid #8a7854;color:#fce5bd}
 html.koyu .surum-hatirlatma svg{stroke:#f6c475}
 html.koyu .surum-hatirlatma a{color:#f9c791}
+html.koyu #yan nav::-webkit-scrollbar-thumb{background:rgba(22,33,49,0.45)}
+html.koyu #yan nav::-webkit-scrollbar-thumb:hover{background:rgba(22,33,49,0.4)}
 /* ---- lisans-kur.html ---- */
 html.koyu .lk-aciklama{background:#18243a;border:1px solid #3e4e65}
 /* ---- lisans-kilit.html ---- */
