@@ -7,7 +7,7 @@
   ust.innerHTML='<div class="wrap"><a class="logo" href="index.html"><img src="icon-192.png" alt="" width="38" height="38"><span>Öğrenci Rehberlik<br>Takip Sistemi</span></a>'+
     '<button id="menuTus" type="button" aria-label="Menü" aria-expanded="false">☰</button><nav id="siteMenu">'+
     MENU.map(m=>'<a href="'+m[0]+'"'+(m[1]===sayfa?' aria-current="page"':'')+'>'+m[2]+'</a>').join('')+
-    '<a class="btn ana" href="indir.html"'+(sayfa==='indir'?' aria-current="page"':'')+'>⬇ Ücretsiz indir</a></nav></div>';
+    '<a class="btn ana" href="indir.html"'+(sayfa==='indir'?' aria-current="page"':'')+'>⬇ Ücretsiz indir</a><button class="tema-tus" id="temaTus" type="button"></button></nav></div>';
   document.body.prepend(ust);
   const alt=document.createElement('footer');alt.className='site-alt';
   alt.innerHTML='<div class="wrap"><div><b>Öğrenci Rehberlik Takip Sistemi</b><br>Rehber öğretmenler için ücretsiz görüşme kaydı, resmî form çıktısı, takvim ve rapor programı. İnternetsiz çalışır; verileriniz yalnızca sizin bilgisayarınızda kalır.'+
@@ -19,4 +19,9 @@
   const tus=document.getElementById('menuTus'),menu=document.getElementById('siteMenu');
   tus.addEventListener('click',()=>{const a=menu.classList.toggle('acik');tus.setAttribute('aria-expanded',a);});
   menu.addEventListener('click',e=>{if(e.target.tagName==='A')menu.classList.remove('acik');});
+  /* açık / koyu tema: varsayılan açık; seçim tarayıcıda hatırlanır */
+  const temaTus=document.getElementById('temaTus'),kok=document.documentElement;
+  function temaYaz(){const koyu=kok.dataset.theme==='dark';temaTus.textContent=koyu?'☀️':'🌙';temaTus.title=temaTus.ariaLabel=koyu?'Açık temaya geç':'Koyu temaya geç';}
+  temaTus.addEventListener('click',()=>{const koyu=kok.dataset.theme!=='dark';if(koyu)kok.dataset.theme='dark';else delete kok.dataset.theme;try{localStorage.setItem('rg-tema',koyu?'koyu':'acik');}catch(e){}temaYaz();});
+  temaYaz();
 })();
