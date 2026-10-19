@@ -14,10 +14,11 @@
 <link rel="stylesheet" href="site.css">
 <script defer src="/_vercel/insights/script.js"></script>
 <style>
-.hero{padding:56px 0 60px;overflow:hidden;background:radial-gradient(900px 480px at 8% 0%,rgba(20,122,128,.13),transparent 65%),radial-gradient(800px 500px at 100% 30%,rgba(232,131,58,.14),transparent 60%),linear-gradient(180deg,#FFFFFF,var(--bg))}
+.hero{padding:30px 0 56px;overflow:hidden;background:radial-gradient(900px 480px at 8% 0%,rgba(20,122,128,.13),transparent 65%),radial-gradient(800px 500px at 100% 30%,rgba(232,131,58,.14),transparent 60%),linear-gradient(180deg,#FFFFFF,var(--bg))}
 :root[data-theme="dark"] .hero{background:radial-gradient(900px 480px at 8% 0%,rgba(92,198,201,.12),transparent 65%),radial-gradient(800px 500px at 100% 30%,rgba(242,163,97,.10),transparent 60%)}
-.hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center}
-@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:32px}}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:start}
+.hero h1{font-size:clamp(32px,4.4vw,48px)}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:24px}}
 .rozet{display:inline-flex;gap:8px;align-items:center;background:var(--teal2);color:var(--teal);font-weight:800;font-size:14px;padding:6px 12px;border-radius:99px;margin-bottom:16px}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 14px}
 .hero .bilgi{color:var(--muted);font-weight:700;font-size:14px}
@@ -28,7 +29,7 @@
 .cerceve img{display:block;width:100%;height:auto}
 /* giriş görseli: 3B duruş, dönen parıltılı kenar, cam yansıması; fareyle eğilir (betik aşağıda) */
 @property --aci{syntax:'<angle>';inherits:false;initial-value:0deg}
-.sahne3d{position:relative;perspective:1700px;padding:24px 0 40px}
+.sahne3d{position:relative;perspective:1700px;padding:8px 0 40px}
 .parilti{--rx:8deg;--ry:-18deg;position:relative;border-radius:18px;padding:4px;
   background:conic-gradient(from var(--aci),#147A80,#5CC6C9,#FFFFFF,#E8833A,#FFC79A,#147A80);
   transform:rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(1.5deg);transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1);
