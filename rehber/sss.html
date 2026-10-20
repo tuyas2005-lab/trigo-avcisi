@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("rg-tema")==="koyu")document.documentElement.dataset.theme="dark";}catch(e){}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="description" content="Öğrenci Rehberlik Takip Sistemi hakkında sıkça sorulan sorular: kurulum, kullanım, sesle yazma, okul raporu, KVKK ve kişisel veriler, yedekleme, sorun giderme.">
+<title>Sıkça Sorulan Sorular · Öğrenci Rehberlik Takip Sistemi</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="site.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+/* Sorular sss.js'den çizilir. Arama Türkçe harflere duyarsızdır: "gorusme" yazan "görüşme"yi de bulur. */
+.ara{position:relative;margin:24px 0 14px}
+.ara input{width:100%;font-size:18px;padding:16px 48px 16px 52px;border-radius:16px;border:2px solid var(--line);background:var(--panel);color:var(--fg);box-shadow:var(--shadow)}
+.ara input::-webkit-search-cancel-button{display:none}
+.ara input:focus{outline:none;border-color:var(--teal)}
+.ara::before{content:'🔎';position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none}
+.ara button{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:var(--panel2);color:var(--fg);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px}
+.bolumler{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.bolumler button{border:1px solid var(--line);background:var(--panel);color:var(--fg);font:700 14px var(--body);padding:7px 12px;border-radius:99px;cursor:pointer}
+@media (max-width:640px){.bolumler{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 8px;padding:2px 20px 6px;scrollbar-width:none}.bolumler button{flex:none}}
+.bolumler button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.sonuc-bilgi{color:var(--muted);font-weight:700;font-size:14px;min-height:22px;margin:10px 0 4px}
+.grup h2{font-size:20px;margin:30px 0 12px;display:flex;align-items:center;gap:8px}
+.soru{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:10px;scroll-margin-top:90px}
+.soru summary{font-weight:800;cursor:pointer;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.soru summary::-webkit-details-marker{display:none}
+.soru summary::after{content:'+';font-size:22px;line-height:1;color:var(--teal);flex:none}
+.soru[open] summary::after{content:'–'}
+.soru .cevap{color:var(--muted);padding-bottom:14px}
+.soru .cevap p{margin:0 0 10px}.soru .cevap ul,.soru .cevap ol{margin:0 0 10px;padding-left:22px}.soru .cevap li{margin-bottom:4px}
+.soru .cevap b{color:var(--fg)}
+.soru .bag{font-size:13px;font-weight:700;color:var(--muted);text-decoration:none}
+.soru .bag:hover{color:var(--teal)}
+.soru:target,.soru.vurgulu{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal2)}
+mark{background:#FFE08A;color:inherit;border-radius:3px;padding:0 1px}
+:root[data-theme="dark"] mark{background:#7A5B12}
+.bulunamadi{background:var(--panel);border:1px dashed var(--line);border-radius:16px;padding:22px;text-align:center;margin-top:16px}
+.bulunamadi p{margin:0 0 12px;color:var(--muted)}
+</style>
+</head>
+<body data-sayfa="sss">
+<main>
+<section style="padding-top:44px">
+  <div class="wrap dar">
+    <p class="ust">Yardım</p>
+    <h1>Sıkça Sorulan Sorular</h1>
+    <p class="lead">Aklınıza takılanı aşağıya yazın; ilgili sorular hemen süzülür. Ya da bir konu seçin.</p>
+    <form class="ara" role="search" id="araForm"><input type="search" id="ara" placeholder="Örn. KVKK, sesle yazma, e-Okul, yedek, şifre…" aria-label="Sorularda ara" autocomplete="off" enterkeyhint="search"><button type="button" id="temizle" aria-label="Aramayı temizle" hidden>✕</button></form>
+    <div class="bolumler" id="bolumler" role="group" aria-label="Konular"></div>
+    <p class="sonuc-bilgi" id="bilgi" aria-live="polite"></p>
+    <div id="liste"><noscript>Soruları görmek için tarayıcınızda JavaScript açık olmalı.</noscript></div>
+    <div class="bulunamadi" id="bulunamadi">
+      <p><b>Aradığınızı bulamadınız mı?</b><br>Sorunuzu bize yazın; kurulum soruları ve hata bildirimleri ücretsiz yanıtlanır.</p>
+      <a class="btn ana" href="iletisim.html">✉ Soru sor</a>
+    </div>
+  </div>
+</section>
+</main>
+<script src="config.js"></script>
+<script src="sss.js"></script>
+<script src="site.js"></script>
+<script>
+const SSS=window.RG_SSS||[],BOLUM=window.RG_SSS_BOLUM||[];
+/* Türkçe harfleri ve büyük/küçük harfi yok sayan arama metni */
+const sade=s=>String(s).toLocaleLowerCase('tr').replace(/[çğıöşüâîû]/g,c=>({'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u','â':'a','î':'i','û':'u'}[c])).replace(/i̇/g,'i');
+const duzMetin=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent;};
+SSS.forEach(q=>{q.ara=sade(q.s+' '+duzMetin(q.c)+' '+(q.a||''));});
+const liste=document.getElementById('liste'),ara=document.getElementById('ara'),bilgi=document.getElementById('bilgi'),temizle=document.getElementById('temizle');
+let secili='';
+document.getElementById('bolumler').innerHTML='<button type="button" data-k="" aria-pressed="true">Tümü</button>'+BOLUM.map(b=>'<button type="button" data-k="'+b[0]+'" aria-pressed="false">'+b[1]+' '+b[2]+'</button>').join('');
+/* aranan kelimeleri metin düğümlerinde işaretler (HTML etiketlerine dokunmaz) */
+function isaretle(kok,kelimeler){
+  if(!kelimeler.length)return;
+  const yuruyen=document.createTreeWalker(kok,NodeFilter.SHOW_TEXT),dugumler=[];
+  while(yuruyen.nextNode())dugumler.push(yuruyen.currentNode);
+  dugumler.forEach(d=>{
+    const metin=d.nodeValue,s=sade(metin);let araliklar=[];
+    kelimeler.forEach(k=>{let i=s.indexOf(k);while(i>-1){araliklar.push([i,i+k.length]);i=s.indexOf(k,i+k.length);}});
+    if(!araliklar.length||s.length!==metin.length)return;
+    araliklar.sort((a,b)=>a[0]-b[0]);const birlesik=[];araliklar.forEach(a=>{const son=birlesik[birlesik.length-1];if(son&&a[0]<=son[1])son[1]=Math.max(son[1],a[1]);else birlesik.push(a.slice());});
+    const parca=document.createDocumentFragment();let j=0;
+    birlesik.forEach(([b,e])=>{parca.append(metin.slice(j,b));const m=document.createElement('mark');m.textContent=metin.slice(b,e);parca.append(m);j=e;});
+    parca.append(metin.slice(j));d.replaceWith(parca);});
+}
+function ciz(){
+  const q=ara.value.trim(),kelimeler=sade(q).split(/\s+/).filter(k=>k.length>1);
+  temizle.hidden=!q;
+  const uyan=SSS.filter(x=>(!secili||x.k===secili)&&kelimeler.every(k=>x.ara.includes(k)));
+  liste.innerHTML=BOLUM.filter(b=>uyan.some(x=>x.k===b[0])).map(b=>'<div class="grup"><h2>'+b[1]+' '+b[2]+'</h2>'+
+    uyan.filter(x=>x.k===b[0]).map(x=>'<details class="soru" id="'+x.id+'"'+(kelimeler.length&&uyan.length<=4?' open':'')+'><summary>'+x.s+'</summary><div class="cevap">'+x.c+'<a class="bag" href="#'+x.id+'">🔗 Bu sorunun bağlantısı</a></div></details>').join('')+'</div>').join('');
+  if(kelimeler.length)liste.querySelectorAll('.soru').forEach(d=>isaretle(d,kelimeler));
+  bilgi.textContent=q?(uyan.length?uyan.length+' soru bulundu.':'Bu aramayla eşleşen soru yok.'):'';
+}
+let zaman;ara.addEventListener('input',()=>{clearTimeout(zaman);zaman=setTimeout(()=>{ciz();const u=new URL(location);if(ara.value.trim())u.searchParams.set('q',ara.value.trim());else u.searchParams.delete('q');history.replaceState(null,'',u.pathname+u.search);},120);});
+document.getElementById('araForm').addEventListener('submit',e=>{e.preventDefault();ara.blur();});
+temizle.addEventListener('click',()=>{ara.value='';ciz();history.replaceState(null,'',location.pathname);ara.focus();});
+document.getElementById('bolumler').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;secili=b.dataset.k;document.querySelectorAll('#bolumler button').forEach(x=>x.setAttribute('aria-pressed',x===b));ciz();});
+/* sss.html?q=kvkk ile arama, sss.html#sesle-yaz ile doğrudan soru */
+const ilkQ=new URLSearchParams(location.search).get('q');if(ilkQ)ara.value=ilkQ;
+ciz();
+function hedefAc(){const id=decodeURIComponent(location.hash.slice(1));const d=id&&document.getElementById(id);if(d&&d.classList.contains('soru')){d.open=true;d.classList.add('vurgulu');d.scrollIntoView({block:'start'});}}
+addEventListener('hashchange',hedefAc);hedefAc();
+</script>
+</body>
+</html>

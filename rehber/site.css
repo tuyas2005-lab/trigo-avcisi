@@ -52,10 +52,11 @@ section{padding:68px 0}
 .tema-tus{border:1px solid var(--line);background:var(--panel);color:var(--fg);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:17px;line-height:1;margin-left:4px}
 .tema-tus:hover{border-color:var(--teal)}
 #menuTus{display:none;margin-left:auto;background:none;border:0;color:var(--fg);font-size:26px;cursor:pointer;padding:6px}
-@media (max-width:900px){
+@media (max-width:1140px){
   .site-ust nav{display:none;position:absolute;top:66px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 20px 16px}
   .site-ust nav.acik{display:flex}
   .site-ust nav a.btn{margin:6px 0 0}
+  .site-ust nav .tema-tus{margin:8px 0 0}
   #menuTus{display:block}
 }
 /* kartlar */
