@@ -1,6 +1,6 @@
 /* Site ayarları. Boş bırakılan alan sayfada görünmez. */
 window.RG_CONFIG={
-  eposta:'',     // geliştirme talepleri ve iletişim için e-posta (örn. 'ornek@gmail.com')
+  eposta:'tuyas2005@gmail.com',     // geliştirme talepleri ve iletişim için e-posta (örn. 'ornek@gmail.com')
   whatsapp:'',   // isteğe bağlı, örn. '905xxxxxxxxx' (ülke koduyla, boşluksuz)
   /* "Nasıl kullanılır?" videosu: YouTube bağlantısı ya da video kimliği. Boşsa adım adım tanıtım görünür. */
   video:'',

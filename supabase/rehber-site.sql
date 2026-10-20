@@ -50,4 +50,5 @@ begin
   return 'ok';
 end $$;
 
+revoke execute on function public.rs_indir(text), public.rs_abone_ol(text, boolean), public.rs_abone_cik(text) from public;
 grant execute on function public.rs_indir(text), public.rs_abone_ol(text, boolean), public.rs_abone_cik(text) to anon, authenticated;
