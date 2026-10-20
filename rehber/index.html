@@ -124,6 +124,8 @@
 .yazi .kim{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);margin-bottom:8px}
 .yazi .devam{margin-top:auto;padding-top:14px;font-weight:800;color:var(--teal);font-size:15px}
 /* sss */
+
+.sss-ara{display:flex;gap:10px;margin-top:20px}.sss-ara input{flex:1;min-width:0;font-size:16px;padding:13px 16px;border-radius:14px;border:2px solid var(--line);background:var(--panel);color:var(--fg)}.sss-ara input:focus{outline:none;border-color:var(--teal)}
 details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:10px}
 summary{font-weight:800;cursor:pointer;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
 summary::-webkit-details-marker{display:none}
@@ -208,7 +210,7 @@ dialog.genis img{display:block;width:100%;height:auto}
       <div class="kart"><div class="ikon">👤</div><h3>Hesap yok, kayıt yok</h3><p>Programı kullanmak için hesap açmazsınız, e-posta vermezsiniz.</p></div>
       <div class="kart"><div class="ikon">🔐</div><h3>Kopyalamaya karşı şifre</h3><p>Program klasörü izinsiz başka bir bilgisayara kopyalanırsa orada kilitlenir; şifre girilmeden hiçbir öğrenci bilgisi görüntülenemez.</p></div>
       <div class="kart"><div class="ikon">💾</div><h3>Otomatik yedek</h3><p>Her gün kendiliğinden yedek alınır; isterseniz USB belleğe ek yedek, istediğiniz tarihe geri dönüş.</p></div>
-      <div class="kart"><div class="ikon">⚖️</div><h3>KVKK'ya uygun kullanım için</h3><p>Veriler sizin bilgisayarınızda kaldığı için kim eriştiğine siz karar verirsiniz. Ayrıntılar <a href="kosullar.html">Kullanım Koşulları</a>'nda.</p></div>
+      <div class="kart"><div class="ikon">⚖️</div><h3>KVKK'ya uygun kullanım için</h3><p>Kayıtları bu programda tutmanın, bilgisayarınızda Excel ya da Word dosyasında tutmaktan farkı yoktur: veriler sizde kalır, kim eriştiğine siz karar verirsiniz. Üstelik kopyalamaya karşı kilit ve otomatik yedek de var. <a href="sss.html?q=kvkk">KVKK soruları →</a></p></div>
     </div>
     <p class="ipucu" style="margin-top:18px">Tek istisna isteğe bağlı sesle yazmadır: kullandığınız anda söyledikleriniz tarayıcının (Chrome/Edge) ses tanıma servisine gider. Kullanmazsanız hiçbir bilgi bilgisayarınızdan çıkmaz.</p>
   </div>
@@ -307,6 +309,7 @@ dialog.genis img{display:block;width:100%;height:auto}
   <div class="wrap dar">
     <p class="ust">Sıkça sorulanlar</p>
     <h2>Merak edilenler</h2>
+    <form class="sss-ara" action="sss.html" role="search"><input type="search" name="q" placeholder="Aklınıza takılanı yazın: KVKK, kurulum, sesle yazma…" aria-label="Sıkça sorulanlarda ara"><button class="btn ana" type="submit">Ara</button></form>
     <div style="margin-top:24px">
       <details open><summary>Program gerçekten ücretsiz mi?</summary><p>Evet. Program kısa süreliğine ücretsizdir; <b>bu dönemde indirip kullananların ücretsiz kullanma hakkı devam edecek.</b> Kurulum kılavuzu ve hata düzeltmeleri de ücretsizdir. Yalnızca yeni özellik ya da okulunuza özel uyarlama talepleri ücretlidir (<a href="iletisim.html">Geliştirme talebi</a>).</p></details>
       <details><summary>Verilerim nerede tutuluyor? (KVKK)</summary><p>Bütün öğrenci, veli ve görüşme bilgileri yalnızca programın kurulu olduğu bilgisayarda, program klasöründeki <code>veri</code> klasöründe tutulur. Program bu bilgileri geliştiriciye ya da başka birine göndermez. Tek istisna isteğe bağlı <b>sesli yazım</b> özelliğidir: Chrome/Edge'in ses tanıma servisini kullandığı için söylediğiniz metin o servise gider ve internet gerektirir; istemezseniz notları elle yazabilirsiniz. Verilerin hukuka uygun işlenmesi ve korunması kullanıcının ve kurumunun sorumluluğundadır (<a href="kosullar.html">Kullanım Koşulları</a>, madde 4).</p></details>
@@ -318,7 +321,9 @@ dialog.genis img{display:block;width:100%;height:auto}
       <details><summary>Okulumuzda birden çok rehber öğretmen var. Nasıl kullanırız?</summary><p>Her öğretmen programı kendi bilgisayarına kurar ve kendi öğrencileriyle çalışır; kimse diğerinin öğrencilerini ve görüşmelerini görmez. Okul geneli rapor için herkes <b>Okul Raporu</b> sayfasından öğrenci adı içermeyen özet paketini rapor sorumlusuna gönderir, o da paketleri birleştirip tüm okulun faaliyet raporunu alır (<a href="#okul">ayrıntı</a>).</p></details>
       <details><summary>MEB'in programı mı?</summary><p>Hayır. Bu program Millî Eğitim Bakanlığı'nın ya da herhangi bir kamu kurumunun resmî yazılımı değildir, bu kurumlarla bağlantısı yoktur ve onlar tarafından onaylanmamıştır. Form düzenleri kullanım kolaylığı için hazırlanmıştır; resmî kayıtların ilgili resmî sistemlere girilmesi kullanıcının sorumluluğundadır.</p></details>
       <details><summary>Klasörü OneDrive'a koyabilir miyim?</summary><p>Koymayın. OneDrive'ın eşitlediği bir klasörde program dosyaları kilitlenebilir. Klasörü tamamen yerel bir yere, örneğin <code>C:\OgrenciRehberlikTakip</code> içine koyun.</p></details>
+      <details><summary>KVKK açısından Excel ya da Word'de kayıt tutmaktan farkı var mı?</summary><p>Hayır, farkı yoktur. Görüşme kayıtlarınızı bu programda tutmak, aynı bilgileri bilgisayarınızda bir Excel ya da Word dosyasında tutmakla aynıdır: bilgiler yalnızca sizin bilgisayarınızda durur ve hiçbir yere gönderilmez. Program bunlara ek olarak kopyalamaya karşı kilit ve otomatik yedek sunar.</p></details>
     </div>
+    <p style="margin-top:18px"><a class="btn cizgi" href="sss.html">Bütün soruları gör ve ara →</a></p>
   </div>
 </section>
 </main>

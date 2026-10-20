@@ -3,7 +3,8 @@
     {"source": "/indir", "destination": "/indir.html"},
     {"source": "/surumler", "destination": "/surumler.html"},
     {"source": "/kosullar", "destination": "/kosullar.html"},
-    {"source": "/iletisim", "destination": "/iletisim.html"}
+    {"source": "/iletisim", "destination": "/iletisim.html"},
+    {"source": "/sss", "destination": "/sss.html"}
   ],
   "headers": [
     {"source": "/(.*)\\.(html|js|css|py)", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
