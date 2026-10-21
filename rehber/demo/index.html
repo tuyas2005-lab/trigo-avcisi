@@ -85,6 +85,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);display:flex
     <p class="kucuk anaBag" style="margin-top:18px"><a href="../" target="_top">← Ana sayfaya dön</a></p>
   </div>
 </div>
+<script src="../config.js"></script>
 <script src="../indir/surum.js"></script>
 <script>
 const PYODIDE='https://cdn.jsdelivr.net/pyodide/v0.27.7/full/';
@@ -108,6 +109,8 @@ function sayacGuncelle(){
 
 async function basla(){
   ls.set(BASLADI_KEY,'1');
+  /* sayaç: canlı örneğin kaç kez başlatıldığı (yalnızca sayı) */
+  try{const C=window.RG_CONFIG||{};if(C.supabaseUrl&&C.supabaseKey&&!navigator.webdriver)fetch(C.supabaseUrl.replace(/\/$/,'')+'/rest/v1/rpc/rs_gorunum',{method:'POST',headers:{'Content-Type':'application/json',apikey:C.supabaseKey},body:JSON.stringify({p_sayfa:'canli-ornek'}),keepalive:true}).catch(()=>{});}catch(e){}
   if(!('serviceWorker' in navigator)){hata('Tarayıcınız canlı örneği desteklemiyor. Güncel Chrome, Edge, Firefox ya da Safari ile deneyin.');return;}
   try{
     ilerleme('Hazırlanıyor…',8);
