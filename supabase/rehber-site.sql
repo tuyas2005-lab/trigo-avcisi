@@ -52,3 +52,29 @@ end $$;
 
 revoke execute on function public.rs_indir(text), public.rs_abone_ol(text, boolean), public.rs_abone_cik(text) from public;
 grant execute on function public.rs_indir(text), public.rs_abone_ol(text, boolean), public.rs_abone_cik(text) to anon, authenticated;
+
+-- Sayfa sayacı (günlük rapor için): gün ve sayfa başına yalnızca bir SAYI. Kim, IP, tarayıcı kaydedilmez.
+--   Son 7 gün:  select gun, sayfa, sayi from public.rs_sayfa where gun > current_date - 7 order by gun desc, sayi desc;
+create table if not exists public.rs_sayfa (
+  gun   date not null,
+  sayfa text not null,
+  sayi  bigint not null default 0,
+  primary key (gun, sayfa)
+);
+-- Günlük raporun o günkü toplam indirme anlık görüntüsü (dünle fark hesabı için).
+create table if not exists public.rs_rapor_anlik (
+  tarih   date primary key,
+  indirme jsonb not null
+);
+alter table public.rs_sayfa enable row level security;
+alter table public.rs_rapor_anlik enable row level security;
+revoke all on public.rs_sayfa, public.rs_rapor_anlik from anon, authenticated;
+
+create or replace function public.rs_gorunum(p_sayfa text) returns void
+language sql security definer set search_path = public as $$
+  insert into public.rs_sayfa (gun, sayfa, sayi)
+  values ((now() at time zone 'Europe/Istanbul')::date, left(coalesce(nullif(trim(p_sayfa), ''), '?'), 30), 1)
+  on conflict (gun, sayfa) do update set sayi = public.rs_sayfa.sayi + 1;
+$$;
+revoke execute on function public.rs_gorunum(text) from public;
+grant execute on function public.rs_gorunum(text) to anon, authenticated;

@@ -24,4 +24,10 @@
   function temaYaz(){const koyu=kok.dataset.theme==='dark';temaTus.textContent=koyu?'☀️':'🌙';temaTus.title=temaTus.ariaLabel=koyu?'Açık temaya geç':'Koyu temaya geç';}
   temaTus.addEventListener('click',()=>{const koyu=kok.dataset.theme!=='dark';if(koyu)kok.dataset.theme='dark';else delete kok.dataset.theme;try{localStorage.setItem('rg-tema',koyu?'koyu':'acik');}catch(e){}temaYaz();});
   temaYaz();
+  /* sayfa sayacı: gün ve sayfa başına yalnızca bir sayı artar (supabase/rehber-site.sql, rs_gorunum); çerez yok, kim olduğu bilinmez */
+  window.rgSay=function(ad){
+    if(!ad||!CFG.supabaseUrl||!CFG.supabaseKey||navigator.webdriver)return;
+    const h={'Content-Type':'application/json',apikey:CFG.supabaseKey};if(!/^sb_/.test(CFG.supabaseKey))h.Authorization='Bearer '+CFG.supabaseKey;
+    fetch(CFG.supabaseUrl.replace(/\/$/,'')+'/rest/v1/rpc/rs_gorunum',{method:'POST',headers:h,body:JSON.stringify({p_sayfa:ad}),keepalive:true}).catch(()=>{});};
+  window.rgSay(sayfa);
 })();
